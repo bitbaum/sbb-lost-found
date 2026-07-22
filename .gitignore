@@ -40,5 +40,4 @@ temp/
 # Lock files (optional - can be committed)
 # package-lock.json
 # yarn.lock
-.vercel
 .env*.local
