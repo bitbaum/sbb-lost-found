@@ -1,0 +1,42 @@
+name: CI
+
+# Minimal CI floor for this scaffold: build the shared types package, then
+# type-check every backend service AND the frontend. This is a compile/type gate
+# only — it keeps the scaffold from rotting without pretending to be a test suite.
+#
+# Intentionally NOT gated here (needs a human decision, see PR notes):
+#   * Lint. The services ship no ESLint config (and 3 of 4 lack the eslint dep),
+#     and the frontend's eslint-config-next@16 / eslint@9 / next@14 combo currently
+#     crashes ESLint. Wiring lint requires dependency changes, so it's out of scope
+#     for this additive floor.
+#   * Running the services / full E2E — needs docker-compose + Postgres + Redis infra.
+#
+# `npm run verify` (root package.json) is the single source of truth for these checks;
+# CI runs it verbatim so local green == CI green.
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  typecheck:
+    name: Typecheck (services + frontend)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install workspace dependencies (services + shared)
+        run: npm ci
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Verify (build shared types, typecheck services + frontend)
+        run: npm run verify
