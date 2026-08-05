@@ -15,6 +15,7 @@ name: CI
 # CI runs it verbatim so local green == CI green.
 
 on:
+  workflow_dispatch: {}
   push:
     branches: [master, main]
   pull_request:
