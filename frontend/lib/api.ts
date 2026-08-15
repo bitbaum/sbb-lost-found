@@ -1,5 +1,5 @@
 /**
- * API Client for SBB Lost & Found Backend
+ * API client for the Lost & Found backend
  *
  * SSOT for all API calls. Supports:
  * - Real backend when available

@@ -53,9 +53,50 @@ Every category of data lives in exactly one file:
 | `lib/config.ts` | Timing windows, validation limits, API URLs |
 | `lib/labels.ts` | All German UI text (211 lines, i18n-ready) |
 | `lib/schemas.ts` | Zod validation schemas (derived from types) |
-| `lib/design-system.ts` | SBB official colors, spacing, typography |
+| `lib/design-system.ts` | Colors, spacing, typography for non-CSS contexts |
+| `lib/tenant.ts` | **Operator identity — wordmark, product name, locale, code** |
 
 Adding a new item category requires changes to 2 locations in `types.ts` -- `ITEM_CATEGORIES` enum and `ITEM_CATEGORY_CONFIG`. Forms, labels, validation, and display all auto-update.
+
+### White-label: the operator is configuration
+
+The app carries no operator's identity in its code. Branding is expressed in
+exactly two places, and switching operator is one environment variable:
+
+```bash
+npm run build                          # Nordbahn — the neutral house brand
+NEXT_PUBLIC_TENANT=sbb npm run build   # SBB livery, same binary
+```
+
+| Where | What it owns |
+|---|---|
+| `frontend/lib/tenant.ts` | Wordmark, legal name, product name, locale, operator code, theme colour |
+| `frontend/app/globals.css` | Palette + font, in one `:root[data-tenant="…"]` block per operator |
+
+`<html data-tenant>` is set once in `app/layout.tsx`, and every colour token
+keys off it — so the palette flips at runtime from a single attribute. Adding
+an operator is two edits: a `TENANTS` entry and one CSS override block
+restating only the tokens that actually differ.
+
+**`npm run check:tenant` enforces this** (and runs inside `npm run verify`):
+it fails the build if an operator name appears anywhere outside those two
+files. The codebase previously spread one operator's name across 600+
+references, and nothing would have failed if that crept back — the app would
+have quietly stopped being re-brandable.
+
+#### Trademark safety
+
+A tenant marked `isConcept: true` uses a third-party trademark, so it is a
+pitch artefact and not a product. Those builds automatically:
+
+- render an "unabhängiges Konzept — kein offizielles Produkt" notice on every
+  screen, and
+- emit `robots: noindex, nofollow`.
+
+The neutral tenant is the **default**, including when `NEXT_PUBLIC_TENANT` is
+unset or misspelled: failing open to someone else's brand is the one failure
+mode that carries real cost. Only a tenant with `isConcept: false` may be
+deployed to a public URL.
 
 ### Real-Time Event Flow
 

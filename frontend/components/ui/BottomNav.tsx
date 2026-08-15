@@ -36,7 +36,7 @@ export function BottomNav({ activeTab, onTabChange }: BottomNavProps) {
           className={`
             flex-1 flex flex-col items-center py-2 px-0.5 min-w-0
             transition-colors duration-200
-            ${activeTab === id ? 'text-sbb-red' : 'text-sbb-smoke hover:text-sbb-granite'}
+            ${activeTab === id ? 'text-brand' : 'text-app-smoke hover:text-app-granite'}
           `}
           aria-current={activeTab === id ? 'page' : undefined}
         >

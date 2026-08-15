@@ -159,7 +159,7 @@ export function MoreIcon({ className }: IconProps) {
 }
 
 // ============================================================================
-// SBB Mobile App Navigation Icons (6 tabs)
+// Mobile app navigation icons (6 tabs)
 // ============================================================================
 
 export function PlanenIcon({ className }: IconProps) {

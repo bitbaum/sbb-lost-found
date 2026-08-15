@@ -73,14 +73,14 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
         aria-labelledby="modal-title"
       >
         {/* Header */}
-        <div className="sticky top-0 bg-white z-10 px-6 py-4 border-b border-sbb-cloud">
+        <div className="sticky top-0 bg-white z-10 px-6 py-4 border-b border-app-cloud">
           <div className="flex items-center justify-between">
-            <h2 id="modal-title" className="text-sbb-xl font-semibold text-sbb-charcoal">
+            <h2 id="modal-title" className="text-app-xl font-semibold text-app-charcoal">
               🧳 Verlust melden
             </h2>
             <button
               onClick={onClose}
-              className="w-11 h-11 rounded-full bg-sbb-milk flex items-center justify-center text-sbb-granite hover:bg-sbb-cloud transition-colors"
+              className="w-11 h-11 rounded-full bg-app-milk flex items-center justify-center text-app-granite hover:bg-app-cloud transition-colors"
               aria-label="Schliessen"
             >
               ✕
@@ -91,10 +91,10 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
         <div className="p-6">
           {/* Urgency Alert */}
           {isUrgent && step !== 'success' && (
-            <div className="bg-gradient-to-r from-sbb-red to-sbb-red-125 text-white rounded-sbb-lg p-5 mb-6 text-center">
+            <div className="bg-gradient-to-r from-brand to-brand-hover text-white rounded-app-lg p-5 mb-6 text-center">
               <div className="text-4xl mb-3">🚨</div>
               <h3 className="text-lg font-semibold mb-2">Schnell handeln!</h3>
-              <p className="text-sbb-sm opacity-90">
+              <p className="text-app-sm opacity-90">
                 Ihr Zug hat vor {minutes} Minuten angehalten.
                 {minutes <= 15
                   ? ' Fahrer kann jetzt noch suchen!'
@@ -105,12 +105,12 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
 
           {/* Trip Info (pre-filled) */}
           {step !== 'success' && (
-            <div className="bg-sbb-milk rounded-sbb-md p-4 mb-6">
-              <p className="text-sbb-xs text-sbb-granite mb-1">Betroffene Reise</p>
-              <p className="text-sbb-base font-semibold text-sbb-charcoal">
+            <div className="bg-app-milk rounded-app-md p-4 mb-6">
+              <p className="text-app-xs text-app-granite mb-1">Betroffene Reise</p>
+              <p className="text-app-base font-semibold text-app-charcoal">
                 {trip.origin.name} → {trip.destination.name}
               </p>
-              <p className="text-sbb-sm text-sbb-granite">
+              <p className="text-app-sm text-app-granite">
                 {trip.vehicle.number} • {formatTime(trip.departureTime)}
                 {trip.car && ` • Wagen ${trip.car}`}
                 {trip.seat && ` • Platz ${trip.seat}`}
@@ -121,7 +121,7 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
           {/* Step: Category Selection */}
           {step === 'category' && (
             <div>
-              <h3 className="text-sbb-base font-semibold text-sbb-charcoal mb-4">
+              <h3 className="text-app-base font-semibold text-app-charcoal mb-4">
                 Was haben Sie verloren?
               </h3>
               <div className="grid grid-cols-3 gap-3">
@@ -132,13 +132,13 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
                       key={cat}
                       onClick={() => handleSelectCategory(cat)}
                       className={`
-                        bg-sbb-milk border-2 border-sbb-cloud rounded-sbb-md p-4 text-center
-                        hover:border-sbb-red hover:bg-red-50 transition-all touch-feedback
-                        ${category === cat ? 'border-sbb-red bg-red-50' : ''}
+                        bg-app-milk border-2 border-app-cloud rounded-app-md p-4 text-center
+                        hover:border-brand hover:bg-red-50 transition-all touch-feedback
+                        ${category === cat ? 'border-brand bg-red-50' : ''}
                       `}
                     >
                       <div className="text-3xl mb-2">{cfg.icon}</div>
-                      <div className="text-sbb-xs font-medium text-sbb-charcoal">
+                      <div className="text-app-xs font-medium text-app-charcoal">
                         {cfg.labelDe}
                       </div>
                     </button>
@@ -153,14 +153,14 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
             <div>
               <button
                 onClick={handleBack}
-                className="text-sbb-sm text-sbb-granite hover:text-sbb-charcoal mb-4 flex items-center gap-1"
+                className="text-app-sm text-app-granite hover:text-app-charcoal mb-4 flex items-center gap-1"
               >
                 ← Zurück
               </button>
 
               <div className="space-y-5">
                 <div>
-                  <label className="block text-sbb-base font-semibold text-sbb-charcoal mb-2">
+                  <label className="block text-app-base font-semibold text-app-charcoal mb-2">
                     Beschreibung
                   </label>
                   <input
@@ -168,7 +168,7 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder={`z.B. Schwarzes ${ITEM_CATEGORY_CONFIG[category!].labelDe}`}
-                    className="input-sbb"
+                    className="input-app"
                     autoFocus
                     minLength={config.validation.description.minLength}
                     maxLength={config.validation.description.maxLength}
@@ -177,7 +177,7 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
                 </div>
 
                 <div>
-                  <label className="block text-sbb-base font-semibold text-sbb-charcoal mb-2">
+                  <label className="block text-app-base font-semibold text-app-charcoal mb-2">
                     Wo genau?
                   </label>
                   <div className="space-y-2">
@@ -188,18 +188,18 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
                           key={loc}
                           onClick={() => setLocation(loc)}
                           className={`
-                            w-full text-left p-4 rounded-sbb-md border-2 transition-all
+                            w-full text-left p-4 rounded-app-md border-2 transition-all
                             ${location === loc
-                              ? 'border-sbb-red bg-red-50'
-                              : 'border-sbb-cloud bg-sbb-milk hover:border-sbb-silver'
+                              ? 'border-brand bg-red-50'
+                              : 'border-app-cloud bg-app-milk hover:border-app-silver'
                             }
                           `}
                         >
-                          <span className="text-sbb-base text-sbb-charcoal">
+                          <span className="text-app-base text-app-charcoal">
                             {cfg.labelDe}
                           </span>
                           {trip.seat && loc === 'seat' && (
-                            <span className="text-sbb-sm text-sbb-granite ml-2">
+                            <span className="text-app-sm text-app-granite ml-2">
                               (Platz {trip.seat})
                             </span>
                           )}
@@ -212,7 +212,7 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
                 <button
                   onClick={handleSubmit}
                   disabled={description.trim().length < config.validation.description.minLength || isSubmitting}
-                  className="btn-sbb-primary w-full flex items-center justify-center gap-2"
+                  className="btn-app-primary w-full flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <>
@@ -233,34 +233,34 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
           {step === 'success' && (
             <div className="text-center py-8">
               <div className="text-7xl mb-6">✅</div>
-              <h3 className="text-sbb-2xl font-semibold text-sbb-charcoal mb-3">
+              <h3 className="text-app-2xl font-semibold text-app-charcoal mb-3">
                 Fahrer benachrichtigt!
               </h3>
-              <p className="text-sbb-base text-sbb-granite mb-8 max-w-xs mx-auto">
+              <p className="text-app-base text-app-granite mb-8 max-w-xs mx-auto">
                 Der Zugführer wurde sofort informiert und wird bei der nächsten Gelegenheit nach Ihrem Gegenstand suchen.
               </p>
 
-              <div className="bg-sbb-milk rounded-sbb-lg p-4 text-left mb-6">
+              <div className="bg-app-milk rounded-app-lg p-4 text-left mb-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-full bg-sbb-success/10 flex items-center justify-center">
-                    <span className="text-sbb-success text-xl">📍</span>
+                  <div className="w-10 h-10 rounded-full bg-app-success/10 flex items-center justify-center">
+                    <span className="text-app-success text-xl">📍</span>
                   </div>
                   <div>
-                    <p className="text-sbb-sm font-semibold text-sbb-charcoal">Nächste Schritte</p>
-                    <p className="text-sbb-xs text-sbb-granite">Sie werden per Push benachrichtigt</p>
+                    <p className="text-app-sm font-semibold text-app-charcoal">Nächste Schritte</p>
+                    <p className="text-app-xs text-app-granite">Sie werden per Push benachrichtigt</p>
                   </div>
                 </div>
-                <ul className="space-y-2 text-sbb-sm text-sbb-granite ml-13">
+                <ul className="space-y-2 text-app-sm text-app-granite ml-13">
                   <li className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-sbb-cloud flex items-center justify-center text-xs">1</span>
+                    <span className="w-5 h-5 rounded-full bg-app-cloud flex items-center justify-center text-xs">1</span>
                     Fahrer prüft bei Endstation
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-sbb-cloud flex items-center justify-center text-xs">2</span>
+                    <span className="w-5 h-5 rounded-full bg-app-cloud flex items-center justify-center text-xs">2</span>
                     Status-Update in der App
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-sbb-cloud flex items-center justify-center text-xs">3</span>
+                    <span className="w-5 h-5 rounded-full bg-app-cloud flex items-center justify-center text-xs">3</span>
                     Abholung koordinieren
                   </li>
                 </ul>
@@ -268,7 +268,7 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
 
               <button
                 onClick={onClose}
-                className="btn-sbb-secondary"
+                className="btn-app-secondary"
               >
                 Verstanden
               </button>

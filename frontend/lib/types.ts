@@ -1,5 +1,5 @@
 /**
- * SBB Lost & Found - TypeScript Type Definitions
+ * Lost & Found — TypeScript type definitions
  * Single Source of Truth for all data types
  */
 
@@ -12,7 +12,12 @@ export interface Vehicle {
   type: 'train' | 'tram' | 'bus';
   line: string;        // e.g., "IC 1", "S3", "Tram 4"
   number: string;      // e.g., "IC 123", "S3 12345"
-  operator: 'SBB' | 'VBZ' | 'ZVV' | 'BLS' | 'SOB';
+  /**
+   * Operator code as shown in vehicle data. Deliberately a free string, not
+   * a union: the app is white-label, so valid operators are deployment data
+   * and cannot be enumerated in the type system. See lib/tenant.ts.
+   */
+  operator: string;
 }
 
 export interface Station {

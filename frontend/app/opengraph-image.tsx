@@ -1,20 +1,27 @@
 import { ImageResponse } from 'next/og';
+import { tenant } from '@/lib/tenant';
 
 /**
  * Social preview card (1200x630 — the 1.91:1 size Slack, Telegram and the
  * OpenGraph scrapers crop to). This app shipped no og:image, so every shared
  * link rendered as a blank grey rectangle.
  *
- * Satori cannot read CSS custom properties, so the SBB palette is repeated
- * here as literals mirroring --sbb-red / --sbb-white in globals.css.
+ * Satori cannot read CSS custom properties, so the brand colour is taken from
+ * the tenant SSOT (lib/tenant.ts `themeColor`) rather than from --brand. That
+ * field exists precisely for contexts like this one, which are rendered before
+ * any CSS exists.
  */
 
 export const runtime = 'edge';
-export const alt = 'SBB Lost & Found';
+export const alt = tenant.productName;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-const SBB_RED = '#EB0000';
+// Same source as layout.tsx's metadataBase, minus the scheme.
+const SITE_HOST = (process.env.NEXT_PUBLIC_APP_URL || 'https://sbb.orangecat.ch')
+  .replace(/^https?:\/\//, '');
+
+const BRAND = tenant.themeColor;
 const WHITE = '#FFFFFF';
 const MILK = '#F6F6F6';
 const ANTHRACITE = '#5A5A5A';
@@ -35,9 +42,9 @@ export default function OGImage() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{ width: 20, height: 20, borderRadius: 4, background: SBB_RED, display: 'flex' }} />
+          <div style={{ width: 20, height: 20, borderRadius: 4, background: BRAND, display: 'flex' }} />
           <div style={{ fontSize: 28, fontWeight: 700, color: '#111111', letterSpacing: '-0.01em' }}>
-            SBB Lost &amp; Found
+            {tenant.productName}
           </div>
         </div>
 
@@ -55,7 +62,7 @@ export default function OGImage() {
             Verlorenes schnell melden
           </div>
           <div style={{ marginTop: 28, fontSize: 32, lineHeight: 1.35, color: ANTHRACITE, maxWidth: 900 }}>
-            Gegenstände direkt in der SBB App melden — einfach und ohne Umwege.
+            {tenant.description}
           </div>
         </div>
 
@@ -69,8 +76,8 @@ export default function OGImage() {
             borderRadius: 12,
           }}
         >
-          <div style={{ width: 48, height: 5, borderRadius: 999, background: SBB_RED, display: 'flex' }} />
-          <div style={{ fontSize: 24, color: ANTHRACITE }}>sbb.orangecat.ch</div>
+          <div style={{ width: 48, height: 5, borderRadius: 999, background: BRAND, display: 'flex' }} />
+          <div style={{ fontSize: 24, color: ANTHRACITE }}>{SITE_HOST}</div>
         </div>
       </div>
     ),

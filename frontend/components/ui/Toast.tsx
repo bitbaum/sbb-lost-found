@@ -12,9 +12,9 @@ interface ToastProps {
 }
 
 const toastStyles = {
-  success: 'bg-sbb-success',
-  error: 'bg-sbb-red',
-  info: 'bg-sbb-blue',
+  success: 'bg-app-success',
+  error: 'bg-brand',
+  info: 'bg-app-blue',
 };
 
 const toastIcons = {
@@ -39,7 +39,7 @@ export function Toast({ message, type, onClose, duration = config.timing.toastDu
       <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-lg">
         {toastIcons[type]}
       </span>
-      <p className="flex-1 text-sbb-sm font-medium">{message}</p>
+      <p className="flex-1 text-app-sm font-medium">{message}</p>
       <button
         onClick={onClose}
         className="w-11 h-11 rounded-full hover:bg-white/10 flex items-center justify-center"

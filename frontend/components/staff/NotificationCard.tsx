@@ -36,16 +36,16 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
 
   const statusConfig = NOTIFICATION_STATUS_CONFIG[notification.status] || {
     label: notification.status,
-    color: 'bg-sbb-cloud',
-    textColor: 'text-sbb-charcoal',
+    color: 'bg-app-cloud',
+    textColor: 'text-app-charcoal',
   };
 
   return (
     <div
       className={`
-        card-sbb overflow-hidden transition-all
-        ${isNew ? 'ring-2 ring-sbb-red animate-pulse-subtle' : ''}
-        ${notification.priority === 'urgent' && isPending ? 'border-l-4 border-l-sbb-red' : ''}
+        card-app overflow-hidden transition-all
+        ${isNew ? 'ring-2 ring-brand animate-pulse-subtle' : ''}
+        ${notification.priority === 'urgent' && isPending ? 'border-l-4 border-l-brand' : ''}
       `}
     >
       {/* Header - Always visible */}
@@ -53,61 +53,61 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full text-left p-4 flex items-start gap-3"
       >
-        <div className="shrink-0 w-12 h-12 rounded-sbb-md bg-sbb-milk flex items-center justify-center text-2xl">
+        <div className="shrink-0 w-12 h-12 rounded-app-md bg-app-milk flex items-center justify-center text-2xl">
           {categoryConfig?.icon || '❓'}
         </div>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className={`text-sbb-xs px-2 py-0.5 rounded-full font-medium ${statusConfig.color} ${statusConfig.textColor}`}>
+            <span className={`text-app-xs px-2 py-0.5 rounded-full font-medium ${statusConfig.color} ${statusConfig.textColor}`}>
               {statusConfig.label}
             </span>
             {notification.priority === 'urgent' && isPending && (
-              <span className="text-sbb-xs text-sbb-red font-medium">{UI_LABELS.lostItem.urgent}</span>
+              <span className="text-app-xs text-brand font-medium">{UI_LABELS.lostItem.urgent}</span>
             )}
           </div>
 
-          <h3 className="text-sbb-base font-semibold text-sbb-charcoal truncate">
+          <h3 className="text-app-base font-semibold text-app-charcoal truncate">
             {notification.message}
           </h3>
 
-          <p className="text-sbb-sm text-sbb-granite mt-0.5">
+          <p className="text-app-sm text-app-granite mt-0.5">
             {notification.location}
           </p>
 
-          <p className="text-sbb-xs text-sbb-smoke mt-1">
+          <p className="text-app-xs text-app-smoke mt-1">
             {formatRelativeTime(notification.createdAt)}
             {notification.passengerInfo && ` • ${notification.passengerInfo.tripRoute}`}
           </p>
         </div>
 
         <ChevronIcon
-          className={`w-5 h-5 text-sbb-granite transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-app-granite transition-transform ${isExpanded ? 'rotate-180' : ''}`}
         />
       </button>
 
       {/* Expanded Content */}
       {isExpanded && (
-        <div className="border-t border-sbb-cloud px-4 pb-4">
+        <div className="border-t border-app-cloud px-4 pb-4">
           {/* Passenger Info */}
           {notification.passengerInfo && (
-            <div className="bg-sbb-milk rounded-sbb-md p-3 mt-3 space-y-2">
-              <h4 className="text-sbb-xs font-semibold text-sbb-granite uppercase tracking-wide">
+            <div className="bg-app-milk rounded-app-md p-3 mt-3 space-y-2">
+              <h4 className="text-app-xs font-semibold text-app-granite uppercase tracking-wide">
                 {UI_LABELS.staff.passengerInfo}
               </h4>
-              <div className="grid grid-cols-2 gap-2 text-sbb-sm">
+              <div className="grid grid-cols-2 gap-2 text-app-sm">
                 <div>
-                  <p className="text-sbb-granite text-sbb-xs">{UI_LABELS.staff.route}</p>
-                  <p className="font-medium text-sbb-charcoal">{notification.passengerInfo.tripRoute}</p>
+                  <p className="text-app-granite text-app-xs">{UI_LABELS.staff.route}</p>
+                  <p className="font-medium text-app-charcoal">{notification.passengerInfo.tripRoute}</p>
                 </div>
                 <div>
-                  <p className="text-sbb-granite text-sbb-xs">{UI_LABELS.staff.time}</p>
-                  <p className="font-medium text-sbb-charcoal">{notification.passengerInfo.tripTime}</p>
+                  <p className="text-app-granite text-app-xs">{UI_LABELS.staff.time}</p>
+                  <p className="font-medium text-app-charcoal">{notification.passengerInfo.tripTime}</p>
                 </div>
                 {notification.passengerInfo.seatInfo && (
                   <div className="col-span-2">
-                    <p className="text-sbb-granite text-sbb-xs">{UI_LABELS.staff.position}</p>
-                    <p className="font-medium text-sbb-charcoal">{notification.passengerInfo.seatInfo}</p>
+                    <p className="text-app-granite text-app-xs">{UI_LABELS.staff.position}</p>
+                    <p className="font-medium text-app-charcoal">{notification.passengerInfo.seatInfo}</p>
                   </div>
                 )}
               </div>
@@ -121,7 +121,7 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
                 value={responseNotes}
                 onChange={(e) => setResponseNotes(e.target.value)}
                 placeholder={UI_LABELS.staff.optionalNote}
-                className="input-sbb text-sbb-sm resize-none"
+                className="input-app text-app-sm resize-none"
                 rows={2}
                 maxLength={config.validation.notes.maxLength}
               />
@@ -130,7 +130,7 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
                 <button
                   onClick={() => handleResponse(true)}
                   disabled={isResponding}
-                  className="flex-1 btn-sbb-primary flex items-center justify-center gap-2"
+                  className="flex-1 btn-app-primary flex items-center justify-center gap-2"
                 >
                   {isResponding ? (
                     <LoadingSpinner />
@@ -144,7 +144,7 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
                 <button
                   onClick={() => handleResponse(false)}
                   disabled={isResponding}
-                  className="flex-1 btn-sbb-secondary flex items-center justify-center gap-2"
+                  className="flex-1 btn-app-secondary flex items-center justify-center gap-2"
                 >
                   {isResponding ? (
                     <LoadingSpinner />
@@ -161,17 +161,17 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
 
           {/* Response Display for Resolved */}
           {!isPending && notification.response && (
-            <div className="mt-3 bg-sbb-milk rounded-sbb-md p-3">
-              <h4 className="text-sbb-xs font-semibold text-sbb-granite uppercase tracking-wide mb-2">
+            <div className="mt-3 bg-app-milk rounded-app-md p-3">
+              <h4 className="text-app-xs font-semibold text-app-granite uppercase tracking-wide mb-2">
                 {UI_LABELS.staff.yourResponse}
               </h4>
               {notification.response.notes && (
-                <p className="text-sbb-sm text-sbb-charcoal">
+                <p className="text-app-sm text-app-charcoal">
                   {notification.response.notes}
                 </p>
               )}
               {notification.respondedAt && (
-                <p className="text-sbb-xs text-sbb-smoke mt-2">
+                <p className="text-app-xs text-app-smoke mt-2">
                   {UI_LABELS.staff.answeredAt} {formatRelativeTime(notification.respondedAt)}
                 </p>
               )}

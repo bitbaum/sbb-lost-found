@@ -13,7 +13,7 @@
 export const NOTIFICATION_STATUS_CONFIG = {
   pending: {
     label: 'Neu',
-    color: 'bg-sbb-red',
+    color: 'bg-brand',
     textColor: 'text-white',
   },
   acknowledged: {
@@ -23,12 +23,12 @@ export const NOTIFICATION_STATUS_CONFIG = {
   },
   found: {
     label: 'Gefunden',
-    color: 'bg-sbb-success',
+    color: 'bg-app-success',
     textColor: 'text-white',
   },
   not_found: {
     label: 'Nicht gefunden',
-    color: 'bg-sbb-granite',
+    color: 'bg-app-granite',
     textColor: 'text-white',
   },
 } as const;
@@ -43,7 +43,7 @@ export const QUICK_ACTIONS_CONFIG = [
     title: 'Lost & Found',
     subtitle: 'Verlust sofort melden',
     icon: '🧳',
-    gradient: 'from-sbb-red to-sbb-red-125',
+    gradient: 'from-brand to-brand-hover',
     primary: true,
   },
   {
@@ -51,21 +51,21 @@ export const QUICK_ACTIONS_CONFIG = [
     title: 'Tickets kaufen',
     subtitle: 'Schneller Ticketkauf',
     icon: '🎫',
-    gradient: 'from-sbb-blue to-sbb-blue',
+    gradient: 'from-app-blue to-app-blue',
   },
   {
     id: 'tracking',
     title: 'Live Tracking',
     subtitle: 'Reise verfolgen',
     icon: '📍',
-    gradient: 'from-sbb-warning to-sbb-warning',
+    gradient: 'from-app-warning to-app-warning',
   },
   {
     id: 'info',
     title: 'Reise-Info',
     subtitle: 'Verspätungen & Updates',
     icon: 'ℹ️',
-    gradient: 'from-sbb-success to-sbb-success',
+    gradient: 'from-app-success to-app-success',
   },
 ] as const;
 
@@ -74,7 +74,7 @@ export const QUICK_ACTIONS_CONFIG = [
 // ============================================================================
 
 export const UI_LABELS = {
-  // Navigation (SBB Mobile App tabs)
+  // Navigation (mobile app tabs)
   navigation: {
     planen: 'Planen',
     reisen: 'Reisen',

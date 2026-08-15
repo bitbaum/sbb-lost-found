@@ -19,7 +19,9 @@ import { config } from './config';
 // ============================================================================
 
 export const vehicleTypeSchema = z.enum(['train', 'tram', 'bus']);
-export const operatorSchema = z.enum(['SBB', 'VBZ', 'ZVV', 'BLS', 'SOB']);
+// Free string, not an enum — operators are deployment data in a white-label
+// app. See lib/tenant.ts.
+export const operatorSchema = z.string().min(1);
 export const tripStatusSchema = z.enum(['upcoming', 'active', 'completed', 'cancelled']);
 
 export const vehicleSchema = z.object({

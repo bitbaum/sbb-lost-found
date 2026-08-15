@@ -2,23 +2,24 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { tenant } from '@/lib/tenant';
 
 export default function DemoPage() {
   const [activeView, setActiveView] = useState<'concept' | 'flow'>('concept');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sbb-milk to-white">
+    <div className="min-h-screen bg-gradient-to-b from-app-milk to-white">
       {/* Header */}
-      <header className="bg-sbb-red text-white px-6 py-8">
+      <header className="bg-brand text-white px-6 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-3xl font-black tracking-wide">SBB</span>
-            <span className="text-sbb-lg font-light opacity-90">Lost & Found</span>
+            <span className="text-3xl font-black tracking-wide">{tenant.wordmark}</span>
+            <span className="text-app-lg font-light opacity-90">Lost & Found</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-semibold mb-2">
             Echtzeit-Verlustmeldung für den ÖV
           </h1>
-          <p className="text-sbb-base opacity-90 max-w-2xl">
+          <p className="text-app-base opacity-90 max-w-2xl">
             Verlorene Gegenstände sofort melden, Personal in Echtzeit benachrichtigen,
             Wiederfindungsrate massiv erhöhen.
           </p>
@@ -26,14 +27,14 @@ export default function DemoPage() {
       </header>
 
       {/* Navigation */}
-      <div className="sticky top-0 bg-white border-b border-sbb-cloud z-10">
+      <div className="sticky top-0 bg-white border-b border-app-cloud z-10">
         <div className="max-w-4xl mx-auto flex">
           <button
             onClick={() => setActiveView('concept')}
             className={`flex-1 py-4 text-center font-medium border-b-2 transition-colors ${
               activeView === 'concept'
-                ? 'text-sbb-red border-sbb-red'
-                : 'text-sbb-granite border-transparent hover:text-sbb-charcoal'
+                ? 'text-brand border-brand'
+                : 'text-app-granite border-transparent hover:text-app-charcoal'
             }`}
           >
             Das Konzept
@@ -42,8 +43,8 @@ export default function DemoPage() {
             onClick={() => setActiveView('flow')}
             className={`flex-1 py-4 text-center font-medium border-b-2 transition-colors ${
               activeView === 'flow'
-                ? 'text-sbb-red border-sbb-red'
-                : 'text-sbb-granite border-transparent hover:text-sbb-charcoal'
+                ? 'text-brand border-brand'
+                : 'text-app-granite border-transparent hover:text-app-charcoal'
             }`}
           >
             Demo-Ansichten
@@ -56,10 +57,10 @@ export default function DemoPage() {
           <div className="space-y-12">
             {/* Problem Section */}
             <section>
-              <h2 className="text-xl font-semibold text-sbb-charcoal mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-app-charcoal mb-4 flex items-center gap-2">
                 <span className="text-2xl">🎯</span> Das Problem
               </h2>
-              <div className="bg-white rounded-sbb-lg p-6 shadow-sbb-card border border-sbb-cloud">
+              <div className="bg-white rounded-app-lg p-6 shadow-app-card border border-app-cloud">
                 <div className="grid md:grid-cols-3 gap-6">
                   <StatCard
                     number="1.2M+"
@@ -77,9 +78,9 @@ export default function DemoPage() {
                     sublabel="bis zur Bearbeitung"
                   />
                 </div>
-                <p className="mt-6 text-sbb-base text-sbb-granite">
-                  <strong className="text-sbb-charcoal">Kernproblem:</strong> Die Zeit zwischen
-                  Verlust und Meldung ist zu lang. Bis der Passagier das SBB Fundbüro kontaktiert,
+                <p className="mt-6 text-app-base text-app-granite">
+                  <strong className="text-app-charcoal">Kernproblem:</strong> Die Zeit zwischen
+                  Verlust und Meldung ist zu lang. Bis der Passagier das Fundbüro kontaktiert,
                   ist der Zug längst weitergefahren und der Gegenstand nicht mehr auffindbar.
                 </p>
               </div>
@@ -87,15 +88,15 @@ export default function DemoPage() {
 
             {/* Solution Section */}
             <section>
-              <h2 className="text-xl font-semibold text-sbb-charcoal mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-app-charcoal mb-4 flex items-center gap-2">
                 <span className="text-2xl">💡</span> Die Lösung
               </h2>
-              <div className="bg-white rounded-sbb-lg p-6 shadow-sbb-card border border-sbb-cloud">
+              <div className="bg-white rounded-app-lg p-6 shadow-app-card border border-app-cloud">
                 <div className="space-y-6">
                   <FlowStep
                     number={1}
                     title="Sofort-Meldung"
-                    description="Passagier meldet Verlust direkt in der SBB Mobile App – mit vorausgefüllten Reisedaten"
+                    description="Passagier meldet Verlust direkt in der Mobile App – mit vorausgefüllten Reisedaten"
                     time="< 1 Minute"
                     icon="📱"
                   />
@@ -126,7 +127,7 @@ export default function DemoPage() {
 
             {/* Impact Section */}
             <section>
-              <h2 className="text-xl font-semibold text-sbb-charcoal mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-app-charcoal mb-4 flex items-center gap-2">
                 <span className="text-2xl">📈</span> Erwartete Wirkung
               </h2>
               <div className="grid md:grid-cols-2 gap-4">
@@ -165,45 +166,45 @@ export default function DemoPage() {
 
         {activeView === 'flow' && (
           <div className="space-y-8">
-            <p className="text-sbb-base text-sbb-granite text-center">
+            <p className="text-app-base text-app-granite text-center">
               Öffnen Sie beide Ansichten nebeneinander, um den Echtzeit-Flow zu erleben.
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
               {/* Passenger View */}
-              <div className="bg-white rounded-sbb-lg overflow-hidden shadow-sbb-card border border-sbb-cloud">
-                <div className="bg-gradient-to-r from-sbb-blue to-sbb-blue text-white p-4">
+              <div className="bg-white rounded-app-lg overflow-hidden shadow-app-card border border-app-cloud">
+                <div className="bg-gradient-to-r from-app-blue to-app-blue text-white p-4">
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">👤</span>
                     <div>
                       <h3 className="font-semibold">Passagier-Ansicht</h3>
-                      <p className="text-sbb-sm opacity-90">SBB Mobile App Integration</p>
+                      <p className="text-app-sm opacity-90">Mobile App Integration</p>
                     </div>
                   </div>
                 </div>
                 <div className="p-4">
-                  <ul className="space-y-2 text-sbb-sm text-sbb-granite mb-4">
+                  <ul className="space-y-2 text-app-sm text-app-granite mb-4">
                     <li className="flex items-center gap-2">
-                      <span className="text-sbb-success">✓</span>
-                      6-Tab Navigation wie SBB Mobile
+                      <span className="text-app-success">✓</span>
+                      6-Tab Navigation wie die Betreiber-App
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-sbb-success">✓</span>
+                      <span className="text-app-success">✓</span>
                       &quot;Reisen&quot;-Tab mit Einzelreisen
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-sbb-success">✓</span>
+                      <span className="text-app-success">✓</span>
                       Verlust direkt bei der Reise melden
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-sbb-success">✓</span>
+                      <span className="text-app-success">✓</span>
                       Echtzeit Status-Updates
                     </li>
                   </ul>
                   <Link
                     href="/"
                     target="_blank"
-                    className="btn-sbb-primary w-full text-center block"
+                    className="btn-app-primary w-full text-center block"
                   >
                     Passagier-App öffnen →
                   </Link>
@@ -211,35 +212,35 @@ export default function DemoPage() {
               </div>
 
               {/* Staff View */}
-              <div className="bg-white rounded-sbb-lg overflow-hidden shadow-sbb-card border border-sbb-cloud">
-                <div className="bg-gradient-to-r from-sbb-red to-sbb-red-125 text-white p-4">
+              <div className="bg-white rounded-app-lg overflow-hidden shadow-app-card border border-app-cloud">
+                <div className="bg-gradient-to-r from-brand to-brand-hover text-white p-4">
                   <div className="flex items-center gap-3">
                     <span className="text-3xl">🚂</span>
                     <div>
                       <h3 className="font-semibold">Mitarbeiter-Ansicht</h3>
-                      <p className="text-sbb-sm opacity-90">Für Lokführer, Zugbegleiter, Kontrolleure</p>
+                      <p className="text-app-sm opacity-90">Für Lokführer, Zugbegleiter, Kontrolleure</p>
                     </div>
                   </div>
                 </div>
                 <div className="p-4">
-                  <ul className="space-y-2 text-sbb-sm text-sbb-granite mb-4">
+                  <ul className="space-y-2 text-app-sm text-app-granite mb-4">
                     <li className="flex items-center gap-2">
-                      <span className="text-sbb-success">✓</span>
+                      <span className="text-app-success">✓</span>
                       Push-Benachrichtigungen
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-sbb-success">✓</span>
+                      <span className="text-app-success">✓</span>
                       Genaue Positionsangaben
                     </li>
                     <li className="flex items-center gap-2">
-                      <span className="text-sbb-success">✓</span>
+                      <span className="text-app-success">✓</span>
                       Ein-Klick Rückmeldung
                     </li>
                   </ul>
                   <Link
                     href="/staff"
                     target="_blank"
-                    className="btn-sbb-primary w-full text-center block"
+                    className="btn-app-primary w-full text-center block"
                   >
                     Mitarbeiter-App öffnen →
                   </Link>
@@ -248,43 +249,43 @@ export default function DemoPage() {
             </div>
 
             {/* Demo Instructions */}
-            <div className="bg-sbb-milk rounded-sbb-lg p-6 border border-sbb-cloud">
-              <h3 className="font-semibold text-sbb-charcoal mb-4 flex items-center gap-2">
+            <div className="bg-app-milk rounded-app-lg p-6 border border-app-cloud">
+              <h3 className="font-semibold text-app-charcoal mb-4 flex items-center gap-2">
                 <span>🎬</span> Demo-Ablauf
               </h3>
-              <ol className="space-y-3 text-sbb-sm">
+              <ol className="space-y-3 text-app-sm">
                 <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-sbb-red text-white flex items-center justify-center text-xs font-medium shrink-0">1</span>
-                  <span className="text-sbb-granite">
-                    <strong className="text-sbb-charcoal">Passagier-App:</strong> Öffnen Sie den
+                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">1</span>
+                  <span className="text-app-granite">
+                    <strong className="text-app-charcoal">Passagier-App:</strong> Öffnen Sie den
                     &quot;Reisen&quot;-Tab (startet automatisch dort)
                   </span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-sbb-red text-white flex items-center justify-center text-xs font-medium shrink-0">2</span>
-                  <span className="text-sbb-granite">
-                    <strong className="text-sbb-charcoal">Reise wählen:</strong> Klicken Sie auf
+                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">2</span>
+                  <span className="text-app-granite">
+                    <strong className="text-app-charcoal">Reise wählen:</strong> Klicken Sie auf
                     &quot;Verlust?&quot; bei einer Ihrer Einzelreisen
                   </span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-sbb-red text-white flex items-center justify-center text-xs font-medium shrink-0">3</span>
-                  <span className="text-sbb-granite">
-                    <strong className="text-sbb-charcoal">Details eingeben:</strong> Kategorie wählen,
+                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">3</span>
+                  <span className="text-app-granite">
+                    <strong className="text-app-charcoal">Details eingeben:</strong> Kategorie wählen,
                     Beschreibung und Position angeben
                   </span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-sbb-red text-white flex items-center justify-center text-xs font-medium shrink-0">4</span>
-                  <span className="text-sbb-granite">
-                    <strong className="text-sbb-charcoal">Mitarbeiter-App:</strong> Beobachten Sie die
+                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">4</span>
+                  <span className="text-app-granite">
+                    <strong className="text-app-charcoal">Mitarbeiter-App:</strong> Beobachten Sie die
                     eingehende Benachrichtigung in Echtzeit
                   </span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-sbb-red text-white flex items-center justify-center text-xs font-medium shrink-0">5</span>
-                  <span className="text-sbb-granite">
-                    <strong className="text-sbb-charcoal">Rückmeldung:</strong> Das Personal kann
+                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">5</span>
+                  <span className="text-app-granite">
+                    <strong className="text-app-charcoal">Rückmeldung:</strong> Das Personal kann
                     &quot;Gefunden&quot; oder &quot;Nicht gefunden&quot; melden
                   </span>
                 </li>
@@ -295,15 +296,15 @@ export default function DemoPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-sbb-charcoal text-white py-8 mt-12">
+      <footer className="bg-app-charcoal text-white py-8 mt-12">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-sbb-sm opacity-70 mb-2">
+          <p className="text-app-sm opacity-70 mb-2">
             Konzept & Prototyp entwickelt von
           </p>
-          <p className="text-sbb-base font-medium">
-            Ein Vorschlag zur Verbesserung des SBB-Kundenerlebnisses
+          <p className="text-app-base font-medium">
+            Ein Vorschlag zur Verbesserung des Kundenerlebnisses
           </p>
-          <p className="text-sbb-xs opacity-50 mt-4">
+          <p className="text-app-xs opacity-50 mt-4">
             Basierend auf First-Principles-Analyse des aktuellen Fundbüro-Prozesses
           </p>
         </div>
@@ -315,9 +316,9 @@ export default function DemoPage() {
 function StatCard({ number, label, sublabel }: { number: string; label: string; sublabel: string }) {
   return (
     <div className="text-center">
-      <div className="text-3xl font-bold text-sbb-red mb-1">{number}</div>
-      <div className="text-sbb-base font-medium text-sbb-charcoal">{label}</div>
-      <div className="text-sbb-xs text-sbb-granite">{sublabel}</div>
+      <div className="text-3xl font-bold text-brand mb-1">{number}</div>
+      <div className="text-app-base font-medium text-app-charcoal">{label}</div>
+      <div className="text-app-xs text-app-granite">{sublabel}</div>
     </div>
   );
 }
@@ -338,19 +339,19 @@ function FlowStep({
   return (
     <div className="flex gap-4">
       <div className="shrink-0">
-        <div className="w-10 h-10 rounded-full bg-sbb-red text-white flex items-center justify-center font-semibold">
+        <div className="w-10 h-10 rounded-full bg-brand text-white flex items-center justify-center font-semibold">
           {number}
         </div>
       </div>
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-xl">{icon}</span>
-          <h4 className="font-semibold text-sbb-charcoal">{title}</h4>
-          <span className="text-sbb-xs bg-sbb-milk text-sbb-granite px-2 py-0.5 rounded-full">
+          <h4 className="font-semibold text-app-charcoal">{title}</h4>
+          <span className="text-app-xs bg-app-milk text-app-granite px-2 py-0.5 rounded-full">
             {time}
           </span>
         </div>
-        <p className="text-sbb-sm text-sbb-granite">{description}</p>
+        <p className="text-app-sm text-app-granite">{description}</p>
       </div>
     </div>
   );
@@ -370,17 +371,17 @@ function ImpactCard({
   description: string;
 }) {
   return (
-    <div className="bg-white rounded-sbb-lg p-5 shadow-sbb-card border border-sbb-cloud">
+    <div className="bg-white rounded-app-lg p-5 shadow-app-card border border-app-cloud">
       <div className="flex items-start gap-3">
         <span className="text-2xl">{icon}</span>
         <div className="flex-1">
-          <h4 className="font-semibold text-sbb-charcoal mb-2">{title}</h4>
-          <div className="flex items-center gap-2 text-sbb-sm mb-2">
-            <span className="text-sbb-smoke line-through">{current}</span>
-            <span className="text-sbb-granite">→</span>
-            <span className="text-sbb-success font-semibold">{target}</span>
+          <h4 className="font-semibold text-app-charcoal mb-2">{title}</h4>
+          <div className="flex items-center gap-2 text-app-sm mb-2">
+            <span className="text-app-smoke line-through">{current}</span>
+            <span className="text-app-granite">→</span>
+            <span className="text-app-success font-semibold">{target}</span>
           </div>
-          <p className="text-sbb-xs text-sbb-granite">{description}</p>
+          <p className="text-app-xs text-app-granite">{description}</p>
         </div>
       </div>
     </div>
