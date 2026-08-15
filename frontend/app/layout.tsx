@@ -4,11 +4,27 @@ import { ConceptNotice } from '@/components/ui/ConceptNotice';
 import { tenant } from '@/lib/tenant';
 import './globals.css';
 
+/**
+ * Where this site actually serves. Load-bearing for the social preview: Next
+ * resolves the generated og:image against `metadataBase`, and without it the
+ * tag is emitted as http://localhost:3000/opengraph-image — present, plausible,
+ * and unfetchable by every scraper. Falls back to the real host, not localhost.
+ */
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://sbb.orangecat.ch';
+
 // Every operator-facing string comes from the tenant SSOT (lib/tenant.ts).
 // Nothing here names an operator.
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: tenant.productName,
   description: tenant.description,
+  openGraph: {
+    title: tenant.productName,
+    description: tenant.description,
+    url: SITE_URL,
+    siteName: tenant.productName,
+    type: 'website',
+  },
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
