@@ -3,6 +3,7 @@
  * Realistic Swiss public transport data for demonstration
  */
 
+import { tenant } from '@/lib/tenant';
 import type { Trip, LostItem, User, Vehicle, Station, StaffMember, StaffNotification } from './types';
 
 // ============================================================================
@@ -44,10 +45,10 @@ export const stations: Record<string, Station> = {
 // ============================================================================
 
 export const vehicles: Record<string, Vehicle> = {
-  ic1: { id: 'v-001', type: 'train', line: 'IC 1', number: 'IC 723', operator: 'SBB' },
-  ic8: { id: 'v-002', type: 'train', line: 'IC 8', number: 'IC 812', operator: 'SBB' },
-  s3: { id: 'v-003', type: 'train', line: 'S3', number: 'S3 18234', operator: 'SBB' },
-  s8: { id: 'v-004', type: 'train', line: 'S8', number: 'S8 18456', operator: 'SBB' },
+  ic1: { id: 'v-001', type: 'train', line: 'IC 1', number: 'IC 723', operator: tenant.operatorCode },
+  ic8: { id: 'v-002', type: 'train', line: 'IC 8', number: 'IC 812', operator: tenant.operatorCode },
+  s3: { id: 'v-003', type: 'train', line: 'S3', number: 'S3 18234', operator: tenant.operatorCode },
+  s8: { id: 'v-004', type: 'train', line: 'S8', number: 'S8 18456', operator: tenant.operatorCode },
   tram4: { id: 'v-005', type: 'tram', line: 'Tram 4', number: '2047', operator: 'VBZ' },
   tram11: { id: 'v-006', type: 'tram', line: 'Tram 11', number: '2103', operator: 'VBZ' },
   bus31: { id: 'v-007', type: 'bus', line: 'Bus 31', number: '704', operator: 'VBZ' },
@@ -271,13 +272,13 @@ export function formatRelativeTime(isoString: string): string {
 }
 
 // ============================================================================
-// Staff Mock Data (SBB Employees)
+// Staff Mock Data (operator employees)
 // ============================================================================
 
 export const mockStaff: StaffMember = {
   id: 'staff-001',
   name: 'Marco Brunner',
-  employeeNumber: 'SBB-7842',
+  employeeNumber: `${tenant.operatorCode}-7842`,
   role: 'conductor',
   vehicleId: 'v-001',
   isOnDuty: true,
@@ -291,7 +292,7 @@ export const mockVehicle: Vehicle = {
   type: 'train',
   line: 'IC 1',
   number: 'IC 723',
-  operator: 'SBB',
+  operator: tenant.operatorCode,
 };
 
 // ============================================================================

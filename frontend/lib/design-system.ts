@@ -1,21 +1,21 @@
 /**
- * SBB Design System — JS constants for non-CSS contexts only.
+ * Design system — JS constants for non-CSS contexts only.
  *
  * SSOT is app/globals.css (CSS custom properties).
  * Use this file ONLY where CSS vars are inaccessible at runtime:
  * canvas drawing, Satori OG images, charting libraries (Recharts SVG attrs).
- * Do NOT use in React components — use Tailwind sbb-* classes instead.
+ * Do NOT use in React components — use Tailwind app-* classes instead.
  *
  * Values must stay in sync with globals.css manually.
- * Based on official SBB digital design system: https://digital.sbb.ch
+ * Values mirror the CSS custom properties in app/globals.css.
  */
 
 // ============================================================================
-// Official SBB Color Palette
+// Colour palette (mirrors globals.css)
 // Source: https://digital.sbb.ch/en/foundation/colors/base-colors/
 // ============================================================================
 
-export const SBB_COLORS = {
+export const APP_COLORS = {
   // Primary
   red: '#EB0000',
   'red-125': '#C60018',
@@ -50,7 +50,7 @@ export const SBB_COLORS = {
 // Spacing (4px base grid)
 // ============================================================================
 
-export const SBB_SPACING = {
+export const APP_SPACING = {
   xs: '4px',
   sm: '8px',
   md: '16px',
@@ -63,7 +63,7 @@ export const SBB_SPACING = {
 // Border Radius
 // ============================================================================
 
-export const SBB_RADIUS = {
+export const APP_RADIUS = {
   sm: '4px',
   md: '8px',
   lg: '16px',
@@ -74,7 +74,7 @@ export const SBB_RADIUS = {
 // Typography Scale
 // ============================================================================
 
-export const SBB_TYPOGRAPHY = {
+export const APP_TYPOGRAPHY = {
   xs: ['12px', { lineHeight: '16px' }],
   sm: ['14px', { lineHeight: '20px' }],
   base: ['16px', { lineHeight: '24px' }],
@@ -88,7 +88,7 @@ export const SBB_TYPOGRAPHY = {
 // Shadows
 // ============================================================================
 
-export const SBB_SHADOWS = {
+export const APP_SHADOWS = {
   card:   '0 2px 8px rgba(0, 0, 0, 0.08)',
   modal:  '0 4px 24px rgba(0, 0, 0, 0.16)',
   button: '0 2px 4px rgba(235, 0, 0, 0.24)',
@@ -108,5 +108,5 @@ export const REPORTING_WINDOWS = {
 // Type exports for TypeScript
 // ============================================================================
 
-export type SbbColor = keyof typeof SBB_COLORS;
-export type SbbSpacing = keyof typeof SBB_SPACING;
+export type AppColor = keyof typeof APP_COLORS;
+export type AppSpacing = keyof typeof APP_SPACING;

@@ -47,18 +47,18 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       }
 
       return (
-        <div className="min-h-screen bg-sbb-milk flex items-center justify-center p-6">
-          <div className="bg-white rounded-sbb-lg shadow-lg p-8 max-w-sm w-full text-center">
+        <div className="min-h-screen bg-app-milk flex items-center justify-center p-6">
+          <div className="bg-white rounded-app-lg shadow-lg p-8 max-w-sm w-full text-center">
             <div className="text-5xl mb-4">😕</div>
-            <h2 className="text-sbb-xl font-semibold text-sbb-charcoal mb-2">
+            <h2 className="text-app-xl font-semibold text-app-charcoal mb-2">
               Etwas ist schiefgelaufen
             </h2>
-            <p className="text-sbb-sm text-sbb-granite mb-6">
+            <p className="text-app-sm text-app-granite mb-6">
               Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.
             </p>
             <button
               onClick={this.handleRetry}
-              className="btn-sbb-primary w-full"
+              className="btn-app-primary w-full"
             >
               Erneut versuchen
             </button>

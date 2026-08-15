@@ -1,16 +1,23 @@
 import type { Metadata, Viewport } from 'next';
 import { AppProvider } from '@/components/providers/AppProvider';
+import { ConceptNotice } from '@/components/ui/ConceptNotice';
+import { tenant } from '@/lib/tenant';
 import './globals.css';
 
+// Every operator-facing string comes from the tenant SSOT (lib/tenant.ts).
+// Nothing here names an operator.
 export const metadata: Metadata = {
-  title: 'SBB Lost & Found',
-  description: 'Schnell und einfach verlorene Gegenstände melden - direkt in der SBB App',
+  title: tenant.productName,
+  description: tenant.description,
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'SBB Lost & Found',
+    title: tenant.productName,
   },
+  // A build carrying someone else's trademark is a pitch artefact and must not
+  // be indexed — being findable is what turns a demo into impersonation.
+  robots: tenant.isConcept ? { index: false, follow: false } : undefined,
 };
 
 export const viewport: Viewport = {
@@ -18,7 +25,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#EB0000',
+  themeColor: tenant.themeColor,
 };
 
 export default function RootLayout({
@@ -27,7 +34,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de">
+    // data-tenant is the single switch: globals.css keys every operator
+    // override off it, so the whole palette changes from this one attribute.
+    <html lang={tenant.locale} data-tenant={tenant.id}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -35,6 +44,7 @@ export default function RootLayout({
       <body>
         <AppProvider>
           <div className="mobile-container">
+            <ConceptNotice />
             {children}
           </div>
         </AppProvider>

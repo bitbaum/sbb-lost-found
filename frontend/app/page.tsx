@@ -16,31 +16,31 @@ import type { Trip, LostItem } from '@/lib/types';
 function PlanenTab() {
   return (
     <div className="px-4 pt-4 pb-6">
-      <div className="bg-white rounded-sbb-lg p-4 shadow-sbb-card mb-4">
-        <h2 className="text-sbb-lg font-semibold text-sbb-charcoal mb-3">Verbindung suchen</h2>
+      <div className="bg-white rounded-app-lg p-4 shadow-app-card mb-4">
+        <h2 className="text-app-lg font-semibold text-app-charcoal mb-3">Verbindung suchen</h2>
         <div className="space-y-3">
-          <div className="flex items-center gap-3 p-3 bg-sbb-milk rounded-sbb-md">
-            <div className="w-2 h-2 rounded-full bg-sbb-success" />
+          <div className="flex items-center gap-3 p-3 bg-app-milk rounded-app-md">
+            <div className="w-2 h-2 rounded-full bg-app-success" />
             <input
               type="text"
               placeholder="Von"
-              className="flex-1 bg-transparent text-sbb-base outline-none"
+              className="flex-1 bg-transparent text-app-base outline-none"
             />
           </div>
-          <div className="flex items-center gap-3 p-3 bg-sbb-milk rounded-sbb-md">
-            <div className="w-2 h-2 rounded-full bg-sbb-red" />
+          <div className="flex items-center gap-3 p-3 bg-app-milk rounded-app-md">
+            <div className="w-2 h-2 rounded-full bg-brand" />
             <input
               type="text"
               placeholder="Nach"
-              className="flex-1 bg-transparent text-sbb-base outline-none"
+              className="flex-1 bg-transparent text-app-base outline-none"
             />
           </div>
         </div>
-        <button className="w-full mt-4 bg-sbb-red text-white py-3 rounded-sbb-md font-medium">
+        <button className="w-full mt-4 bg-brand text-white py-3 rounded-app-md font-medium">
           Verbindung suchen
         </button>
       </div>
-      <p className="text-sbb-sm text-sbb-granite text-center">
+      <p className="text-app-sm text-app-granite text-center">
         Demo: Planen-Tab (Verbindungssuche)
       </p>
     </div>
@@ -50,19 +50,19 @@ function PlanenTab() {
 function EasyRideTab() {
   return (
     <div className="px-4 pt-4 pb-6">
-      <div className="bg-white rounded-sbb-lg p-6 shadow-sbb-card text-center">
-        <div className="w-16 h-16 bg-sbb-milk rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="bg-white rounded-app-lg p-6 shadow-app-card text-center">
+        <div className="w-16 h-16 bg-app-milk rounded-full flex items-center justify-center mx-auto mb-4">
           <span className="text-3xl">🎫</span>
         </div>
-        <h2 className="text-sbb-lg font-semibold text-sbb-charcoal mb-2">EasyRide</h2>
-        <p className="text-sbb-sm text-sbb-granite mb-4">
+        <h2 className="text-app-lg font-semibold text-app-charcoal mb-2">EasyRide</h2>
+        <p className="text-app-sm text-app-granite mb-4">
           Check-in, reisen, Check-out. Der Fahrpreis wird automatisch berechnet.
         </p>
-        <button className="w-full bg-sbb-red text-white py-3 rounded-sbb-md font-medium">
+        <button className="w-full bg-brand text-white py-3 rounded-app-md font-medium">
           EasyRide starten
         </button>
       </div>
-      <p className="text-sbb-sm text-sbb-granite text-center mt-4">
+      <p className="text-app-sm text-app-granite text-center mt-4">
         Demo: EasyRide-Tab
       </p>
     </div>
@@ -72,22 +72,22 @@ function EasyRideTab() {
 function BilletteTab() {
   return (
     <div className="px-4 pt-4 pb-6">
-      <div className="bg-white rounded-sbb-lg p-4 shadow-sbb-card mb-4">
-        <h2 className="text-sbb-lg font-semibold text-sbb-charcoal mb-3">Meine Billette</h2>
+      <div className="bg-white rounded-app-lg p-4 shadow-app-card mb-4">
+        <h2 className="text-app-lg font-semibold text-app-charcoal mb-3">Meine Billette</h2>
         <div className="flex gap-2 mb-4">
-          <button className="flex-1 py-2 px-3 bg-sbb-red text-white rounded-sbb-md text-sbb-sm font-medium">
+          <button className="flex-1 py-2 px-3 bg-brand text-white rounded-app-md text-app-sm font-medium">
             Gültig
           </button>
-          <button className="flex-1 py-2 px-3 bg-sbb-milk text-sbb-granite rounded-sbb-md text-sbb-sm font-medium">
+          <button className="flex-1 py-2 px-3 bg-app-milk text-app-granite rounded-app-md text-app-sm font-medium">
             Abgelaufen
           </button>
         </div>
         <div className="text-center py-8">
           <span className="text-4xl mb-2 block">🎫</span>
-          <p className="text-sbb-sm text-sbb-granite">Keine aktiven Billette</p>
+          <p className="text-app-sm text-app-granite">Keine aktiven Billette</p>
         </div>
       </div>
-      <p className="text-sbb-sm text-sbb-granite text-center">
+      <p className="text-app-sm text-app-granite text-center">
         Demo: Billette & Abos Tab
       </p>
     </div>
@@ -97,8 +97,8 @@ function BilletteTab() {
 function ShopTab() {
   return (
     <div className="px-4 pt-4 pb-6">
-      <div className="bg-white rounded-sbb-lg p-4 shadow-sbb-card mb-4">
-        <h2 className="text-sbb-lg font-semibold text-sbb-charcoal mb-3">Shop & Services</h2>
+      <div className="bg-white rounded-app-lg p-4 shadow-app-card mb-4">
+        <h2 className="text-app-lg font-semibold text-app-charcoal mb-3">Shop & Services</h2>
         <div className="grid grid-cols-2 gap-3">
           {[
             { icon: '🎫', label: 'Tageskarten' },
@@ -106,14 +106,14 @@ function ShopTab() {
             { icon: '🐕', label: 'Hunde-Tageskarte' },
             { icon: '🔍', label: 'Fundservice' },
           ].map((item) => (
-            <div key={item.label} className="p-4 bg-sbb-milk rounded-sbb-md text-center">
+            <div key={item.label} className="p-4 bg-app-milk rounded-app-md text-center">
               <span className="text-2xl mb-2 block">{item.icon}</span>
-              <span className="text-sbb-sm text-sbb-charcoal">{item.label}</span>
+              <span className="text-app-sm text-app-charcoal">{item.label}</span>
             </div>
           ))}
         </div>
       </div>
-      <p className="text-sbb-sm text-sbb-granite text-center">
+      <p className="text-app-sm text-app-granite text-center">
         Demo: Shop & Services Tab
       </p>
     </div>
@@ -128,14 +128,14 @@ function ProfilTab({ onOpenFundservice }: ProfilTabProps) {
   const user = mockUser;
   return (
     <div className="px-4 pt-4 pb-6">
-      <div className="bg-white rounded-sbb-lg p-4 shadow-sbb-card mb-4">
+      <div className="bg-white rounded-app-lg p-4 shadow-app-card mb-4">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 bg-sbb-milk rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 bg-app-milk rounded-full flex items-center justify-center">
             <span className="text-2xl">👤</span>
           </div>
           <div>
-            <h2 className="text-sbb-lg font-semibold text-sbb-charcoal">{user.name}</h2>
-            <p className="text-sbb-sm text-sbb-granite">{user.swissPassId || 'SwissPass'}</p>
+            <h2 className="text-app-lg font-semibold text-app-charcoal">{user.name}</h2>
+            <p className="text-app-sm text-app-granite">{user.swissPassId || 'SwissPass'}</p>
           </div>
         </div>
         <div className="space-y-2">
@@ -143,14 +143,14 @@ function ProfilTab({ onOpenFundservice }: ProfilTabProps) {
           {onOpenFundservice && (
             <button
               onClick={onOpenFundservice}
-              className="w-full p-3 bg-sbb-red/10 rounded-sbb-md flex items-center gap-3 hover:bg-sbb-red/15 transition-colors"
+              className="w-full p-3 bg-brand/10 rounded-app-md flex items-center gap-3 hover:bg-brand/15 transition-colors"
             >
               <span className="text-xl">🧳</span>
               <div className="flex-1 text-left">
-                <span className="text-sbb-base font-medium text-sbb-red">Fundservice</span>
-                <p className="text-sbb-xs text-sbb-granite">Verlust melden oder Status prüfen</p>
+                <span className="text-app-base font-medium text-brand">Fundservice</span>
+                <p className="text-app-xs text-app-granite">Verlust melden oder Status prüfen</p>
               </div>
-              <span className="text-sbb-red">›</span>
+              <span className="text-brand">›</span>
             </button>
           )}
           {[
@@ -160,14 +160,14 @@ function ProfilTab({ onOpenFundservice }: ProfilTabProps) {
             'Einstellungen',
             'Hilfe & Kontakt',
           ].map((item) => (
-            <div key={item} className="p-3 bg-sbb-milk rounded-sbb-md flex justify-between items-center">
-              <span className="text-sbb-base text-sbb-charcoal">{item}</span>
-              <span className="text-sbb-granite">›</span>
+            <div key={item} className="p-3 bg-app-milk rounded-app-md flex justify-between items-center">
+              <span className="text-app-base text-app-charcoal">{item}</span>
+              <span className="text-app-granite">›</span>
             </div>
           ))}
         </div>
       </div>
-      <p className="text-sbb-sm text-sbb-granite text-center">
+      <p className="text-app-sm text-app-granite text-center">
         Demo: Profil-Tab
       </p>
     </div>
@@ -224,25 +224,25 @@ export default function PassengerApp() {
   const renderLoadingSkeleton = () => (
     <div className="px-4 pt-4">
       {/* Active trip skeleton */}
-      <div className="bg-sbb-cloud rounded-sbb-lg p-5 mb-4 animate-pulse">
-        <div className="h-4 bg-sbb-silver rounded w-1/3 mb-4" />
-        <div className="h-6 bg-sbb-silver rounded w-2/3 mb-2" />
-        <div className="h-4 bg-sbb-silver rounded w-1/2 mb-4" />
-        <div className="h-12 bg-sbb-silver rounded" />
+      <div className="bg-app-cloud rounded-app-lg p-5 mb-4 animate-pulse">
+        <div className="h-4 bg-app-silver rounded w-1/3 mb-4" />
+        <div className="h-6 bg-app-silver rounded w-2/3 mb-2" />
+        <div className="h-4 bg-app-silver rounded w-1/2 mb-4" />
+        <div className="h-12 bg-app-silver rounded" />
       </div>
 
       {/* Recent trips skeleton */}
-      <div className="h-5 bg-sbb-cloud rounded w-1/3 mb-4" />
+      <div className="h-5 bg-app-cloud rounded w-1/3 mb-4" />
       <div className="space-y-3">
         {[1, 2, 3].map(i => (
-          <div key={i} className="bg-white rounded-sbb-lg p-4 animate-pulse shadow-sbb-card">
+          <div key={i} className="bg-white rounded-app-lg p-4 animate-pulse shadow-app-card">
             <div className="flex gap-3">
-              <div className="w-4 h-4 bg-sbb-cloud rounded" />
+              <div className="w-4 h-4 bg-app-cloud rounded" />
               <div className="flex-1 space-y-2">
-                <div className="h-4 bg-sbb-cloud rounded w-3/4" />
-                <div className="h-3 bg-sbb-cloud rounded w-1/2" />
+                <div className="h-4 bg-app-cloud rounded w-3/4" />
+                <div className="h-3 bg-app-cloud rounded w-1/2" />
               </div>
-              <div className="w-16 h-8 bg-sbb-cloud rounded-sbb-md" />
+              <div className="w-16 h-8 bg-app-cloud rounded-app-md" />
             </div>
           </div>
         ))}
@@ -270,7 +270,7 @@ export default function PassengerApp() {
 
         {/* Einzelreisen (Individual Trips) Section - past trips */}
         <section>
-          <h2 className="text-sbb-sm font-medium text-sbb-granite mb-3">
+          <h2 className="text-app-sm font-medium text-app-granite mb-3">
             Letzte Reisen
           </h2>
           <div className="space-y-2">
@@ -320,15 +320,15 @@ export default function PassengerApp() {
       {/* iOS Status Bar */}
       <StatusBar />
 
-      {/* SBB Header */}
+      {/* Operator header */}
       <Header user={mockUser} />
 
       {/* Main Content */}
-      <main className="pb-20 overflow-y-auto hide-scrollbar bg-sbb-milk min-h-[calc(100vh-120px)]">
+      <main className="pb-20 overflow-y-auto hide-scrollbar bg-app-milk min-h-[calc(100vh-120px)]">
         {renderTabContent()}
       </main>
 
-      {/* Bottom Navigation - 6 tabs like real SBB app */}
+      {/* Bottom Navigation - 6 tabs, mirroring a typical operator app */}
       <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
 
       {/* Lost Item Modal */}

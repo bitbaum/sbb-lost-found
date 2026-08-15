@@ -11,9 +11,9 @@ interface StaffStatusBarProps {
 
 export function StaffStatusBar({ vehicle, pendingCount, isOnline }: StaffStatusBarProps) {
   return (
-    <div className="bg-sbb-charcoal text-white px-4 py-2 flex items-center justify-between text-sbb-xs">
+    <div className="bg-app-charcoal text-white px-4 py-2 flex items-center justify-between text-app-xs">
       <div className="flex items-center gap-2">
-        <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-sbb-success' : 'bg-sbb-smoke'}`} />
+        <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-app-success' : 'bg-app-smoke'}`} />
         <span className="opacity-80">
           {isOnline ? UI_LABELS.status.online : UI_LABELS.status.offline}
         </span>
@@ -23,7 +23,7 @@ export function StaffStatusBar({ vehicle, pendingCount, isOnline }: StaffStatusB
       </div>
       <div className="flex items-center gap-1.5">
         {pendingCount > 0 && (
-          <span className="bg-sbb-red px-1.5 py-0.5 rounded-full text-white font-medium">
+          <span className="bg-brand px-1.5 py-0.5 rounded-full text-white font-medium">
             {pendingCount}
           </span>
         )}

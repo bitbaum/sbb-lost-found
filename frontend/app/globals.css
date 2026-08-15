@@ -2,66 +2,93 @@
 @tailwind components;
 @tailwind utilities;
 
-/* SBB Design System Global Styles
+/* Design System Global Styles — WHITE-LABEL
  *
  * SSOT: All design tokens are CSS custom properties defined here.
  * tailwind.config.js references these vars — never define values there directly.
  * design-system.ts mirrors select tokens for non-CSS contexts (canvas, Satori).
+ *
+ * TENANCY: `:root` carries the neutral house brand. Every operator-specific
+ * value lives in a `:root[data-tenant="..."]` block at the bottom of this
+ * :root section — nothing else in the codebase names an operator. The active
+ * tenant is set once, on <html data-tenant>, from lib/tenant.ts. Switching
+ * operator is therefore one env var (NEXT_PUBLIC_TENANT) and no code change.
+ *
+ * To add an operator: add a tenant entry in lib/tenant.ts and one override
+ * block here. Only tokens that actually differ need restating.
  */
 :root {
   /* Safe area insets for mobile */
   --safe-area-top: env(safe-area-inset-top);
   --safe-area-bottom: env(safe-area-inset-bottom);
 
-  /* SBB Colors — official palette from digital.sbb.ch */
-  --sbb-red:        #EB0000;
-  --sbb-red-125:    #C60018;
-  --sbb-red-150:    #A20013;
+  /* Brand — neutral house palette (Nordbahn). Operators override below. */
+  --brand:        #0B4F8F;
+  --brand-hover:    #083C6E;
+  --brand-active:    #062B4F;
+  --brand-contrast: #FFFFFF;
+  --font-brand: 'Inter';
 
   /* Neutrals */
-  --sbb-white:      #FFFFFF;
-  --sbb-milk:       #F6F6F6;
-  --sbb-cloud:      #E5E5E5;
-  --sbb-silver:     #DCDCDC;
-  --sbb-aluminum:   #D2D2D2;
-  --sbb-platinum:   #CDCDCD;
-  --sbb-cement:     #BDBDBD;
-  --sbb-graphite:   #B7B7B7;
-  --sbb-storm:      #A8A8A8;
-  --sbb-smoke:      #8D8D8D;
-  --sbb-metal:      #767676;
-  --sbb-granite:    #686868;
-  --sbb-anthracite: #5A5A5A;
-  --sbb-iron:       #444444;
-  --sbb-charcoal:   #212121;
-  --sbb-midnight:   #151515;
-  --sbb-black:      #000000;
+  --app-white:      #FFFFFF;
+  --app-milk:       #F6F6F6;
+  --app-cloud:      #E5E5E5;
+  --app-silver:     #DCDCDC;
+  --app-aluminum:   #D2D2D2;
+  --app-platinum:   #CDCDCD;
+  --app-cement:     #BDBDBD;
+  --app-graphite:   #B7B7B7;
+  --app-storm:      #A8A8A8;
+  --app-smoke:      #8D8D8D;
+  --app-metal:      #767676;
+  --app-granite:    #686868;
+  --app-anthracite: #5A5A5A;
+  --app-iron:       #444444;
+  --app-charcoal:   #212121;
+  --app-midnight:   #151515;
+  --app-black:      #000000;
 
   /* Functional */
-  --sbb-blue:       #2D327D;
-  --sbb-success:    #00973B;
-  --sbb-warning:    #FFAB00;
-  --sbb-error:      #EB0000;
-  --sbb-info:       #2D327D;
+  --app-blue:       #2D327D;
+  --app-success:    #00973B;
+  --app-warning:    #FFAB00;
+  --app-error:      #EB0000;
+  --app-info:       #2D327D;
 
   /* Spacing (4px grid) */
-  --sbb-space-xs:   4px;
-  --sbb-space-sm:   8px;
-  --sbb-space-md:   16px;
-  --sbb-space-lg:   24px;
-  --sbb-space-xl:   32px;
-  --sbb-space-2xl:  48px;
+  --app-space-xs:   4px;
+  --app-space-sm:   8px;
+  --app-space-md:   16px;
+  --app-space-lg:   24px;
+  --app-space-xl:   32px;
+  --app-space-2xl:  48px;
 
   /* Border Radius */
-  --sbb-radius-sm:  4px;
-  --sbb-radius-md:  8px;
-  --sbb-radius-lg:  16px;
-  --sbb-radius-xl:  24px;
+  --app-radius-sm:  4px;
+  --app-radius-md:  8px;
+  --app-radius-lg:  16px;
+  --app-radius-xl:  24px;
 
-  /* Shadows */
-  --sbb-shadow-card:   0 2px 8px rgba(0, 0, 0, 0.08);
-  --sbb-shadow-modal:  0 4px 24px rgba(0, 0, 0, 0.16);
-  --sbb-shadow-button: 0 2px 4px rgba(235, 0, 0, 0.24);
+  /* Shadows. The button glow is brand-tinted, so it is a tenant token. */
+  --app-shadow-card:   0 2px 8px rgba(0, 0, 0, 0.08);
+  --app-shadow-modal:  0 4px 24px rgba(0, 0, 0, 0.16);
+  --app-shadow-button: 0 2px 4px rgba(11, 79, 143, 0.24);
+}
+
+/* ─── Tenant overrides ────────────────────────────────────────────────────
+ * The ONLY place an operator's visual identity is expressed. Neutrals,
+ * spacing, radii and type scale are shared, so an operator restates just
+ * the handful of tokens that actually differ.
+ */
+
+/* SBB — Schweizerische Bundesbahnen. Official palette: digital.sbb.ch */
+:root[data-tenant='sbb'] {
+  --brand:          #EB0000;
+  --brand-hover:    #C60018;
+  --brand-active:   #A20013;
+  --brand-contrast: #FFFFFF;
+  --font-brand: 'SBB Web';
+  --app-shadow-button: 0 2px 4px rgba(235, 0, 0, 0.24);
 }
 
 /* Base styles */
@@ -77,9 +104,9 @@ html {
 }
 
 body {
-  font-family: 'SBB Web', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: var(--sbb-milk);
-  color: var(--sbb-charcoal);
+  font-family: var(--font-brand), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--app-milk);
+  color: var(--app-charcoal);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -91,7 +118,7 @@ body {
   margin: 0 auto;
   min-height: 100vh;
   min-height: 100dvh; /* Dynamic viewport height for mobile */
-  background: var(--sbb-white);
+  background: var(--app-white);
   position: relative;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
 }
@@ -105,49 +132,49 @@ body {
   padding-bottom: max(var(--safe-area-bottom), 34px);
 }
 
-/* SBB Button styles */
+/* Button styles */
 @layer components {
-  .btn-sbb-primary {
-    @apply bg-sbb-red text-white font-semibold py-4 px-6 rounded-sbb-lg;
-    @apply hover:bg-sbb-red-125 active:bg-sbb-red-150;
+  .btn-app-primary {
+    @apply bg-brand text-white font-semibold py-4 px-6 rounded-app-lg;
+    @apply hover:bg-brand-hover active:bg-brand-active;
     @apply transition-colors duration-200;
-    @apply shadow-sbb-button;
+    @apply shadow-app-button;
     @apply disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  .btn-sbb-secondary {
-    @apply bg-sbb-cloud text-sbb-charcoal font-medium py-3 px-5 rounded-sbb-md;
-    @apply hover:bg-sbb-silver active:bg-sbb-cement;
+  .btn-app-secondary {
+    @apply bg-app-cloud text-app-charcoal font-medium py-3 px-5 rounded-app-md;
+    @apply hover:bg-app-silver active:bg-app-cement;
     @apply transition-colors duration-200;
   }
 
-  .btn-sbb-ghost {
-    @apply bg-transparent text-sbb-red font-medium py-3 px-5 rounded-sbb-md;
-    @apply hover:bg-sbb-milk active:bg-sbb-cloud;
+  .btn-app-ghost {
+    @apply bg-transparent text-brand font-medium py-3 px-5 rounded-app-md;
+    @apply hover:bg-app-milk active:bg-app-cloud;
     @apply transition-colors duration-200;
   }
 
-  /* SBB Card */
-  .card-sbb {
-    @apply bg-white rounded-sbb-lg shadow-sbb-card;
-    @apply border border-sbb-cloud;
+  /* Card */
+  .card-app {
+    @apply bg-white rounded-app-lg shadow-app-card;
+    @apply border border-app-cloud;
   }
 
-  /* SBB Input */
-  .input-sbb {
-    @apply w-full py-4 px-4 rounded-sbb-md;
-    @apply bg-sbb-milk border-2 border-sbb-cloud;
-    @apply text-sbb-base text-sbb-charcoal;
-    @apply placeholder:text-sbb-smoke;
-    @apply focus:outline-none focus:border-sbb-red focus:bg-white;
+  /* Input */
+  .input-app {
+    @apply w-full py-4 px-4 rounded-app-md;
+    @apply bg-app-milk border-2 border-app-cloud;
+    @apply text-app-base text-app-charcoal;
+    @apply placeholder:text-app-smoke;
+    @apply focus:outline-none focus:border-brand focus:bg-white;
     @apply transition-colors duration-200;
   }
 
-  /* SBB Header */
-  .header-sbb {
-    @apply bg-gradient-to-b from-sbb-red to-sbb-red-125;
+  /* Header */
+  .header-app {
+    @apply bg-gradient-to-b from-brand to-brand-hover;
     @apply text-white;
-    @apply px-sbb-lg py-sbb-md;
+    @apply px-app-lg py-app-md;
   }
 }
 
@@ -238,10 +265,10 @@ body {
 .bottom-nav {
   @apply fixed bottom-0 left-1/2 -translate-x-1/2;
   @apply w-full max-w-[430px];
-  @apply bg-white border-t border-sbb-cloud;
+  @apply bg-white border-t border-app-cloud;
   @apply flex justify-around;
   @apply pb-[max(var(--safe-area-bottom),8px)] pt-2;
-  @apply shadow-sbb-modal;
+  @apply shadow-app-modal;
 }
 
 /* Modal overlay */
@@ -252,7 +279,7 @@ body {
 
 .modal-content {
   @apply w-full max-w-[430px] bg-white;
-  @apply rounded-t-sbb-xl;
+  @apply rounded-t-app-xl;
   @apply max-h-[85vh] overflow-y-auto;
 }
 
@@ -260,9 +287,9 @@ body {
 .toast {
   @apply fixed top-16 left-1/2 -translate-x-1/2;
   @apply w-[calc(100%-32px)] max-w-[398px];
-  @apply bg-sbb-success text-white;
-  @apply p-4 rounded-sbb-lg;
-  @apply shadow-sbb-modal;
+  @apply bg-app-success text-white;
+  @apply p-4 rounded-app-lg;
+  @apply shadow-app-modal;
   @apply flex items-center gap-3;
   @apply z-[100];
 }
@@ -280,7 +307,7 @@ body {
 
 /* Focus visible for keyboard navigation */
 :focus-visible {
-  @apply outline-2 outline-offset-2 outline-sbb-red;
+  @apply outline-2 outline-offset-2 outline-brand;
 }
 
 /* Hide scrollbar but keep functionality */
