@@ -1,4 +1,5 @@
 import express from 'express';
+import fs from 'fs';
 import path from 'path';
 import helmet from 'helmet';
 import cors from 'cors';
@@ -29,12 +30,23 @@ try {
     path.resolve(process.cwd(), 'services/api-gateway/public'),
   ];
   const staticDir = candidates.find((p) => {
-    try { return require('fs').existsSync(p); } catch { return false; }
+    try {
+      return fs.existsSync(p);
+    } catch {
+      return false;
+    }
   });
   if (staticDir) {
     app.use('/ui', express.static(staticDir));
+  } else {
+    logger.warn('Prototype UI not mounted: no public/ directory found', { candidates });
   }
-} catch {}
+} catch (error) {
+  // Was `catch {}`. The prototype UI is optional, so failing to mount it must
+  // not stop the gateway — but silence meant /ui could 404 with nothing
+  // anywhere saying why.
+  logger.warn('Prototype UI not mounted', { error });
+}
 
 // Dev-only: mock recent trips for prefill UX
 app.get('/me/recent-trips', (_req, res) => {

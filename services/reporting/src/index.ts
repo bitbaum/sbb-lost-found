@@ -200,8 +200,12 @@ const setupRedisEventListeners = async () => {
   });
 };
 
-// Error handling middleware
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+// Error handling middleware.
+//
+// `_next` is unused but MUST stay: Express identifies an error handler by its
+// ARITY, so dropping the fourth parameter silently demotes this to ordinary
+// middleware that never runs on error. Renamed rather than removed.
+app.use((err: Error, req: express.Request, res: express.Response, _next: express.NextFunction) => {
   logger.error('Unhandled error', { error: err, path: req.path, method: req.method });
   res.status(500).json({
     success: false,

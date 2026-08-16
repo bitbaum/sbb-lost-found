@@ -4,7 +4,6 @@ import cors from 'cors';
 import { Pool } from 'pg';
 import { createClient, RedisClientType } from 'redis';
 import { logger } from './utils/logger';
-import { ItemCategory } from '@sbb-lost-found/types';
 
 const app = express();
 app.use(helmet());
@@ -105,7 +104,11 @@ process.on('SIGTERM', async () => {
   logger.info('SIGTERM received, shutting down');
   try {
     await redis?.quit();
-  } catch {}
+  } catch (error) {
+    // Best-effort on the way down — a failed quit must not block shutdown, but
+    // swallowing it silently is how a connection leak stays invisible.
+    logger.warn('Redis quit failed during shutdown', { error });
+  }
   await db?.end();
   process.exit(0);
 });

@@ -21,8 +21,8 @@ on:
   pull_request:
 
 jobs:
-  typecheck:
-    name: Typecheck (services + frontend)
+  verify:
+    name: Verify (lint + typecheck + test)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,5 +39,8 @@ jobs:
         working-directory: frontend
         run: npm ci
 
-      - name: Verify (build shared types, typecheck services + frontend)
+      # SSOT: the gate bundle is defined once, in package.json `verify`, and CI
+      # calls it verbatim. Do not inline checks here — a check that exists only
+      # in CI cannot be run before pushing, which is the whole point of verify.
+      - name: Verify (build shared types, lint + typecheck + test, tenant SSOT)
         run: npm run verify
