@@ -75,7 +75,7 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
             {notification.location}
           </p>
 
-          <p className="text-app-xs text-app-smoke mt-1">
+          <p className="text-app-xs text-app-granite mt-1">
             {formatRelativeTime(notification.createdAt)}
             {notification.passengerInfo && ` • ${notification.passengerInfo.tripRoute}`}
           </p>
@@ -171,7 +171,7 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
                 </p>
               )}
               {notification.respondedAt && (
-                <p className="text-app-xs text-app-smoke mt-2">
+                <p className="text-app-xs text-app-granite mt-2">
                   {UI_LABELS.staff.answeredAt} {formatRelativeTime(notification.respondedAt)}
                 </p>
               )}
