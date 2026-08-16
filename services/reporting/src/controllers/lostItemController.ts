@@ -176,8 +176,13 @@ export class LostItemController {
   }
 }
 
-// Extend Express Request to include user
+// Extend Express Request to include user.
+//
+// `no-namespace` exempts declaration merging, which is exactly what this is:
+// augmenting an interface from a third-party package has no ES2015-module
+// equivalent, so the alternative the rule prefers does not exist here.
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       user?: {

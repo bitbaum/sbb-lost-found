@@ -95,7 +95,11 @@ process.on('SIGTERM', async () => {
   logger.info('SIGTERM received, shutting down');
   try {
     await Promise.allSettled([redisSub?.quit(), redisPub?.quit()]);
-  } catch {}
+  } catch (error) {
+    // Best-effort on the way down — a failed quit must not block shutdown, but
+    // swallowing it silently is how a connection leak stays invisible.
+    logger.warn('Redis quit failed during shutdown', { error });
+  }
   httpServer.close(() => process.exit(0));
 });
 

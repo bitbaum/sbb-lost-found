@@ -52,6 +52,14 @@ export function useApiWithFallback<T>(
   }, [apiFn, mockData]);
 
   useEffect(() => {
+    // Justified disable, not a silenced bug. `set-state-in-effect` exists to
+    // catch state DERIVED during render that was pushed into an effect; this is
+    // the other case the rule's own docs call legitimate — loading from an
+    // external system. What the rule sees is fetchData's first statement, a
+    // synchronous setState flipping isLoading, and there is no way to express
+    // "fetch on mount" without it. The rule stays on so a genuine
+    // derived-state-in-effect still fails here.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
   }, deps);
 

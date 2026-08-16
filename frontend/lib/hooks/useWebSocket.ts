@@ -38,6 +38,20 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttemptsRef = useRef(0);
 
+  // `handleDisconnect` schedules a reconnect by calling `connect`, and `connect`
+  // lists `handleDisconnect` as a dependency — a genuine cycle. It used to be
+  // resolved by declaring `handleDisconnect` first and omitting `connect` from
+  // its dependency list, which trades a lint error for a staleness bug:
+  // `handleDisconnect` is memoised on [autoConnect, onDisconnect], so it keeps
+  // calling whichever `connect` existed when it was created. Once the handlers
+  // change identity, a reconnect rewires the socket to the PREVIOUS render's
+  // callbacks — messages then arrive at a stale onMessage.
+  //
+  // Reading `connect` through a ref breaks the cycle honestly: the ref is
+  // repointed whenever `connect` changes, so the reconnect path always reaches
+  // the current one and no dependency has to be hidden from the linter.
+  const connectRef = useRef<() => void>(() => {});
+
   const handleMessage = useCallback((event: WebSocketEvent) => {
     setLastEvent(event);
     onMessage?.(event);
@@ -58,7 +72,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
       const delay = Math.min(1000 * Math.pow(2, reconnectAttemptsRef.current), 30000);
       reconnectTimeoutRef.current = setTimeout(() => {
         reconnectAttemptsRef.current++;
-        connect();
+        connectRef.current();
       }, delay);
     }
   }, [autoConnect, onDisconnect]);
@@ -81,6 +95,13 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     );
   }, [handleMessage, handleError, handleConnect, handleDisconnect]);
 
+  // Declared BEFORE the auto-connect effect on purpose: effects run in
+  // declaration order on mount, so the ref points at the real `connect` before
+  // anything can call it.
+  useEffect(() => {
+    connectRef.current = connect;
+  }, [connect]);
+
   const disconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
@@ -96,16 +117,20 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     connectionRef.current?.send(data);
   }, []);
 
-  // Auto-connect on mount
+  // Auto-connect on mount. Goes through the ref so this effect does not have to
+  // depend on `connect` (which changes whenever any handler prop does, and would
+  // otherwise tear the socket down and rebuild it on every such render).
+  // `disconnect` is memoised on [] and therefore stable, so depending on it is
+  // honest rather than a hidden omission.
   useEffect(() => {
     if (autoConnect) {
-      connect();
+      connectRef.current();
     }
 
     return () => {
       disconnect();
     };
-  }, [autoConnect]); // Intentionally excluding connect/disconnect to avoid loops
+  }, [autoConnect, disconnect]);
 
   return {
     isConnected,
