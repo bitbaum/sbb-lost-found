@@ -78,7 +78,7 @@ export function TripCard({ trip, variant, onReportLost, timeAgo }: TripCardProps
           <div className="flex items-center gap-2 mb-0.5">
             <span className="text-app-sm font-medium text-app-charcoal">{trip.vehicle.line}</span>
             {timeAgo && (
-              <span className="text-app-xs text-app-smoke">{timeAgo}</span>
+              <span className="text-app-xs text-app-granite">{timeAgo}</span>
             )}
             {isUrgent && (
               <span className="text-app-xs text-white bg-brand px-1.5 py-0.5 rounded font-medium">

@@ -377,7 +377,7 @@ function ImpactCard({
         <div className="flex-1">
           <h4 className="font-semibold text-app-charcoal mb-2">{title}</h4>
           <div className="flex items-center gap-2 text-app-sm mb-2">
-            <span className="text-app-smoke line-through">{current}</span>
+            <span className="text-app-granite line-through">{current}</span>
             <span className="text-app-granite">→</span>
             <span className="text-app-success font-semibold">{target}</span>
           </div>
