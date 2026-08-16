@@ -13,7 +13,7 @@
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "verify": "npm run build --workspace=@sbb-lost-found/types && npm run typecheck --workspaces --if-present && npm --prefix frontend run typecheck && npm run check:tenant",
+    "verify": "npm run build --workspace=@sbb-lost-found/types && npm run typecheck --workspaces && npm --prefix frontend run typecheck && npm run check:tenant",
     "check:tenant": "bash scripts/check-tenant-ssot.sh",
     "clean": "npm run clean --workspaces --if-present",
     "docker:build": "docker-compose build",
