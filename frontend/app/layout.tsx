@@ -25,7 +25,6 @@ export const metadata: Metadata = {
     siteName: tenant.productName,
     type: 'website',
   },
-  manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
