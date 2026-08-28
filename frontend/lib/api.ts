@@ -23,7 +23,10 @@ import type {
 // ============================================================================
 
 const DEMO_MODE = config.demo.enabled;
-const WS_URL = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3003';
+// Read through config, not a second process.env lookup. This line used to
+// default to port 3003 while next.config.js defaulted the same variable to
+// 3001 — one value, three definitions, two of them disagreeing.
+const WS_URL = config.api.wsUrl;
 
 // ============================================================================
 // WebSocket Types
@@ -63,7 +66,16 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    // In demo mode, we still try the API but don't fail hard
+    // Demo mode means no backend is reachable from this build, so there is
+    // nothing to try. Firing the request anyway is not a harmless fallback: the
+    // URL is inlined at build time, so in a deployed bundle it points at the
+    // visitor's own machine. The caller sees the same shape a failed request
+    // produces, so the existing mock fallback in useApiWithFallback is unchanged
+    // — it just no longer needs a doomed round trip to trigger it.
+    if (DEMO_MODE) {
+      return { success: false, error: 'Demo mode: no backend configured' };
+    }
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
@@ -197,6 +209,9 @@ class ApiClient {
     onDisconnect?: () => void
   ): WebSocketConnection {
     if (typeof window === 'undefined') return null;
+    // Same reason as request(): with no backend configured there is no socket
+    // to open, and `new WebSocket('')` throws.
+    if (DEMO_MODE || WS_URL === '') return null;
 
     try {
       this.wsConnection = new WebSocket(WS_URL);

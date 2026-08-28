@@ -7,12 +7,29 @@
  * - lib/design-system.ts (runtime reference if needed)
  */
 
+/**
+ * Where the backend lives, for THIS build.
+ *
+ * There is deliberately no localhost fallback. A production build ships these
+ * values inlined into the browser bundle, so a `|| 'http://localhost:3001'`
+ * default does not mean "try the dev backend" — it means every visitor's
+ * browser aims the request at port 3001 of *their own machine*. That is what
+ * sbb.orangecat.ch shipped until this change: doomed requests, and a real
+ * chance of hitting whatever unrelated app a developer happens to run there.
+ *
+ * Unset therefore means exactly what it says: no backend is reachable from this
+ * build. Local development gets its values from `.env.development`, which Next
+ * loads in dev only, so the defaults can never leak into a deployed bundle.
+ */
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
+const WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? '';
+
 export const config = {
   api: {
-    // API Gateway proxies to all services
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
-    // Notification service for WebSocket
-    wsUrl: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3003',
+    // API Gateway proxies to all services. Empty when no backend is configured.
+    baseUrl: API_URL,
+    // Notification service for WebSocket. Empty when no backend is configured.
+    wsUrl: WS_URL,
     timeout: 10000,
   },
 
@@ -28,7 +45,14 @@ export const config = {
 
   // Demo mode configuration
   demo: {
-    enabled: process.env.NEXT_PUBLIC_DEMO_MODE === 'true' || true,
+    // On when explicitly asked for, and on whenever no backend is configured —
+    // running on mock data is then the honest state, not a fallback reached by
+    // letting a request fail first.
+    //
+    // This was `process.env.NEXT_PUBLIC_DEMO_MODE === 'true' || true`, which is
+    // `true` for every possible value of the variable. The flag read as
+    // configurable and was not, and nothing consumed it anyway.
+    enabled: process.env.NEXT_PUBLIC_DEMO_MODE === 'true' || API_URL === '',
     mockDelay: 1500,
     autoNotify: true,
   },
