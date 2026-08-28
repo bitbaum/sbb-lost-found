@@ -160,7 +160,7 @@ Official SBB corporate identity -- not approximated, implemented from their desi
 ### Setup
 
 ```bash
-git clone https://github.com/maonakamoto/sbb-lost-found.git
+git clone https://github.com/catomean/sbb-lost-found.git
 cd sbb-lost-found
 
 # Option A: Docker (recommended)
