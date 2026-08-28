@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { AppProvider } from '@/components/providers/AppProvider';
 import { ConceptNotice } from '@/components/ui/ConceptNotice';
 import { tenant } from '@/lib/tenant';
@@ -63,6 +64,15 @@ export default function RootLayout({
             {children}
           </div>
         </AppProvider>
+
+        {/* FleetCrown feedback widget — env-gated, see docs/architecture/feedback-widget.md */}
+        {process.env.NEXT_PUBLIC_FC_WIDGET_TOKEN && (
+          <Script
+            src="https://fleetcrown.orangecat.ch/widget.js"
+            strategy="afterInteractive"
+            data-fc-project={process.env.NEXT_PUBLIC_FC_WIDGET_TOKEN}
+          />
+        )}
       </body>
     </html>
   );
