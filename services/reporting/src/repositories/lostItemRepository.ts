@@ -30,7 +30,7 @@ export class LostItemRepository {
       data.lossLocation || null,
       data.contactInfo ? JSON.stringify(data.contactInfo) : null,
       data.rewardOffered || 0,
-      data.images || []
+      data.images || [],
     ];
 
     try {
@@ -65,7 +65,7 @@ export class LostItemRepository {
 
     try {
       const result = await this.db.query(query, [reporterId, limit, offset]);
-      return result.rows.map(row => this.mapRowToLostItem(row));
+      return result.rows.map((row) => this.mapRowToLostItem(row));
     } catch (error) {
       logger.error('Failed to find lost items by reporter', { error, reporterId });
       throw error;
@@ -154,12 +154,12 @@ export class LostItemRepository {
     try {
       const [countResult, itemsResult] = await Promise.all([
         this.db.query(countQuery, values.slice(0, -2)),
-        this.db.query(itemsQuery, values)
+        this.db.query(itemsQuery, values),
       ]);
 
       return {
-        items: itemsResult.rows.map(row => this.mapRowToLostItem(row)),
-        total: parseInt(countResult.rows[0].total)
+        items: itemsResult.rows.map((row) => this.mapRowToLostItem(row)),
+        total: parseInt(countResult.rows[0].total),
       };
     } catch (error) {
       logger.error('Failed to search lost items', { error, params });
@@ -208,7 +208,7 @@ export class LostItemRepository {
       aiEmbedding: row.ai_embedding,
       images: row.images || [],
       createdAt: row.created_at,
-      updatedAt: row.updated_at
+      updatedAt: row.updated_at,
     };
   }
 }

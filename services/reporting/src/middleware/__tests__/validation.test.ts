@@ -25,7 +25,7 @@ type Captured = {
 function invoke(
   middleware: (req: Request, res: Response, next: NextFunction) => void,
   payload: Record<string, unknown>,
-  where: 'body' | 'query' = 'body'
+  where: 'body' | 'query' = 'body',
 ): { captured: Captured; nextCalled: boolean } {
   const captured: Captured = {};
   let nextCalled = false;
@@ -81,7 +81,7 @@ describe('validateCreateLostItem', () => {
   ])('rejects when %s', (_label, payload) => {
     const { captured, nextCalled } = invoke(
       validateCreateLostItem,
-      payload as Record<string, unknown>
+      payload as Record<string, unknown>,
     );
     expect(nextCalled).toBe(false);
     expect(captured.status).toBe(400);

@@ -10,7 +10,7 @@
 // no `.eslintrc*`, so it launched its interactive "How would you like to
 // configure ESLint?" wizard instead of ever reaching the config. Two failures
 // stacked: the runner never got to the config, and the config was broken.
-import coreWebVitals from 'eslint-config-next/core-web-vitals'
+import coreWebVitals from 'eslint-config-next/core-web-vitals';
 
 // Named rather than an anonymous array literal — `import/no-anonymous-default-export`
 // is part of the config this file loads, so exporting the array inline made the
@@ -22,6 +22,6 @@ const config = [
     // `.next/` left over from a local build makes lint fail on generated code.
     ignores: ['.next/**', 'out/**', 'node_modules/**', 'next-env.d.ts'],
   },
-]
+];
 
-export default config
+export default config;

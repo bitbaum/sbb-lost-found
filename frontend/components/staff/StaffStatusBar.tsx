@@ -18,9 +18,7 @@ export function StaffStatusBar({ vehicle, pendingCount, isOnline }: StaffStatusB
           {isOnline ? UI_LABELS.status.online : UI_LABELS.status.offline}
         </span>
       </div>
-      <div className="font-medium">
-        {vehicle.number}
-      </div>
+      <div className="font-medium">{vehicle.number}</div>
       <div className="flex items-center gap-1.5">
         {pendingCount > 0 && (
           <span className="bg-brand px-1.5 py-0.5 rounded-full text-white font-medium">

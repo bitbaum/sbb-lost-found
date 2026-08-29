@@ -13,7 +13,7 @@ export class LostItemController {
       if (!reporterId) {
         res.status(401).json({
           success: false,
-          error: { code: 'UNAUTHORIZED', message: 'User not authenticated' }
+          error: { code: 'UNAUTHORIZED', message: 'User not authenticated' },
         } as ApiResponse<null>);
         return;
       }
@@ -22,27 +22,30 @@ export class LostItemController {
       const lostItem = await this.lostItemRepository.create(reporterId, data);
 
       // Publish event for real-time notifications
-      await redisPublisher.publish('lost_item_created', JSON.stringify({
-        type: 'lost_item_created',
-        data: { lostItem },
-        timestamp: new Date()
-      }));
+      await redisPublisher.publish(
+        'lost_item_created',
+        JSON.stringify({
+          type: 'lost_item_created',
+          data: { lostItem },
+          timestamp: new Date(),
+        }),
+      );
 
       res.status(201).json({
         success: true,
-        data: lostItem
+        data: lostItem,
       } as ApiResponse<typeof lostItem>);
 
       logger.info('Lost item created successfully', {
         itemId: lostItem.id,
         reporterId,
-        category: lostItem.category
+        category: lostItem.category,
       });
     } catch (error) {
       logger.error('Failed to create lost item', { error, body: req.body });
       res.status(500).json({
         success: false,
-        error: { code: 'INTERNAL_ERROR', message: 'Failed to create lost item' }
+        error: { code: 'INTERNAL_ERROR', message: 'Failed to create lost item' },
       } as ApiResponse<null>);
     }
   }
@@ -55,20 +58,20 @@ export class LostItemController {
       if (!lostItem) {
         res.status(404).json({
           success: false,
-          error: { code: 'NOT_FOUND', message: 'Lost item not found' }
+          error: { code: 'NOT_FOUND', message: 'Lost item not found' },
         } as ApiResponse<null>);
         return;
       }
 
       res.json({
         success: true,
-        data: lostItem
+        data: lostItem,
       } as ApiResponse<typeof lostItem>);
     } catch (error) {
       logger.error('Failed to get lost item', { error, id: req.params.id });
       res.status(500).json({
         success: false,
-        error: { code: 'INTERNAL_ERROR', message: 'Failed to retrieve lost item' }
+        error: { code: 'INTERNAL_ERROR', message: 'Failed to retrieve lost item' },
       } as ApiResponse<null>);
     }
   }
@@ -79,7 +82,7 @@ export class LostItemController {
       if (!reporterId) {
         res.status(401).json({
           success: false,
-          error: { code: 'UNAUTHORIZED', message: 'User not authenticated' }
+          error: { code: 'UNAUTHORIZED', message: 'User not authenticated' },
         } as ApiResponse<null>);
         return;
       }
@@ -92,13 +95,13 @@ export class LostItemController {
       res.json({
         success: true,
         data: lostItems,
-        pagination: { total: lostItems.length, limit, offset }
+        pagination: { total: lostItems.length, limit, offset },
       } as ApiResponse<typeof lostItems>);
     } catch (error) {
       logger.error('Failed to get user lost items', { error, userId: req.user?.id });
       res.status(500).json({
         success: false,
-        error: { code: 'INTERNAL_ERROR', message: 'Failed to retrieve lost items' }
+        error: { code: 'INTERNAL_ERROR', message: 'Failed to retrieve lost items' },
       } as ApiResponse<null>);
     }
   }
@@ -115,7 +118,7 @@ export class LostItemController {
         vehicleId: req.query.vehicleId as string,
         status: req.query.status as any,
         limit: parseInt(req.query.limit as string) || 50,
-        offset: parseInt(req.query.offset as string) || 0
+        offset: parseInt(req.query.offset as string) || 0,
       };
 
       const result = await this.lostItemRepository.search(searchParams);
@@ -126,14 +129,14 @@ export class LostItemController {
         pagination: {
           total: result.total,
           limit: searchParams.limit!,
-          offset: searchParams.offset!
-        }
+          offset: searchParams.offset!,
+        },
       } as ApiResponse<typeof result.items>);
     } catch (error) {
       logger.error('Failed to search lost items', { error, query: req.query });
       res.status(500).json({
         success: false,
-        error: { code: 'INTERNAL_ERROR', message: 'Failed to search lost items' }
+        error: { code: 'INTERNAL_ERROR', message: 'Failed to search lost items' },
       } as ApiResponse<null>);
     }
   }
@@ -148,21 +151,24 @@ export class LostItemController {
       if (!updatedItem) {
         res.status(404).json({
           success: false,
-          error: { code: 'NOT_FOUND', message: 'Lost item not found' }
+          error: { code: 'NOT_FOUND', message: 'Lost item not found' },
         } as ApiResponse<null>);
         return;
       }
 
       // Publish status update event
-      await redisPublisher.publish('lost_item_status_updated', JSON.stringify({
-        type: 'lost_item_status_updated',
-        data: { itemId: id, status },
-        timestamp: new Date()
-      }));
+      await redisPublisher.publish(
+        'lost_item_status_updated',
+        JSON.stringify({
+          type: 'lost_item_status_updated',
+          data: { itemId: id, status },
+          timestamp: new Date(),
+        }),
+      );
 
       res.json({
         success: true,
-        data: updatedItem
+        data: updatedItem,
       } as ApiResponse<typeof updatedItem>);
 
       logger.info('Lost item status updated', { itemId: id, status });
@@ -170,7 +176,7 @@ export class LostItemController {
       logger.error('Failed to update lost item status', { error, id: req.params.id });
       res.status(500).json({
         success: false,
-        error: { code: 'INTERNAL_ERROR', message: 'Failed to update lost item status' }
+        error: { code: 'INTERNAL_ERROR', message: 'Failed to update lost item status' },
       } as ApiResponse<null>);
     }
   }

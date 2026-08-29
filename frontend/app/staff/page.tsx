@@ -50,7 +50,7 @@ export default function StaffPage() {
         },
       };
 
-      setNotifications(prev => [newNotification, ...prev]);
+      setNotifications((prev) => [newNotification, ...prev]);
 
       // Play notification sound (if available)
       if (typeof window !== 'undefined' && 'vibrate' in navigator) {
@@ -61,46 +61,41 @@ export default function StaffPage() {
     return () => clearTimeout(demoTimer);
   }, []);
 
-  const handleUpdateStatus = useCallback(async (
-    notificationId: string,
-    status: NotificationStatus,
-    notes?: string
-  ) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, config.demo.mockDelay));
+  const handleUpdateStatus = useCallback(
+    async (notificationId: string, status: NotificationStatus, notes?: string) => {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, config.demo.mockDelay));
 
-    setNotifications(prev =>
-      prev.map(n =>
-        n.id === notificationId
-          ? {
-              ...n,
-              status,
-              respondedAt: new Date().toISOString(),
-              response: notes ? { notes, foundItem: status === 'found' } : undefined,
-            }
-          : n
-      )
-    );
-  }, []);
+      setNotifications((prev) =>
+        prev.map((n) =>
+          n.id === notificationId
+            ? {
+                ...n,
+                status,
+                respondedAt: new Date().toISOString(),
+                response: notes ? { notes, foundItem: status === 'found' } : undefined,
+              }
+            : n,
+        ),
+      );
+    },
+    [],
+  );
 
-  const filteredNotifications = notifications.filter(n => {
+  const filteredNotifications = notifications.filter((n) => {
     if (activeFilter === 'all') return true;
     if (activeFilter === 'pending') return n.status === 'pending' || n.status === 'acknowledged';
     return n.status === 'found' || n.status === 'not_found';
   });
 
   const pendingCount = notifications.filter(
-    n => n.status === 'pending' || n.status === 'acknowledged'
+    (n) => n.status === 'pending' || n.status === 'acknowledged',
   ).length;
 
   return (
     <div className="min-h-screen bg-app-milk">
       {/* Status Bar */}
-      <StaffStatusBar
-        vehicle={mockVehicle}
-        pendingCount={pendingCount}
-        isOnline={true}
-      />
+      <StaffStatusBar vehicle={mockVehicle} pendingCount={pendingCount} isOnline={true} />
 
       {/* Header */}
       <StaffHeader staff={mockStaff} vehicle={mockVehicle} />
@@ -111,8 +106,12 @@ export default function StaffPage() {
           {[
             { id: 'all', label: UI_LABELS.staff.tabAll, count: notifications.length },
             { id: 'pending', label: UI_LABELS.staff.tabOpen, count: pendingCount },
-            { id: 'resolved', label: UI_LABELS.staff.tabResolved, count: notifications.length - pendingCount },
-          ].map(tab => (
+            {
+              id: 'resolved',
+              label: UI_LABELS.staff.tabResolved,
+              count: notifications.length - pendingCount,
+            },
+          ].map((tab) => (
             <button
               key={tab.id}
               role="tab"
@@ -121,21 +120,25 @@ export default function StaffPage() {
               onClick={() => setActiveFilter(tab.id as typeof activeFilter)}
               className={`
                 flex-1 py-3 px-2 text-app-sm font-medium border-b-2 transition-colors
-                ${activeFilter === tab.id
-                  ? 'text-brand border-brand'
-                  : 'text-app-granite border-transparent hover:text-app-charcoal'
+                ${
+                  activeFilter === tab.id
+                    ? 'text-brand border-brand'
+                    : 'text-app-granite border-transparent hover:text-app-charcoal'
                 }
               `}
             >
               {tab.label}
               {tab.count > 0 && (
-                <span className={`
+                <span
+                  className={`
                   ml-1.5 px-1.5 py-0.5 rounded-full text-app-xs
-                  ${activeFilter === tab.id
-                    ? 'bg-brand text-white'
-                    : 'bg-app-cloud text-app-granite'
+                  ${
+                    activeFilter === tab.id
+                      ? 'bg-brand text-white'
+                      : 'bg-app-cloud text-app-granite'
                   }
-                `}>
+                `}
+                >
                   {tab.count}
                 </span>
               )}
@@ -149,7 +152,7 @@ export default function StaffPage() {
         {isLoading ? (
           // Loading skeletons
           <div className="space-y-3">
-            {[1, 2, 3].map(i => (
+            {[1, 2, 3].map((i) => (
               <div key={i} className="card-app p-4 animate-pulse">
                 <div className="flex gap-3">
                   <div className="w-12 h-12 bg-app-cloud rounded-app-md" />
@@ -164,9 +167,7 @@ export default function StaffPage() {
         ) : filteredNotifications.length === 0 ? (
           // Empty state
           <div className="text-center py-12">
-            <div className="text-5xl mb-4">
-              {activeFilter === 'pending' ? '✅' : '📭'}
-            </div>
+            <div className="text-5xl mb-4">{activeFilter === 'pending' ? '✅' : '📭'}</div>
             <h3 className="text-app-lg font-semibold text-app-charcoal mb-2">
               {activeFilter === 'pending'
                 ? UI_LABELS.staff.noOpenReports

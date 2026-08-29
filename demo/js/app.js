@@ -24,21 +24,20 @@ class SBBLostFoundApp {
 
     try {
       loadingManager.showGlobal();
-      
+
       // Initialize components
       await this.initializeComponents();
-      
+
       // Set up component interactions
       this.setupComponentInteractions();
-      
+
       // Start health monitoring
       this.components.healthCheck = new HealthCheck();
-      
+
       // Show success message
       toastManager.success('SBB Lost & Found system ready!');
-      
+
       this.isInitialized = true;
-      
     } catch (error) {
       console.error('Application initialization failed:', error);
       toastManager.error('Failed to initialize application. Please refresh the page.');
@@ -53,13 +52,13 @@ class SBBLostFoundApp {
   async initializeComponents() {
     // Initialize form component
     this.components.lostItemForm = new LostItemForm('lostItemFormContainer');
-    
+
     // Initialize search component
     this.components.searchComponent = new SearchComponent('searchContainer');
-    
+
     // Initialize stats dashboard
     this.components.statsDashboard = new StatsDashboard('statsContainer');
-    
+
     // Test API connection
     await this.testApiConnection();
   }
@@ -84,13 +83,13 @@ class SBBLostFoundApp {
     // When a lost item is successfully submitted, refresh the search results
     this.components.lostItemForm.setOnSubmitSuccess((newItem) => {
       console.log('New item submitted:', newItem);
-      
+
       // Refresh search results to show the new item
       this.components.searchComponent.refresh();
-      
+
       // Refresh stats
       this.components.statsDashboard.loadStats();
-      
+
       // Show additional success information
       toastManager.info(`Item "${newItem.title}" has been added to the database`);
     });
@@ -108,7 +107,7 @@ class SBBLostFoundApp {
     // Create a modal or detailed view
     const modal = this.createItemModal(item);
     document.body.appendChild(modal);
-    
+
     // Show the modal
     requestAnimationFrame(() => {
       modal.classList.add('show');
@@ -145,12 +144,16 @@ class SBBLostFoundApp {
               <label>Reported:</label>
               <span>${new Date(item.createdAt).toLocaleString('de-CH')}</span>
             </div>
-            ${item.lostDate ? `
+            ${
+              item.lostDate
+                ? `
               <div class="detail-group">
                 <label>Lost Date:</label>
                 <span>${new Date(item.lostDate).toLocaleString('de-CH')}</span>
               </div>
-            ` : ''}
+            `
+                : ''
+            }
             <div class="detail-group">
               <label>Status:</label>
               <span class="status-badge status-${item.status || 'open'}">${item.status || 'Open'}</span>
@@ -191,14 +194,14 @@ class SBBLostFoundApp {
    */
   getCategoryDisplay(categoryId) {
     const categories = {
-      'electronics': '📱 Electronics',
-      'clothing': '👕 Clothing',
-      'bags': '🎒 Bags & Luggage',
-      'documents': '📄 Documents',
-      'keys': '🔑 Keys',
-      'jewelry': '💍 Jewelry',
-      'books': '📚 Books',
-      'other': '❓ Other'
+      electronics: '📱 Electronics',
+      clothing: '👕 Clothing',
+      bags: '🎒 Bags & Luggage',
+      documents: '📄 Documents',
+      keys: '🔑 Keys',
+      jewelry: '💍 Jewelry',
+      books: '📚 Books',
+      other: '❓ Other',
     };
     return categories[categoryId] || categoryId;
   }
@@ -368,7 +371,7 @@ class SBBLostFoundApp {
 document.addEventListener('DOMContentLoaded', async () => {
   // Initialize the application
   window.sbbApp = new SBBLostFoundApp();
-  
+
   try {
     await window.sbbApp.init();
     console.log('🚀 SBB Lost & Found Demo initialized successfully');

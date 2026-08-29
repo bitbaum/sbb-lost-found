@@ -89,8 +89,8 @@ export const APP_TYPOGRAPHY = {
 // ============================================================================
 
 export const APP_SHADOWS = {
-  card:   '0 2px 8px rgba(0, 0, 0, 0.08)',
-  modal:  '0 4px 24px rgba(0, 0, 0, 0.16)',
+  card: '0 2px 8px rgba(0, 0, 0, 0.08)',
+  modal: '0 4px 24px rgba(0, 0, 0, 0.16)',
   button: '0 2px 4px rgba(235, 0, 0, 0.24)',
 } as const;
 
@@ -99,9 +99,9 @@ export const APP_SHADOWS = {
 // ============================================================================
 
 export const REPORTING_WINDOWS = {
-  instantAlertMinutes: 30,   // Driver gets instant notification
-  priorityHours: 2,          // Priority handling
-  standardHours: 24,         // Standard queue
+  instantAlertMinutes: 30, // Driver gets instant notification
+  priorityHours: 2, // Priority handling
+  standardHours: 24, // Standard queue
 } as const;
 
 // ============================================================================

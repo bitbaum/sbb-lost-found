@@ -18,7 +18,7 @@ app.get('/health', (_req, res) => {
   res.json({
     status: 'healthy',
     service: 'api-gateway',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -63,14 +63,17 @@ app.get('/me/recent-trips', (_req, res) => {
       vehicleId,
       departureTime: dep.toISOString(),
       arrivalTime: arr.toISOString(),
-      tripDate: dep.toISOString().slice(0, 10)
+      tripDate: dep.toISOString().slice(0, 10),
     };
   };
-  res.json({ success: true, data: [
-    mkTrip(1, 'Zürich HB → Bern', 'IC 815'),
-    mkTrip(3, 'Bern → Thun', 'S1 3412'),
-    mkTrip(6, 'Zürich, Central → Loorenstrasse', 'Bus 761')
-  ]});
+  res.json({
+    success: true,
+    data: [
+      mkTrip(1, 'Zürich HB → Bern', 'IC 815'),
+      mkTrip(3, 'Bern → Thun', 'S1 3412'),
+      mkTrip(6, 'Zürich, Central → Loorenstrasse', 'Bus 761'),
+    ],
+  });
 });
 
 // Aggregated health
@@ -81,14 +84,16 @@ app.get('/healthz', async (_req, res) => {
     { name: 'notification', url: NOTIFICATION_SERVICE_URL + '/health' },
   ];
   const results: Record<string, any> = {};
-  await Promise.all(targets.map(async (t) => {
-    try {
-      const r = await fetch(t.url, { method: 'GET' });
-      results[t.name] = { ok: r.ok, status: r.status };
-    } catch (error) {
-      results[t.name] = { ok: false, error: (error as Error).message };
-    }
-  }));
+  await Promise.all(
+    targets.map(async (t) => {
+      try {
+        const r = await fetch(t.url, { method: 'GET' });
+        results[t.name] = { ok: r.ok, status: r.status };
+      } catch (error) {
+        results[t.name] = { ok: false, error: (error as Error).message };
+      }
+    }),
+  );
   res.json({ success: true, services: results });
 });
 
@@ -101,7 +106,8 @@ async function forward(targetBase: string, req: express.Request, res: express.Re
       if (typeof v === 'string') headers[k] = v;
     }
     // Remove hop-by-hop headers
-    delete headers['host']; delete headers['content-length'];
+    delete headers['host'];
+    delete headers['content-length'];
 
     let body: any = undefined;
     if (req.method !== 'GET' && req.method !== 'HEAD') {
@@ -120,7 +126,9 @@ async function forward(targetBase: string, req: express.Request, res: express.Re
     res.send(buf);
   } catch (error) {
     logger.error('Proxy error', { error: (error as Error).message, path: req.originalUrl });
-    res.status(502).json({ success: false, error: { code: 'BAD_GATEWAY', message: 'Upstream error' } });
+    res
+      .status(502)
+      .json({ success: false, error: { code: 'BAD_GATEWAY', message: 'Upstream error' } });
   }
 }
 

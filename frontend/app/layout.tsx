@@ -44,11 +44,7 @@ export const viewport: Viewport = {
   themeColor: tenant.themeColor,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     // data-tenant is the single switch: globals.css keys every operator
     // override off it, so the whole palette changes from this one attribute.

@@ -34,9 +34,7 @@ export function QuickActions({ onLostFound }: QuickActionsProps) {
             <h3 className="text-app-base font-semibold text-app-charcoal group-hover:text-brand transition-colors">
               {action.title}
             </h3>
-            <p className="text-app-sm text-app-granite mt-1">
-              {action.subtitle}
-            </p>
+            <p className="text-app-sm text-app-granite mt-1">{action.subtitle}</p>
             {'primary' in action && action.primary && (
               <span className="inline-block mt-2 text-app-xs text-brand font-medium">
                 Sofort-Benachrichtigung →

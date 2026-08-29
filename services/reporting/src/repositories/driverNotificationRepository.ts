@@ -52,7 +52,7 @@ export class DriverNotificationRepository {
       const result = await this.db.query(query, values);
       logger.info('Driver notification created', {
         notificationId: result.rows[0].id,
-        vehicleId: data.vehicleId
+        vehicleId: data.vehicleId,
       });
       return this.mapRowToNotification(result.rows[0], data);
     } catch (error) {
@@ -64,7 +64,7 @@ export class DriverNotificationRepository {
   async findByVehicle(
     vehicleId: string,
     filter?: 'all' | 'pending' | 'resolved',
-    limit = 50
+    limit = 50,
   ): Promise<DriverNotification[]> {
     let query = `
       SELECT dn.*, li.category, li.loss_location, li.description,
@@ -90,7 +90,7 @@ export class DriverNotificationRepository {
 
     try {
       const result = await this.db.query(query, values);
-      return result.rows.map(row => this.mapRowToNotification(row));
+      return result.rows.map((row) => this.mapRowToNotification(row));
     } catch (error) {
       logger.error('Failed to find notifications by vehicle', { error, vehicleId });
       throw error;
@@ -122,7 +122,7 @@ export class DriverNotificationRepository {
     id: string,
     status: 'found' | 'not_found',
     notes?: string,
-    acknowledgedBy?: string
+    acknowledgedBy?: string,
   ): Promise<DriverNotification | null> {
     const query = `
       UPDATE driver_notifications
@@ -137,10 +137,10 @@ export class DriverNotificationRepository {
 
       // Also update the lost item status
       const lostItemStatus = status === 'found' ? 'found' : 'not_found';
-      await this.db.query(
-        'UPDATE lost_items SET status = $1, updated_at = NOW() WHERE id = $2',
-        [lostItemStatus, result.rows[0].lost_item_id]
-      );
+      await this.db.query('UPDATE lost_items SET status = $1, updated_at = NOW() WHERE id = $2', [
+        lostItemStatus,
+        result.rows[0].lost_item_id,
+      ]);
 
       logger.info('Driver notification responded', { notificationId: id, status });
 
@@ -156,7 +156,9 @@ export class DriverNotificationRepository {
   private mapRowToNotification(row: any, extra?: any): DriverNotification {
     const priority = row.priority <= 1 ? 'normal' : row.priority <= 3 ? 'urgent' : 'critical';
     const status = row.acknowledged_at
-      ? (extra?.response?.foundItem ? 'found' : 'not_found')
+      ? extra?.response?.foundItem
+        ? 'found'
+        : 'not_found'
       : 'pending';
 
     return {
@@ -173,11 +175,17 @@ export class DriverNotificationRepository {
       acknowledgedAt: row.acknowledged_at?.toISOString?.() || row.acknowledged_at,
       respondedAt: row.acknowledged_at?.toISOString?.() || row.acknowledged_at,
       response: extra?.response,
-      passengerInfo: row.origin_station ? {
-        tripRoute: `${row.origin_station} → ${row.destination_station}`,
-        tripTime: row.departure_time?.toLocaleTimeString?.('de-CH', { hour: '2-digit', minute: '2-digit' }) || '',
-        seatInfo: row.loss_location,
-      } : extra?.passengerInfo,
+      passengerInfo: row.origin_station
+        ? {
+            tripRoute: `${row.origin_station} → ${row.destination_station}`,
+            tripTime:
+              row.departure_time?.toLocaleTimeString?.('de-CH', {
+                hour: '2-digit',
+                minute: '2-digit',
+              }) || '',
+            seatInfo: row.loss_location,
+          }
+        : extra?.passengerInfo,
     };
   }
 }

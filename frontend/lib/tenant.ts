@@ -58,8 +58,7 @@ export const TENANTS: Record<TenantId, Tenant> = {
     wordmark: 'NORDBAHN',
     legalName: 'Nordbahn AG',
     productName: 'Nordbahn Lost & Found',
-    description:
-      'Verlorene Gegenstände sofort melden — solange der Zug noch unterwegs ist.',
+    description: 'Verlorene Gegenstände sofort melden — solange der Zug noch unterwegs ist.',
     locale: 'de',
     operatorCode: 'NB',
     themeColor: '#0B4F8F',
@@ -76,8 +75,7 @@ export const TENANTS: Record<TenantId, Tenant> = {
     wordmark: 'SBB',
     legalName: 'Schweizerische Bundesbahnen SBB',
     productName: 'SBB Lost & Found',
-    description:
-      'Schnell und einfach verlorene Gegenstände melden — direkt in der App.',
+    description: 'Schnell und einfach verlorene Gegenstände melden — direkt in der App.',
     locale: 'de-CH',
     operatorCode: 'SBB',
     themeColor: '#EB0000',

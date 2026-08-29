@@ -23,18 +23,18 @@ class HttpClient {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...options.headers
+        ...options.headers,
       },
-      ...options
+      ...options,
     };
 
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.timeout);
-      
+
       const response = await fetch(url, {
         ...config,
-        signal: controller.signal
+        signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
@@ -43,7 +43,7 @@ class HttpClient {
         throw new ApiError(
           `HTTP ${response.status}: ${response.statusText}`,
           response.status,
-          await this.extractErrorData(response)
+          await this.extractErrorData(response),
         );
       }
 
@@ -75,7 +75,7 @@ class HttpClient {
     return this.request(endpoint, {
       ...options,
       method: 'POST',
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
   }
 
@@ -83,7 +83,7 @@ class HttpClient {
     return this.request(endpoint, {
       ...options,
       method: 'PUT',
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
   }
 
@@ -123,7 +123,7 @@ class LostFoundApiService {
   constructor() {
     this.client = new HttpClient(CONFIG.API.BASE_URL);
     this.authHeaders = {
-      'Authorization': `Bearer ${CONFIG.DEMO.JWT_TOKEN}`
+      Authorization: `Bearer ${CONFIG.DEMO.JWT_TOKEN}`,
     };
   }
 
@@ -138,21 +138,18 @@ class LostFoundApiService {
    * Create a new lost item report
    */
   async createLostItem(itemData) {
-    return this.client.post(
-      CONFIG.API.ENDPOINTS.LOST_ITEMS,
-      itemData,
-      { headers: this.authHeaders }
-    );
+    return this.client.post(CONFIG.API.ENDPOINTS.LOST_ITEMS, itemData, {
+      headers: this.authHeaders,
+    });
   }
 
   /**
    * Get a specific lost item by ID
    */
   async getLostItem(itemId) {
-    return this.client.get(
-      `${CONFIG.API.ENDPOINTS.LOST_ITEMS}/${itemId}`,
-      { headers: this.authHeaders }
-    );
+    return this.client.get(`${CONFIG.API.ENDPOINTS.LOST_ITEMS}/${itemId}`, {
+      headers: this.authHeaders,
+    });
   }
 
   /**
@@ -161,34 +158,30 @@ class LostFoundApiService {
   async searchLostItems(params = {}) {
     const searchParams = new URLSearchParams({
       limit: CONFIG.DEMO.ITEMS_PER_PAGE,
-      ...params
+      ...params,
     });
 
-    return this.client.get(
-      `${CONFIG.API.ENDPOINTS.SEARCH}?${searchParams}`,
-      { headers: this.authHeaders }
-    );
+    return this.client.get(`${CONFIG.API.ENDPOINTS.SEARCH}?${searchParams}`, {
+      headers: this.authHeaders,
+    });
   }
 
   /**
    * Update a lost item
    */
   async updateLostItem(itemId, updates) {
-    return this.client.put(
-      `${CONFIG.API.ENDPOINTS.LOST_ITEMS}/${itemId}`,
-      updates,
-      { headers: this.authHeaders }
-    );
+    return this.client.put(`${CONFIG.API.ENDPOINTS.LOST_ITEMS}/${itemId}`, updates, {
+      headers: this.authHeaders,
+    });
   }
 
   /**
    * Delete a lost item
    */
   async deleteLostItem(itemId) {
-    return this.client.delete(
-      `${CONFIG.API.ENDPOINTS.LOST_ITEMS}/${itemId}`,
-      { headers: this.authHeaders }
-    );
+    return this.client.delete(`${CONFIG.API.ENDPOINTS.LOST_ITEMS}/${itemId}`, {
+      headers: this.authHeaders,
+    });
   }
 
   /**

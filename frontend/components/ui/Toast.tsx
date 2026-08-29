@@ -23,7 +23,12 @@ const toastIcons = {
   info: 'ℹ',
 };
 
-export function Toast({ message, type, onClose, duration = config.timing.toastDuration }: ToastProps) {
+export function Toast({
+  message,
+  type,
+  onClose,
+  duration = config.timing.toastDuration,
+}: ToastProps) {
   useEffect(() => {
     if (duration === 0) return;
     const timer = setTimeout(onClose, duration);
@@ -31,11 +36,7 @@ export function Toast({ message, type, onClose, duration = config.timing.toastDu
   }, [onClose, duration]);
 
   return (
-    <div
-      className={`toast animate-slide-up ${toastStyles[type]}`}
-      role="alert"
-      aria-live="polite"
-    >
+    <div className={`toast animate-slide-up ${toastStyles[type]}`} role="alert" aria-live="polite">
       <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-lg">
         {toastIcons[type]}
       </span>

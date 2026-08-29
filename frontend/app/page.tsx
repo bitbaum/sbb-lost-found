@@ -62,9 +62,7 @@ function EasyRideTab() {
           EasyRide starten
         </button>
       </div>
-      <p className="text-app-sm text-app-granite text-center mt-4">
-        Demo: EasyRide-Tab
-      </p>
+      <p className="text-app-sm text-app-granite text-center mt-4">Demo: EasyRide-Tab</p>
     </div>
   );
 }
@@ -87,9 +85,7 @@ function BilletteTab() {
           <p className="text-app-sm text-app-granite">Keine aktiven Billette</p>
         </div>
       </div>
-      <p className="text-app-sm text-app-granite text-center">
-        Demo: Billette & Abos Tab
-      </p>
+      <p className="text-app-sm text-app-granite text-center">Demo: Billette & Abos Tab</p>
     </div>
   );
 }
@@ -113,9 +109,7 @@ function ShopTab() {
           ))}
         </div>
       </div>
-      <p className="text-app-sm text-app-granite text-center">
-        Demo: Shop & Services Tab
-      </p>
+      <p className="text-app-sm text-app-granite text-center">Demo: Shop & Services Tab</p>
     </div>
   );
 }
@@ -160,16 +154,17 @@ function ProfilTab({ onOpenFundservice }: ProfilTabProps) {
             'Einstellungen',
             'Hilfe & Kontakt',
           ].map((item) => (
-            <div key={item} className="p-3 bg-app-milk rounded-app-md flex justify-between items-center">
+            <div
+              key={item}
+              className="p-3 bg-app-milk rounded-app-md flex justify-between items-center"
+            >
               <span className="text-app-base text-app-charcoal">{item}</span>
               <span className="text-app-granite">›</span>
             </div>
           ))}
         </div>
       </div>
-      <p className="text-app-sm text-app-granite text-center">
-        Demo: Profil-Tab
-      </p>
+      <p className="text-app-sm text-app-granite text-center">Demo: Profil-Tab</p>
     </div>
   );
 }
@@ -177,7 +172,10 @@ function ProfilTab({ onOpenFundservice }: ProfilTabProps) {
 export default function PassengerApp() {
   const [showLostModal, setShowLostModal] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'info';
+  } | null>(null);
   const [activeTab, setActiveTab] = useState<NavTab>('reisen');
   const [isLoading, setIsLoading] = useState(true);
   const [currentTrip, setCurrentTrip] = useState<Trip | null>(null);
@@ -186,7 +184,7 @@ export default function PassengerApp() {
   // Load trips data (simulates API call)
   useEffect(() => {
     const loadData = async () => {
-      await new Promise(resolve => setTimeout(resolve, config.demo.mockDelay));
+      await new Promise((resolve) => setTimeout(resolve, config.demo.mockDelay));
       setCurrentTrip(mockActiveTrip);
       setRecentTrips(mockTrips);
       setIsLoading(false);
@@ -234,7 +232,7 @@ export default function PassengerApp() {
       {/* Recent trips skeleton */}
       <div className="h-5 bg-app-cloud rounded w-1/3 mb-4" />
       <div className="space-y-3">
-        {[1, 2, 3].map(i => (
+        {[1, 2, 3].map((i) => (
           <div key={i} className="bg-white rounded-app-lg p-4 animate-pulse shadow-app-card">
             <div className="flex gap-3">
               <div className="w-4 h-4 bg-app-cloud rounded" />
@@ -261,18 +259,13 @@ export default function PassengerApp() {
         {/* Current Journey (if active) - no lost button here, user is on the train */}
         {currentTrip && currentTrip.status === 'active' && (
           <section className="mb-4">
-            <TripCard
-              trip={currentTrip}
-              variant="active"
-            />
+            <TripCard trip={currentTrip} variant="active" />
           </section>
         )}
 
         {/* Einzelreisen (Individual Trips) Section - past trips */}
         <section>
-          <h2 className="text-app-sm font-medium text-app-granite mb-3">
-            Letzte Reisen
-          </h2>
+          <h2 className="text-app-sm font-medium text-app-granite mb-3">Letzte Reisen</h2>
           <div className="space-y-2">
             {recentTrips.slice(0, 5).map((trip, index) => (
               <TripCard
@@ -304,12 +297,16 @@ export default function PassengerApp() {
       case 'shop':
         return <ShopTab />;
       case 'profil':
-        return <ProfilTab onOpenFundservice={() => {
-          // Open lost item modal with most recent trip
-          if (recentTrips.length > 0) {
-            handleReportLost(recentTrips[0]);
-          }
-        }} />;
+        return (
+          <ProfilTab
+            onOpenFundservice={() => {
+              // Open lost item modal with most recent trip
+              if (recentTrips.length > 0) {
+                handleReportLost(recentTrips[0]);
+              }
+            }}
+          />
+        );
       default:
         return renderReisenTab();
     }
@@ -341,13 +338,7 @@ export default function PassengerApp() {
       )}
 
       {/* Toast Notifications */}
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </>
   );
 }

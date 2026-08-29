@@ -137,7 +137,7 @@ export enum ItemCategory {
   TOYS = 'toys',
   SPORTS_EQUIPMENT = 'sports_equipment',
   MEDICAL = 'medical',
-  OTHER = 'other'
+  OTHER = 'other',
 }
 
 export enum ItemStatus {
@@ -145,7 +145,7 @@ export enum ItemStatus {
   REPORTED_FOUND = 'reported_found',
   MATCHED = 'matched',
   RETURNED = 'returned',
-  DISPOSED = 'disposed'
+  DISPOSED = 'disposed',
 }
 
 export enum TransportType {
@@ -154,14 +154,14 @@ export enum TransportType {
   TRAM = 'tram',
   FUNICULAR = 'funicular',
   CABLE_CAR = 'cable_car',
-  BOAT = 'boat'
+  BOAT = 'boat',
 }
 
 export enum MatchStatus {
   PENDING = 'pending',
   CONFIRMED = 'confirmed',
   REJECTED = 'rejected',
-  EXPIRED = 'expired'
+  EXPIRED = 'expired',
 }
 
 // API Request/Response types

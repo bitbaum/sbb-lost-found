@@ -20,11 +20,7 @@ export const connectRedis = async (): Promise<void> => {
   redisPublisher.on('connect', () => logger.info('Redis publisher connected'));
   redisSubscriber.on('connect', () => logger.info('Redis subscriber connected'));
 
-  await Promise.all([
-    redisClient.connect(),
-    redisPublisher.connect(),
-    redisSubscriber.connect()
-  ]);
+  await Promise.all([redisClient.connect(), redisPublisher.connect(), redisSubscriber.connect()]);
 
   logger.info('All Redis connections established');
 };

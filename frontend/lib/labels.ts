@@ -147,7 +147,8 @@ export const UI_LABELS = {
     sending: 'Wird gesendet...',
     instantNotification: 'Sofort-Benachrichtigung →',
     successTitle: 'Personal benachrichtigt!',
-    successMessage: 'Das Zugpersonal wurde sofort informiert und wird bei der nächsten Gelegenheit nach Ihrem Gegenstand suchen.',
+    successMessage:
+      'Das Zugpersonal wurde sofort informiert und wird bei der nächsten Gelegenheit nach Ihrem Gegenstand suchen.',
     nextSteps: 'Nächste Schritte',
     pushNotification: 'Sie werden per Push benachrichtigt',
     step1: 'Personal prüft bei Endstation',
@@ -195,7 +196,8 @@ export const UI_LABELS = {
   a11y: {
     openProfile: 'Profil öffnen',
     closeModal: 'Schliessen',
-    reportLossFor: (origin: string, dest: string) => `Verlust melden für Reise ${origin} nach ${dest}`,
+    reportLossFor: (origin: string, dest: string) =>
+      `Verlust melden für Reise ${origin} nach ${dest}`,
   },
 } as const;
 

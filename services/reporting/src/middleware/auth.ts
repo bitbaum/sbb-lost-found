@@ -17,7 +17,11 @@ const DEMO_USER: JwtPayload = {
 
 const isDemoMode = process.env.DEMO_MODE === 'true' || process.env.NODE_ENV !== 'production';
 
-export const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const authenticate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     // In demo mode, use demo user without requiring token
     if (isDemoMode) {
@@ -31,7 +35,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       res.status(401).json({
         success: false,
-        error: { code: 'MISSING_TOKEN', message: 'Authorization token required' }
+        error: { code: 'MISSING_TOKEN', message: 'Authorization token required' },
       });
       return;
     }
@@ -49,13 +53,13 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
       logger.warn('Invalid JWT token', { error: error.message });
       res.status(401).json({
         success: false,
-        error: { code: 'INVALID_TOKEN', message: 'Invalid authorization token' }
+        error: { code: 'INVALID_TOKEN', message: 'Invalid authorization token' },
       });
     } else {
       logger.error('Authentication error', { error });
       res.status(500).json({
         success: false,
-        error: { code: 'AUTH_ERROR', message: 'Authentication failed' }
+        error: { code: 'AUTH_ERROR', message: 'Authentication failed' },
       });
     }
   }

@@ -13,7 +13,7 @@ export function StatusBar() {
         now.toLocaleTimeString('de-CH', {
           hour: '2-digit',
           minute: '2-digit',
-        })
+        }),
       );
     };
 

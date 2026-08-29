@@ -13,9 +13,10 @@ interface TripCardProps {
 }
 
 export function TripCard({ trip, variant, onReportLost, timeAgo }: TripCardProps) {
-  const { isUrgent, isPriority } = trip.status === 'completed'
-    ? getTimeSinceTrip(trip.arrivalTime)
-    : { isUrgent: false, isPriority: false };
+  const { isUrgent, isPriority } =
+    trip.status === 'completed'
+      ? getTimeSinceTrip(trip.arrivalTime)
+      : { isUrgent: false, isPriority: false };
 
   // Active trip - user is currently ON the train
   // Show live tracking info, NOT "lost something?" (that makes no sense while on the train)
@@ -28,7 +29,9 @@ export function TripCard({ trip, variant, onReportLost, timeAgo }: TripCardProps
             <div className="w-2 h-2 rounded-full bg-app-success animate-pulse" />
             <span className="text-app-sm font-medium">Live</span>
           </div>
-          <span className="text-app-sm">{trip.vehicle.line} → {trip.destination.name}</span>
+          <span className="text-app-sm">
+            {trip.vehicle.line} → {trip.destination.name}
+          </span>
         </div>
 
         {/* Trip details */}
@@ -49,12 +52,17 @@ export function TripCard({ trip, variant, onReportLost, timeAgo }: TripCardProps
 
           {/* Progress bar */}
           <div className="relative h-1 bg-app-cloud rounded-full mb-2">
-            <div className="absolute left-0 top-0 h-full bg-brand rounded-full" style={{ width: '45%' }} />
+            <div
+              className="absolute left-0 top-0 h-full bg-brand rounded-full"
+              style={{ width: '45%' }}
+            />
           </div>
 
           <div className="flex justify-between text-app-sm">
             <span className="text-app-granite">{formatTime(trip.departureTime)}</span>
-            <span className="text-app-charcoal font-medium">{UI_LABELS.trip.arrival} {formatTime(trip.arrivalTime)}</span>
+            <span className="text-app-charcoal font-medium">
+              {UI_LABELS.trip.arrival} {formatTime(trip.arrivalTime)}
+            </span>
           </div>
         </div>
       </div>
@@ -77,9 +85,7 @@ export function TripCard({ trip, variant, onReportLost, timeAgo }: TripCardProps
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
             <span className="text-app-sm font-medium text-app-charcoal">{trip.vehicle.line}</span>
-            {timeAgo && (
-              <span className="text-app-xs text-app-granite">{timeAgo}</span>
-            )}
+            {timeAgo && <span className="text-app-xs text-app-granite">{timeAgo}</span>}
             {isUrgent && (
               <span className="text-app-xs text-white bg-brand px-1.5 py-0.5 rounded font-medium">
                 !
@@ -105,16 +111,17 @@ export function TripCard({ trip, variant, onReportLost, timeAgo }: TripCardProps
             }}
             className={`
               shrink-0 px-3 py-1.5 rounded-app-md text-app-sm font-medium transition-colors
-              ${isUrgent
-                ? 'bg-brand text-white'
-                : isPriority
-                  ? 'bg-brand/10 text-brand border border-brand/20'
-                  : 'bg-app-milk text-app-granite hover:bg-app-cloud'
+              ${
+                isUrgent
+                  ? 'bg-brand text-white'
+                  : isPriority
+                    ? 'bg-brand/10 text-brand border border-brand/20'
+                    : 'bg-app-milk text-app-granite hover:bg-app-cloud'
               }
             `}
             aria-label={UI_LABELS.a11y.reportLossFor(trip.origin.name, trip.destination.name)}
           >
-{UI_LABELS.actions.reportLoss}
+            {UI_LABELS.actions.reportLoss}
           </button>
         )}
       </div>

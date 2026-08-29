@@ -28,7 +28,7 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
     await onUpdateStatus(
       notification.id,
       found ? 'found' : 'not_found',
-      responseNotes || undefined
+      responseNotes || undefined,
     );
     setIsResponding(false);
     setIsExpanded(false);
@@ -59,11 +59,15 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className={`text-app-xs px-2 py-0.5 rounded-full font-medium ${statusConfig.color} ${statusConfig.textColor}`}>
+            <span
+              className={`text-app-xs px-2 py-0.5 rounded-full font-medium ${statusConfig.color} ${statusConfig.textColor}`}
+            >
               {statusConfig.label}
             </span>
             {notification.priority === 'urgent' && isPending && (
-              <span className="text-app-xs text-brand font-medium">{UI_LABELS.lostItem.urgent}</span>
+              <span className="text-app-xs text-brand font-medium">
+                {UI_LABELS.lostItem.urgent}
+              </span>
             )}
           </div>
 
@@ -71,9 +75,7 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
             {notification.message}
           </h3>
 
-          <p className="text-app-sm text-app-granite mt-0.5">
-            {notification.location}
-          </p>
+          <p className="text-app-sm text-app-granite mt-0.5">{notification.location}</p>
 
           <p className="text-app-xs text-app-granite mt-1">
             {formatRelativeTime(notification.createdAt)}
@@ -98,16 +100,22 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
               <div className="grid grid-cols-2 gap-2 text-app-sm">
                 <div>
                   <p className="text-app-granite text-app-xs">{UI_LABELS.staff.route}</p>
-                  <p className="font-medium text-app-charcoal">{notification.passengerInfo.tripRoute}</p>
+                  <p className="font-medium text-app-charcoal">
+                    {notification.passengerInfo.tripRoute}
+                  </p>
                 </div>
                 <div>
                   <p className="text-app-granite text-app-xs">{UI_LABELS.staff.time}</p>
-                  <p className="font-medium text-app-charcoal">{notification.passengerInfo.tripTime}</p>
+                  <p className="font-medium text-app-charcoal">
+                    {notification.passengerInfo.tripTime}
+                  </p>
                 </div>
                 {notification.passengerInfo.seatInfo && (
                   <div className="col-span-2">
                     <p className="text-app-granite text-app-xs">{UI_LABELS.staff.position}</p>
-                    <p className="font-medium text-app-charcoal">{notification.passengerInfo.seatInfo}</p>
+                    <p className="font-medium text-app-charcoal">
+                      {notification.passengerInfo.seatInfo}
+                    </p>
                   </div>
                 )}
               </div>
@@ -166,9 +174,7 @@ export function NotificationCard({ notification, onUpdateStatus, isNew }: Notifi
                 {UI_LABELS.staff.yourResponse}
               </h4>
               {notification.response.notes && (
-                <p className="text-app-sm text-app-charcoal">
-                  {notification.response.notes}
-                </p>
+                <p className="text-app-sm text-app-charcoal">{notification.response.notes}</p>
               )}
               {notification.respondedAt && (
                 <p className="text-app-xs text-app-granite mt-2">

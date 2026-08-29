@@ -56,7 +56,12 @@ app.get('/api/matches/:lostItemId', async (req, res) => {
     res.json({ success: true, data: matches });
   } catch (error) {
     logger.error('Failed to get matches', { error });
-    res.status(500).json({ success: false, error: { code: 'MATCH_ERROR', message: 'Failed to compute matches' } });
+    res
+      .status(500)
+      .json({
+        success: false,
+        error: { code: 'MATCH_ERROR', message: 'Failed to compute matches' },
+      });
   }
 });
 
@@ -65,11 +70,19 @@ app.post('/api/matches/:lostItemId/recompute', async (req, res) => {
   try {
     const { lostItemId } = req.params;
     const { matches } = await findMatches(lostItemId, 10);
-    await redis.publish('item_matched', JSON.stringify({ type: 'item_matched', lostItemId, matches }));
+    await redis.publish(
+      'item_matched',
+      JSON.stringify({ type: 'item_matched', lostItemId, matches }),
+    );
     res.json({ success: true, data: { count: matches.length } });
   } catch (error) {
     logger.error('Failed to recompute matches', { error });
-    res.status(500).json({ success: false, error: { code: 'RECOMPUTE_ERROR', message: 'Failed to recompute matches' } });
+    res
+      .status(500)
+      .json({
+        success: false,
+        error: { code: 'RECOMPUTE_ERROR', message: 'Failed to recompute matches' },
+      });
   }
 });
 
@@ -114,4 +127,3 @@ process.on('SIGTERM', async () => {
 });
 
 start();
-

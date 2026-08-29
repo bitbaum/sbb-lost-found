@@ -19,4 +19,3 @@ for (const ch of ['driver_notification', 'lost_item_created', 'lost_item_status_
 socket.on('disconnect', (reason) => {
   console.log('WS disconnected:', reason);
 });
-

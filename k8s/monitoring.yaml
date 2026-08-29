@@ -10,9 +10,9 @@ spec:
     matchLabels:
       monitoring: enabled
   endpoints:
-  - port: http
-    path: /metrics
-    interval: 30s
+    - port: http
+      path: /metrics
+      interval: 30s
 
 ---
 apiVersion: v1
@@ -21,7 +21,7 @@ metadata:
   name: grafana-dashboard
   namespace: sbb-lost-found
   labels:
-    grafana_dashboard: "1"
+    grafana_dashboard: '1'
 data:
   sbb-lost-found-dashboard.json: |
     {
@@ -93,9 +93,9 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 9090
-    targetPort: 9090
-    protocol: TCP
-    name: metrics
+    - port: 9090
+      targetPort: 9090
+      protocol: TCP
+      name: metrics
   selector:
     app: reporting-service

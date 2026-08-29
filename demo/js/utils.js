@@ -30,7 +30,7 @@ export function formatDate(dateString) {
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 }
 
@@ -203,7 +203,7 @@ export class ToastManager {
   show(message, type = 'info', duration = CONFIG.UI.TOAST_DURATION) {
     const id = generateId();
     const toast = this.createToast(id, message, type);
-    
+
     this.container.appendChild(toast);
     this.toasts.set(id, toast);
 
@@ -224,7 +224,7 @@ export class ToastManager {
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
     toast.dataset.id = id;
-    
+
     const icon = this.getIcon(type);
     toast.innerHTML = `
       <div class="toast-content">
@@ -242,7 +242,7 @@ export class ToastManager {
       success: '✅',
       error: '❌',
       warning: '⚠️',
-      info: 'ℹ️'
+      info: 'ℹ️',
     };
     return icons[type] || icons.info;
   }
@@ -299,7 +299,7 @@ export class LoadingManager {
     if (typeof element === 'string') {
       element = document.querySelector(element);
     }
-    
+
     if (element) {
       element.classList.add('loading');
       element.disabled = true;
@@ -314,7 +314,7 @@ export class LoadingManager {
     if (typeof element === 'string') {
       element = document.querySelector(element);
     }
-    
+
     if (element) {
       element.classList.remove('loading');
       element.disabled = false;
