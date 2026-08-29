@@ -19,7 +19,7 @@ export const rateLimit = (maxRequests: number, windowSeconds: number) => {
           path: req.path,
           current,
           maxRequests,
-          resetIn: ttl
+          resetIn: ttl,
         });
 
         res.status(429).json({
@@ -30,9 +30,9 @@ export const rateLimit = (maxRequests: number, windowSeconds: number) => {
             details: {
               limit: maxRequests,
               window: windowSeconds,
-              resetIn: ttl
-            }
-          }
+              resetIn: ttl,
+            },
+          },
         });
         return;
       }
@@ -40,7 +40,9 @@ export const rateLimit = (maxRequests: number, windowSeconds: number) => {
       res.set({
         'X-RateLimit-Limit': maxRequests.toString(),
         'X-RateLimit-Remaining': Math.max(0, maxRequests - current).toString(),
-        'X-RateLimit-Reset': new Date(Date.now() + (await redisClient.ttl(key)) * 1000).toISOString()
+        'X-RateLimit-Reset': new Date(
+          Date.now() + (await redisClient.ttl(key)) * 1000,
+        ).toISOString(),
       });
 
       next();

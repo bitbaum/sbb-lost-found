@@ -14,7 +14,7 @@ const logFormat = winston.format.combine(
       service: 'reporting-service',
       ...meta,
     });
-  })
+  }),
 );
 
 const transports: winston.transport[] = [];
@@ -27,7 +27,7 @@ try {
   }
   transports.push(
     new winston.transports.File({ filename: path.join(logsDir, 'error.log'), level: 'error' }),
-    new winston.transports.File({ filename: path.join(logsDir, 'combined.log') })
+    new winston.transports.File({ filename: path.join(logsDir, 'combined.log') }),
   );
 } catch (_) {
   // If file transports cannot be initialized, stick to console below
@@ -41,10 +41,9 @@ export const logger = winston.createLogger({
 });
 
 if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.simple()
-    )
-  }));
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
+    }),
+  );
 }

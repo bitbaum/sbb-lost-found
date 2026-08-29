@@ -2,11 +2,7 @@
  * Hooks - SSOT for custom React hooks
  */
 
-export {
-  useWebSocket,
-  useDriverNotifications,
-  useItemStatusUpdates,
-} from './useWebSocket';
+export { useWebSocket, useDriverNotifications, useItemStatusUpdates } from './useWebSocket';
 
 export {
   useApiWithFallback,

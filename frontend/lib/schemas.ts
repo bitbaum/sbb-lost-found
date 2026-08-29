@@ -101,7 +101,8 @@ export const lostItemSchema = z.object({
   userId: z.string(),
   tripId: z.string(),
   category: itemCategorySchema,
-  description: z.string()
+  description: z
+    .string()
     .min(config.validation.description.minLength)
     .max(config.validation.description.maxLength),
   color: z.string().optional(),
@@ -122,9 +123,16 @@ export const lostItemSchema = z.object({
 export const lostItemFormSchema = z.object({
   tripId: z.string().min(1, 'Reise muss ausgewählt werden'),
   category: itemCategorySchema,
-  description: z.string()
-    .min(config.validation.description.minLength, `Mindestens ${config.validation.description.minLength} Zeichen`)
-    .max(config.validation.description.maxLength, `Maximal ${config.validation.description.maxLength} Zeichen`),
+  description: z
+    .string()
+    .min(
+      config.validation.description.minLength,
+      `Mindestens ${config.validation.description.minLength} Zeichen`,
+    )
+    .max(
+      config.validation.description.maxLength,
+      `Maximal ${config.validation.description.maxLength} Zeichen`,
+    ),
   color: z.string().optional(),
   location: itemLocationSchema,
   locationDetail: z.string().optional(),
@@ -146,11 +154,13 @@ export const apiResponseSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
     success: z.boolean(),
     data: dataSchema.optional(),
     error: z.string().optional(),
-    meta: z.object({
-      total: z.number().optional(),
-      page: z.number().optional(),
-      pageSize: z.number().optional(),
-    }).optional(),
+    meta: z
+      .object({
+        total: z.number().optional(),
+        page: z.number().optional(),
+        pageSize: z.number().optional(),
+      })
+      .optional(),
   });
 
 export const lostItemResponseSchema = apiResponseSchema(lostItemSchema);
@@ -178,16 +188,20 @@ export const driverNotificationSchema = z.object({
   createdAt: z.string().datetime(),
   acknowledgedAt: z.string().datetime().optional(),
   respondedAt: z.string().datetime().optional(),
-  response: z.object({
-    notes: z.string().optional(),
-    foundItem: z.boolean().optional(),
-    imageUrl: z.string().url().optional(),
-  }).optional(),
-  passengerInfo: z.object({
-    tripRoute: z.string(),
-    tripTime: z.string(),
-    seatInfo: z.string().optional(),
-  }).optional(),
+  response: z
+    .object({
+      notes: z.string().optional(),
+      foundItem: z.boolean().optional(),
+      imageUrl: z.string().url().optional(),
+    })
+    .optional(),
+  passengerInfo: z
+    .object({
+      tripRoute: z.string(),
+      tripTime: z.string(),
+      seatInfo: z.string().optional(),
+    })
+    .optional(),
 });
 
 // ============================================================================
@@ -203,10 +217,7 @@ export const driverNotificationSchema = z.object({
 /**
  * Validates API response and returns typed data or throws error
  */
-export function validateApiResponse<T>(
-  schema: z.ZodSchema<T>,
-  data: unknown
-): T {
+export function validateApiResponse<T>(schema: z.ZodSchema<T>, data: unknown): T {
   const result = schema.safeParse(data);
   if (!result.success) {
     console.error('API validation failed:', result.error.flatten());
@@ -220,7 +231,7 @@ export function validateApiResponse<T>(
  */
 export function validateForm<T>(
   schema: z.ZodSchema<T>,
-  data: unknown
+  data: unknown,
 ): { success: true; data: T } | { success: false; errors: Record<string, string[]> } {
   const result = schema.safeParse(data);
   if (!result.success) {

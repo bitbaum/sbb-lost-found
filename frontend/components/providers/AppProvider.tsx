@@ -12,9 +12,5 @@ interface AppProviderProps {
  * (e.g., theme, auth, toast context)
  */
 export function AppProvider({ children }: AppProviderProps) {
-  return (
-    <ErrorBoundary>
-      {children}
-    </ErrorBoundary>
-  );
+  return <ErrorBoundary>{children}</ErrorBoundary>;
 }

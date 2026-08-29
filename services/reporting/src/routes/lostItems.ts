@@ -35,11 +35,12 @@ const lostItemController = new LostItemController();
  *       429:
  *         description: Rate limit exceeded
  */
-router.post('/',
+router.post(
+  '/',
   authenticate,
   rateLimit(10, 15 * 60), // 10 requests per 15 minutes
   validateCreateLostItem,
-  lostItemController.createLostItem.bind(lostItemController)
+  lostItemController.createLostItem.bind(lostItemController),
 );
 
 /**
@@ -94,10 +95,11 @@ router.post('/',
  *             schema:
  *               $ref: '#/components/schemas/LostItemSearchResponse'
  */
-router.get('/search',
+router.get(
+  '/search',
   rateLimit(100, 60), // 100 requests per minute
   validateSearch,
-  lostItemController.searchLostItems.bind(lostItemController)
+  lostItemController.searchLostItems.bind(lostItemController),
 );
 
 /**
@@ -129,10 +131,11 @@ router.get('/search',
  *               items:
  *                 $ref: '#/components/schemas/LostItem'
  */
-router.get('/my',
+router.get(
+  '/my',
   authenticate,
   rateLimit(60, 60), // 60 requests per minute
-  lostItemController.getUserLostItems.bind(lostItemController)
+  lostItemController.getUserLostItems.bind(lostItemController),
 );
 
 /**
@@ -158,9 +161,10 @@ router.get('/my',
  *       404:
  *         description: Lost item not found
  */
-router.get('/:id',
+router.get(
+  '/:id',
   rateLimit(120, 60), // 120 requests per minute
-  lostItemController.getLostItem.bind(lostItemController)
+  lostItemController.getLostItem.bind(lostItemController),
 );
 
 /**
@@ -199,10 +203,11 @@ router.get('/:id',
  *       404:
  *         description: Lost item not found
  */
-router.patch('/:id/status',
+router.patch(
+  '/:id/status',
   authenticate,
   rateLimit(20, 60), // 20 requests per minute
-  lostItemController.updateLostItemStatus.bind(lostItemController)
+  lostItemController.updateLostItemStatus.bind(lostItemController),
 );
 
 export default router;

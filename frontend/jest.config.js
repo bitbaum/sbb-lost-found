@@ -14,4 +14,4 @@ module.exports = {
     // cannot execute directly — override to commonjs for the test run only.
     '^.+\\.ts$': ['ts-jest', { tsconfig: { module: 'commonjs', esModuleInterop: true } }],
   },
-}
+};

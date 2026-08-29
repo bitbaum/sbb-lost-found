@@ -2,7 +2,12 @@
 
 import { useState, useCallback } from 'react';
 import type { Trip, LostItem, ItemCategory, ItemLocation } from '@/lib/types';
-import { ITEM_CATEGORY_CONFIG, ITEM_LOCATION_CONFIG, ITEM_CATEGORIES, ITEM_LOCATIONS } from '@/lib/types';
+import {
+  ITEM_CATEGORY_CONFIG,
+  ITEM_LOCATION_CONFIG,
+  ITEM_CATEGORIES,
+  ITEM_LOCATIONS,
+} from '@/lib/types';
 import { formatTime, getTimeSinceTrip } from '@/lib/mock-data';
 import { config } from '@/lib/config';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
@@ -138,9 +143,7 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
                       `}
                     >
                       <div className="text-3xl mb-2">{cfg.icon}</div>
-                      <div className="text-app-xs font-medium text-app-charcoal">
-                        {cfg.labelDe}
-                      </div>
+                      <div className="text-app-xs font-medium text-app-charcoal">{cfg.labelDe}</div>
                     </button>
                   );
                 })}
@@ -181,7 +184,7 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
                     Wo genau?
                   </label>
                   <div className="space-y-2">
-                    {ITEM_LOCATIONS.filter(l => l !== 'unknown').map((loc) => {
+                    {ITEM_LOCATIONS.filter((l) => l !== 'unknown').map((loc) => {
                       const cfg = ITEM_LOCATION_CONFIG[loc];
                       return (
                         <button
@@ -189,15 +192,14 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
                           onClick={() => setLocation(loc)}
                           className={`
                             w-full text-left p-4 rounded-app-md border-2 transition-all
-                            ${location === loc
-                              ? 'border-brand bg-red-50'
-                              : 'border-app-cloud bg-app-milk hover:border-app-silver'
+                            ${
+                              location === loc
+                                ? 'border-brand bg-red-50'
+                                : 'border-app-cloud bg-app-milk hover:border-app-silver'
                             }
                           `}
                         >
-                          <span className="text-app-base text-app-charcoal">
-                            {cfg.labelDe}
-                          </span>
+                          <span className="text-app-base text-app-charcoal">{cfg.labelDe}</span>
                           {trip.seat && loc === 'seat' && (
                             <span className="text-app-sm text-app-granite ml-2">
                               (Platz {trip.seat})
@@ -211,7 +213,10 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
 
                 <button
                   onClick={handleSubmit}
-                  disabled={description.trim().length < config.validation.description.minLength || isSubmitting}
+                  disabled={
+                    description.trim().length < config.validation.description.minLength ||
+                    isSubmitting
+                  }
                   className="btn-app-primary w-full flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
@@ -220,9 +225,7 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
                       Wird gesendet...
                     </>
                   ) : (
-                    <>
-                      🚨 Fahrer sofort benachrichtigen
-                    </>
+                    <>🚨 Fahrer sofort benachrichtigen</>
                   )}
                 </button>
               </div>
@@ -237,7 +240,8 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
                 Fahrer benachrichtigt!
               </h3>
               <p className="text-app-base text-app-granite mb-8 max-w-xs mx-auto">
-                Der Zugführer wurde sofort informiert und wird bei der nächsten Gelegenheit nach Ihrem Gegenstand suchen.
+                Der Zugführer wurde sofort informiert und wird bei der nächsten Gelegenheit nach
+                Ihrem Gegenstand suchen.
               </p>
 
               <div className="bg-app-milk rounded-app-lg p-4 text-left mb-6">
@@ -247,29 +251,34 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
                   </div>
                   <div>
                     <p className="text-app-sm font-semibold text-app-charcoal">Nächste Schritte</p>
-                    <p className="text-app-xs text-app-granite">Sie werden per Push benachrichtigt</p>
+                    <p className="text-app-xs text-app-granite">
+                      Sie werden per Push benachrichtigt
+                    </p>
                   </div>
                 </div>
                 <ul className="space-y-2 text-app-sm text-app-granite ml-13">
                   <li className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-app-cloud flex items-center justify-center text-xs">1</span>
+                    <span className="w-5 h-5 rounded-full bg-app-cloud flex items-center justify-center text-xs">
+                      1
+                    </span>
                     Fahrer prüft bei Endstation
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-app-cloud flex items-center justify-center text-xs">2</span>
+                    <span className="w-5 h-5 rounded-full bg-app-cloud flex items-center justify-center text-xs">
+                      2
+                    </span>
                     Status-Update in der App
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-app-cloud flex items-center justify-center text-xs">3</span>
+                    <span className="w-5 h-5 rounded-full bg-app-cloud flex items-center justify-center text-xs">
+                      3
+                    </span>
                     Abholung koordinieren
                   </li>
                 </ul>
               </div>
 
-              <button
-                onClick={onClose}
-                className="btn-app-secondary"
-              >
+              <button onClick={onClose} className="btn-app-secondary">
                 Verstanden
               </button>
             </div>

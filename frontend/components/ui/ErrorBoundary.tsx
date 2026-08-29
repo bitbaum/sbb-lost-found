@@ -56,10 +56,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             <p className="text-app-sm text-app-granite mb-6">
               Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.
             </p>
-            <button
-              onClick={this.handleRetry}
-              className="btn-app-primary w-full"
-            >
+            <button onClick={this.handleRetry} className="btn-app-primary w-full">
               Erneut versuchen
             </button>
           </div>

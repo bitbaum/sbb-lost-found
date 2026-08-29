@@ -20,8 +20,8 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: process.env.CORS_ORIGIN || '*',
-    methods: ['GET', 'POST']
-  }
+    methods: ['GET', 'POST'],
+  },
 });
 
 // Swagger configuration
@@ -36,25 +36,36 @@ const swaggerOptions = {
     servers: [
       {
         url: process.env.API_URL || 'http://localhost:3001',
-        description: 'Reporting Service API'
-      }
+        description: 'Reporting Service API',
+      },
     ],
     components: {
       securitySchemes: {
         bearerAuth: {
           type: 'http',
           scheme: 'bearer',
-          bearerFormat: 'JWT'
-        }
+          bearerFormat: 'JWT',
+        },
       },
       schemas: {
         ItemCategory: {
           type: 'string',
-          enum: ['electronics', 'clothing', 'bags', 'documents', 'jewelry', 'books', 'toys', 'sports_equipment', 'medical', 'other']
+          enum: [
+            'electronics',
+            'clothing',
+            'bags',
+            'documents',
+            'jewelry',
+            'books',
+            'toys',
+            'sports_equipment',
+            'medical',
+            'other',
+          ],
         },
         ItemStatus: {
           type: 'string',
-          enum: ['reported_lost', 'reported_found', 'matched', 'returned', 'disposed']
+          enum: ['reported_lost', 'reported_found', 'matched', 'returned', 'disposed'],
         },
         CreateLostItemRequest: {
           type: 'object',
@@ -72,8 +83,8 @@ const swaggerOptions = {
             lossLocation: { type: 'string', maxLength: 255 },
             contactInfo: { type: 'object' },
             rewardOffered: { type: 'number', minimum: 0, maximum: 10000 },
-            images: { type: 'array', items: { type: 'string', format: 'uri' }, maxItems: 10 }
-          }
+            images: { type: 'array', items: { type: 'string', format: 'uri' }, maxItems: 10 },
+          },
         },
         LostItem: {
           type: 'object',
@@ -95,15 +106,15 @@ const swaggerOptions = {
             status: { $ref: '#/components/schemas/ItemStatus' },
             images: { type: 'array', items: { type: 'string' } },
             createdAt: { type: 'string', format: 'date-time' },
-            updatedAt: { type: 'string', format: 'date-time' }
-          }
+            updatedAt: { type: 'string', format: 'date-time' },
+          },
         },
         LostItemResponse: {
           type: 'object',
           properties: {
             success: { type: 'boolean', example: true },
-            data: { $ref: '#/components/schemas/LostItem' }
-          }
+            data: { $ref: '#/components/schemas/LostItem' },
+          },
         },
         LostItemSearchResponse: {
           type: 'object',
@@ -111,22 +122,22 @@ const swaggerOptions = {
             success: { type: 'boolean', example: true },
             data: {
               type: 'array',
-              items: { $ref: '#/components/schemas/LostItem' }
+              items: { $ref: '#/components/schemas/LostItem' },
             },
             pagination: {
               type: 'object',
               properties: {
                 total: { type: 'number' },
                 limit: { type: 'number' },
-                offset: { type: 'number' }
-              }
-            }
-          }
-        }
-      }
-    }
+                offset: { type: 'number' },
+              },
+            },
+          },
+        },
+      },
+    },
   },
-  apis: ['./src/routes/*.ts']
+  apis: ['./src/routes/*.ts'],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
@@ -139,11 +150,13 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Logging
-app.use(morgan('combined', {
-  stream: {
-    write: (message: string) => logger.info(message.trim())
-  }
-}));
+app.use(
+  morgan('combined', {
+    stream: {
+      write: (message: string) => logger.info(message.trim()),
+    },
+  }),
+);
 
 // API Documentation
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -154,7 +167,7 @@ app.get('/health', (req, res) => {
     status: 'healthy',
     service: 'reporting-service',
     timestamp: new Date().toISOString(),
-    version: process.env.npm_package_version || '1.0.0'
+    version: process.env.npm_package_version || '1.0.0',
   });
 });
 
@@ -211,8 +224,8 @@ app.use((err: Error, req: express.Request, res: express.Response, _next: express
     success: false,
     error: {
       code: 'INTERNAL_ERROR',
-      message: 'An internal server error occurred'
-    }
+      message: 'An internal server error occurred',
+    },
   });
 });
 
@@ -222,8 +235,8 @@ app.use('*', (req, res) => {
     success: false,
     error: {
       code: 'NOT_FOUND',
-      message: 'Endpoint not found'
-    }
+      message: 'Endpoint not found',
+    },
   });
 });
 
@@ -247,7 +260,7 @@ const start = async (): Promise<void> => {
     httpServer.listen(port, () => {
       logger.info(`Reporting service started on port ${port}`, {
         environment: process.env.NODE_ENV || 'development',
-        docs: `http://localhost:${port}/docs`
+        docs: `http://localhost:${port}/docs`,
       });
     });
   } catch (error) {

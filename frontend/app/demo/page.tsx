@@ -72,16 +72,12 @@ export default function DemoPage() {
                     label="Wiederfindungsrate"
                     sublabel="aktuell (geschätzt)"
                   />
-                  <StatCard
-                    number="24-48h"
-                    label="Reaktionszeit"
-                    sublabel="bis zur Bearbeitung"
-                  />
+                  <StatCard number="24-48h" label="Reaktionszeit" sublabel="bis zur Bearbeitung" />
                 </div>
                 <p className="mt-6 text-app-base text-app-granite">
                   <strong className="text-app-charcoal">Kernproblem:</strong> Die Zeit zwischen
-                  Verlust und Meldung ist zu lang. Bis der Passagier das Fundbüro kontaktiert,
-                  ist der Zug längst weitergefahren und der Gegenstand nicht mehr auffindbar.
+                  Verlust und Meldung ist zu lang. Bis der Passagier das Fundbüro kontaktiert, ist
+                  der Zug längst weitergefahren und der Gegenstand nicht mehr auffindbar.
                 </p>
               </div>
             </section>
@@ -218,7 +214,9 @@ export default function DemoPage() {
                     <span className="text-3xl">🚂</span>
                     <div>
                       <h3 className="font-semibold">Mitarbeiter-Ansicht</h3>
-                      <p className="text-app-sm opacity-90">Für Lokführer, Zugbegleiter, Kontrolleure</p>
+                      <p className="text-app-sm opacity-90">
+                        Für Lokführer, Zugbegleiter, Kontrolleure
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -255,35 +253,45 @@ export default function DemoPage() {
               </h3>
               <ol className="space-y-3 text-app-sm">
                 <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">1</span>
+                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">
+                    1
+                  </span>
                   <span className="text-app-granite">
                     <strong className="text-app-charcoal">Passagier-App:</strong> Öffnen Sie den
                     &quot;Reisen&quot;-Tab (startet automatisch dort)
                   </span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">2</span>
+                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">
+                    2
+                  </span>
                   <span className="text-app-granite">
                     <strong className="text-app-charcoal">Reise wählen:</strong> Klicken Sie auf
                     &quot;Verlust?&quot; bei einer Ihrer Einzelreisen
                   </span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">3</span>
+                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">
+                    3
+                  </span>
                   <span className="text-app-granite">
-                    <strong className="text-app-charcoal">Details eingeben:</strong> Kategorie wählen,
-                    Beschreibung und Position angeben
+                    <strong className="text-app-charcoal">Details eingeben:</strong> Kategorie
+                    wählen, Beschreibung und Position angeben
                   </span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">4</span>
+                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">
+                    4
+                  </span>
                   <span className="text-app-granite">
-                    <strong className="text-app-charcoal">Mitarbeiter-App:</strong> Beobachten Sie die
-                    eingehende Benachrichtigung in Echtzeit
+                    <strong className="text-app-charcoal">Mitarbeiter-App:</strong> Beobachten Sie
+                    die eingehende Benachrichtigung in Echtzeit
                   </span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">5</span>
+                  <span className="w-6 h-6 rounded-full bg-brand text-white flex items-center justify-center text-xs font-medium shrink-0">
+                    5
+                  </span>
                   <span className="text-app-granite">
                     <strong className="text-app-charcoal">Rückmeldung:</strong> Das Personal kann
                     &quot;Gefunden&quot; oder &quot;Nicht gefunden&quot; melden
@@ -298,9 +306,7 @@ export default function DemoPage() {
       {/* Footer */}
       <footer className="bg-app-charcoal text-white py-8 mt-12">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-app-sm opacity-70 mb-2">
-            Konzept & Prototyp entwickelt von
-          </p>
+          <p className="text-app-sm opacity-70 mb-2">Konzept & Prototyp entwickelt von</p>
           <p className="text-app-base font-medium">
             Ein Vorschlag zur Verbesserung des Kundenerlebnisses
           </p>
@@ -313,7 +319,15 @@ export default function DemoPage() {
   );
 }
 
-function StatCard({ number, label, sublabel }: { number: string; label: string; sublabel: string }) {
+function StatCard({
+  number,
+  label,
+  sublabel,
+}: {
+  number: string;
+  label: string;
+  sublabel: string;
+}) {
   return (
     <div className="text-center">
       <div className="text-3xl font-bold text-brand mb-1">{number}</div>

@@ -36,9 +36,7 @@ export function StaffHeader({ staff, vehicle }: StaffHeaderProps) {
         </div>
         <div>
           <p className="text-app-sm font-medium">{UI_LABELS.staff.notifications}</p>
-          <p className="text-app-xs opacity-80">
-            {UI_LABELS.staff.realtimeAlerts}
-          </p>
+          <p className="text-app-xs opacity-80">{UI_LABELS.staff.realtimeAlerts}</p>
         </div>
       </div>
     </header>

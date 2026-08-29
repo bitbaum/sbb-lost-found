@@ -5,7 +5,9 @@ import { logger } from '../utils/logger';
 
 const createLostItemSchema = Joi.object({
   tripId: Joi.string().uuid().optional(),
-  category: Joi.string().valid(...Object.values(ItemCategory)).required(),
+  category: Joi.string()
+    .valid(...Object.values(ItemCategory))
+    .required(),
   title: Joi.string().min(3).max(255).required(),
   description: Joi.string().min(10).max(2000).required(),
   color: Joi.string().max(100).optional(),
@@ -16,21 +18,25 @@ const createLostItemSchema = Joi.object({
   lossLocation: Joi.string().max(255).optional(),
   contactInfo: Joi.object().optional(),
   rewardOffered: Joi.number().min(0).max(10000).optional(),
-  images: Joi.array().items(Joi.string().uri()).max(10).optional()
+  images: Joi.array().items(Joi.string().uri()).max(10).optional(),
 });
 
 const searchSchema = Joi.object({
   query: Joi.string().max(255).optional(),
-  category: Joi.string().valid(...Object.values(ItemCategory)).optional(),
+  category: Joi.string()
+    .valid(...Object.values(ItemCategory))
+    .optional(),
   color: Joi.string().max(100).optional(),
   brand: Joi.string().max(100).optional(),
   dateFrom: Joi.string().isoDate().optional(),
   dateTo: Joi.string().isoDate().optional(),
   vehicleId: Joi.string().uuid().optional(),
   routeId: Joi.string().uuid().optional(),
-  status: Joi.string().valid(...Object.values(ItemStatus)).optional(),
+  status: Joi.string()
+    .valid(...Object.values(ItemStatus))
+    .optional(),
   limit: Joi.number().integer().min(1).max(100).optional(),
-  offset: Joi.number().integer().min(0).optional()
+  offset: Joi.number().integer().min(0).optional(),
 });
 
 export const validateCreateLostItem = (req: Request, res: Response, next: NextFunction): void => {
@@ -43,11 +49,11 @@ export const validateCreateLostItem = (req: Request, res: Response, next: NextFu
       error: {
         code: 'VALIDATION_ERROR',
         message: 'Invalid request data',
-        details: error.details.map(detail => ({
+        details: error.details.map((detail) => ({
           field: detail.path.join('.'),
-          message: detail.message
-        }))
-      }
+          message: detail.message,
+        })),
+      },
     });
     return;
   }
@@ -65,11 +71,11 @@ export const validateSearch = (req: Request, res: Response, next: NextFunction):
       error: {
         code: 'VALIDATION_ERROR',
         message: 'Invalid search parameters',
-        details: error.details.map(detail => ({
+        details: error.details.map((detail) => ({
           field: detail.path.join('.'),
-          message: detail.message
-        }))
-      }
+          message: detail.message,
+        })),
+      },
     });
     return;
   }

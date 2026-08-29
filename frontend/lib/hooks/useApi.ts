@@ -4,11 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '../api';
 import { config } from '../config';
 import type { Trip, DriverNotification, LostItem } from '../types';
-import {
-  mockTrips,
-  mockDriverNotifications,
-  mockActiveTrip,
-} from '../mock-data';
+import { mockTrips, mockDriverNotifications, mockActiveTrip } from '../mock-data';
 
 interface UseApiState<T> {
   data: T | null;
@@ -23,7 +19,7 @@ interface UseApiState<T> {
 export function useApiWithFallback<T>(
   apiFn: () => Promise<{ success: boolean; data?: T; error?: string }>,
   mockData: T,
-  deps: unknown[] = []
+  deps: unknown[] = [],
 ): UseApiState<T> & { refetch: () => void } {
   const [state, setState] = useState<UseApiState<T>>({
     data: null,
@@ -76,7 +72,7 @@ export function useTrips(): UseApiState<Trip[]> & { refetch: () => void } {
       return response;
     },
     mockTrips,
-    []
+    [],
   );
 }
 
@@ -90,7 +86,7 @@ export function useCurrentTrip(): UseApiState<Trip | null> & { refetch: () => vo
       return response;
     },
     mockActiveTrip,
-    []
+    [],
   );
 }
 
@@ -99,7 +95,7 @@ export function useCurrentTrip(): UseApiState<Trip | null> & { refetch: () => vo
  */
 export function useDriverNotificationsApi(
   vehicleId: string,
-  filter?: 'all' | 'pending' | 'resolved'
+  filter?: 'all' | 'pending' | 'resolved',
 ): UseApiState<DriverNotification[]> & {
   refetch: () => void;
   updateNotification: (id: string, status: 'found' | 'not_found', notes?: string) => Promise<void>;
@@ -112,39 +108,38 @@ export function useDriverNotificationsApi(
       return response;
     },
     mockDriverNotifications,
-    [vehicleId, filter]
+    [vehicleId, filter],
   );
 
   // Use local data if we've made local updates
   const data = localData ?? baseState.data;
 
-  const updateNotification = useCallback(async (
-    id: string,
-    status: 'found' | 'not_found',
-    notes?: string
-  ) => {
-    // Optimistic update
-    setLocalData((prev) => {
-      if (!prev) return prev;
-      return prev.map((n) =>
-        n.id === id
-          ? {
-              ...n,
-              status,
-              respondedAt: new Date().toISOString(),
-              response: notes ? { notes, foundItem: status === 'found' } : undefined,
-            }
-          : n
-      );
-    });
+  const updateNotification = useCallback(
+    async (id: string, status: 'found' | 'not_found', notes?: string) => {
+      // Optimistic update
+      setLocalData((prev) => {
+        if (!prev) return prev;
+        return prev.map((n) =>
+          n.id === id
+            ? {
+                ...n,
+                status,
+                respondedAt: new Date().toISOString(),
+                response: notes ? { notes, foundItem: status === 'found' } : undefined,
+              }
+            : n,
+        );
+      });
 
-    // Try API call
-    try {
-      await api.respondToNotification(id, status, notes);
-    } catch (error) {
-      console.log('API update failed, keeping local state');
-    }
-  }, []);
+      // Try API call
+      try {
+        await api.respondToNotification(id, status, notes);
+      } catch (error) {
+        console.log('API update failed, keeping local state');
+      }
+    },
+    [],
+  );
 
   return {
     ...baseState,
@@ -160,40 +155,43 @@ export function useReportLostItem() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const reportItem = useCallback(async (data: {
-    tripId: string;
-    category: string;
-    description: string;
-    location: string;
-    locationDetail?: string;
-  }): Promise<{ success: boolean; item?: LostItem }> => {
-    setIsSubmitting(true);
-    setError(null);
+  const reportItem = useCallback(
+    async (data: {
+      tripId: string;
+      category: string;
+      description: string;
+      location: string;
+      locationDetail?: string;
+    }): Promise<{ success: boolean; item?: LostItem }> => {
+      setIsSubmitting(true);
+      setError(null);
 
-    try {
-      const response = await api.reportLostItem({
-        tripId: data.tripId,
-        category: data.category as any,
-        description: data.description,
-        location: data.location as any,
-        locationDetail: data.locationDetail,
-      });
+      try {
+        const response = await api.reportLostItem({
+          tripId: data.tripId,
+          category: data.category as any,
+          description: data.description,
+          location: data.location as any,
+          locationDetail: data.locationDetail,
+        });
 
-      if (response.success && response.data) {
+        if (response.success && response.data) {
+          setIsSubmitting(false);
+          return { success: true, item: response.data };
+        }
+
+        // API failed but we still want to show success in demo mode
+        console.log('API report failed, simulating success for demo');
         setIsSubmitting(false);
-        return { success: true, item: response.data };
+        return { success: true };
+      } catch (error) {
+        console.log('Report API error, simulating success for demo');
+        setIsSubmitting(false);
+        return { success: true };
       }
-
-      // API failed but we still want to show success in demo mode
-      console.log('API report failed, simulating success for demo');
-      setIsSubmitting(false);
-      return { success: true };
-    } catch (error) {
-      console.log('Report API error, simulating success for demo');
-      setIsSubmitting(false);
-      return { success: true };
-    }
-  }, []);
+    },
+    [],
+  );
 
   return {
     reportItem,

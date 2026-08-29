@@ -10,8 +10,8 @@
 export interface Vehicle {
   id: string;
   type: 'train' | 'tram' | 'bus';
-  line: string;        // e.g., "IC 1", "S3", "Tram 4"
-  number: string;      // e.g., "IC 123", "S3 12345"
+  line: string; // e.g., "IC 1", "S3", "Tram 4"
+  number: string; // e.g., "IC 123", "S3 12345"
   /**
    * Operator code as shown in vehicle data. Deliberately a free string, not
    * a union: the app is white-label, so valid operators are deployment data
@@ -22,8 +22,8 @@ export interface Vehicle {
 
 export interface Station {
   id: string;
-  name: string;        // e.g., "Zürich HB"
-  code?: string;       // e.g., "ZUE"
+  name: string; // e.g., "Zürich HB"
+  code?: string; // e.g., "ZUE"
 }
 
 export interface Trip {
@@ -31,11 +31,11 @@ export interface Trip {
   vehicle: Vehicle;
   origin: Station;
   destination: Station;
-  departureTime: string;  // ISO 8601
-  arrivalTime: string;    // ISO 8601
-  car?: string;           // e.g., "7"
-  seat?: string;          // e.g., "42A"
-  platform?: string;      // e.g., "3"
+  departureTime: string; // ISO 8601
+  arrivalTime: string; // ISO 8601
+  car?: string; // e.g., "7"
+  seat?: string; // e.g., "42A"
+  platform?: string; // e.g., "3"
   status: 'upcoming' | 'active' | 'completed' | 'cancelled';
 }
 
@@ -55,9 +55,12 @@ export const ITEM_CATEGORIES = [
   'other',
 ] as const;
 
-export type ItemCategory = typeof ITEM_CATEGORIES[number];
+export type ItemCategory = (typeof ITEM_CATEGORIES)[number];
 
-export const ITEM_CATEGORY_CONFIG: Record<ItemCategory, { label: string; labelDe: string; icon: string }> = {
+export const ITEM_CATEGORY_CONFIG: Record<
+  ItemCategory,
+  { label: string; labelDe: string; icon: string }
+> = {
   electronics: { label: 'Electronics', labelDe: 'Elektronik', icon: '📱' },
   bags: { label: 'Bags', labelDe: 'Taschen', icon: '🎒' },
   clothing: { label: 'Clothing', labelDe: 'Kleidung', icon: '👕' },
@@ -79,7 +82,7 @@ export const ITEM_LOCATIONS = [
   'unknown',
 ] as const;
 
-export type ItemLocation = typeof ITEM_LOCATIONS[number];
+export type ItemLocation = (typeof ITEM_LOCATIONS)[number];
 
 export const ITEM_LOCATION_CONFIG: Record<ItemLocation, { label: string; labelDe: string }> = {
   seat: { label: 'At my seat', labelDe: 'Bei meinem Sitzplatz' },
@@ -92,13 +95,13 @@ export const ITEM_LOCATION_CONFIG: Record<ItemLocation, { label: string; labelDe
 };
 
 export type LostItemStatus =
-  | 'reported'       // Initial report
-  | 'searching'      // Driver/staff notified, actively looking
-  | 'found'          // Item located
-  | 'not_found'      // Search completed, not found
-  | 'returned'       // Returned to owner
-  | 'in_depot'       // At lost & found office
-  | 'closed';        // Case closed
+  | 'reported' // Initial report
+  | 'searching' // Driver/staff notified, actively looking
+  | 'found' // Item located
+  | 'not_found' // Search completed, not found
+  | 'returned' // Returned to owner
+  | 'in_depot' // At lost & found office
+  | 'closed'; // Case closed
 
 export interface LostItem {
   id: string;
@@ -140,8 +143,8 @@ export interface FoundItem {
   color?: string;
   location: string;
   imageUrl?: string;
-  foundBy: string;        // Staff/driver ID
-  foundAt: string;        // ISO 8601
+  foundBy: string; // Staff/driver ID
+  foundAt: string; // ISO 8601
   status: 'reported' | 'matched' | 'returned' | 'in_depot';
   matchedLostItemId?: string;
   createdAt: string;
@@ -152,11 +155,11 @@ export interface FoundItem {
 // ============================================================================
 
 export type NotificationType =
-  | 'lost_item_alert'     // Alert to driver about new lost item
-  | 'item_found'          // Notification to user that item was found
-  | 'item_not_found'      // Notification to user that search completed
-  | 'status_update'       // General status update
-  | 'match_found';        // Potential match between lost/found
+  | 'lost_item_alert' // Alert to driver about new lost item
+  | 'item_found' // Notification to user that item was found
+  | 'item_not_found' // Notification to user that search completed
+  | 'status_update' // General status update
+  | 'match_found'; // Potential match between lost/found
 
 export interface Notification {
   id: string;
@@ -216,7 +219,10 @@ export interface LostItemFormData {
 
 export type WebSocketEvent =
   | { type: 'lost_item_created'; payload: LostItem }
-  | { type: 'status_updated'; payload: { itemId: string; status: LostItemStatus; message?: string } }
+  | {
+      type: 'status_updated';
+      payload: { itemId: string; status: LostItemStatus; message?: string };
+    }
   | { type: 'item_found'; payload: { lostItemId: string; foundItemId: string } }
   | { type: 'driver_notification'; payload: { vehicleId: string; lostItem: LostItem } };
 

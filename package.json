@@ -13,7 +13,7 @@
     "test": "npm run test --workspace=services/reporting && npm --prefix frontend run test",
     "lint": "npm run lint --workspaces && npm --prefix frontend run lint",
     "typecheck": "npm run typecheck --workspaces && npm --prefix frontend run typecheck",
-    "verify": "npm run build --workspace=@sbb-lost-found/types && npm run lint && npm run typecheck && npm run test && npm run check:tenant",
+    "verify": "npm run format:check && npm run build --workspace=@sbb-lost-found/types && npm run lint && npm run typecheck && npm run test && npm run check:tenant",
     "check:tenant": "bash scripts/check-tenant-ssot.sh",
     "clean": "npm run clean --workspaces --if-present",
     "docker:build": "docker-compose build",
@@ -21,12 +21,15 @@
     "docker:down": "docker-compose down",
     "k8s:deploy": "kubectl apply -f k8s/",
     "db:migrate": "npm run db:migrate --workspace=services/reporting",
-    "db:seed": "npm run db:seed --workspace=services/reporting"
+    "db:seed": "npm run db:seed --workspace=services/reporting",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
     "@types/node": "^26.3.0",
-    "typescript": "^5.0.0",
-    "concurrently": "^8.0.0"
+    "concurrently": "^8.0.0",
+    "prettier": "3.9.6",
+    "typescript": "^5.0.0"
   },
   "engines": {
     "node": ">=20",

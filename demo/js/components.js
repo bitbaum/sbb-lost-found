@@ -5,7 +5,14 @@
 
 import { CONFIG, CATEGORIES, ROUTES } from './config.js';
 import { apiService, ApiError } from './api.js';
-import { FormValidator, toastManager, loadingManager, formatDate, truncateText, debounce } from './utils.js';
+import {
+  FormValidator,
+  toastManager,
+  loadingManager,
+  formatDate,
+  truncateText,
+  debounce,
+} from './utils.js';
 
 /**
  * Lost Item Form Component
@@ -51,9 +58,11 @@ export class LostItemForm {
               <label for="category" class="form-label">Category *</label>
               <select id="category" name="category" class="form-control form-select" required>
                 <option value="">Select a category...</option>
-                ${CATEGORIES.map(cat => `
+                ${CATEGORIES.map(
+                  (cat) => `
                   <option value="${cat.id}">${cat.icon} ${cat.label}</option>
-                `).join('')}
+                `,
+                ).join('')}
               </select>
               <div class="form-error" id="category-error"></div>
             </div>
@@ -85,7 +94,7 @@ export class LostItemForm {
                 required
               >
               <datalist id="routes-list">
-                ${ROUTES.map(route => `<option value="${route}"></option>`).join('')}
+                ${ROUTES.map((route) => `<option value="${route}"></option>`).join('')}
               </datalist>
               <div class="form-error" id="lossLocation-error"></div>
               <div class="form-help">Where did you lose this item?</div>
@@ -150,15 +159,18 @@ export class LostItemForm {
 
     // Real-time validation
     const inputs = form.querySelectorAll('input, select, textarea');
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       input.addEventListener('blur', () => this.validateField(input));
-      input.addEventListener('input', debounce(() => this.validateField(input), CONFIG.UI.DEBOUNCE_DELAY));
+      input.addEventListener(
+        'input',
+        debounce(() => this.validateField(input), CONFIG.UI.DEBOUNCE_DELAY),
+      );
     });
 
     // Character counter for description
     const description = document.getElementById('description');
     const title = document.getElementById('title');
-    
+
     this.setupCharacterCounter(description, CONFIG.VALIDATION.DESCRIPTION_MAX_LENGTH);
     this.setupCharacterCounter(title, CONFIG.VALIDATION.TITLE_MAX_LENGTH);
   }
@@ -169,7 +181,7 @@ export class LostItemForm {
       const remaining = maxLength - element.value.length;
       const originalText = helpText.textContent.split('(')[0];
       helpText.textContent = `${originalText}(${remaining} characters remaining)`;
-      
+
       if (remaining < 50) {
         helpText.style.color = 'var(--color-warning)';
       } else if (remaining < 20) {
@@ -200,21 +212,21 @@ export class LostItemForm {
         this.validator.minLength(value, CONFIG.VALIDATION.TITLE_MIN_LENGTH, 'Title');
         this.validator.maxLength(value, CONFIG.VALIDATION.TITLE_MAX_LENGTH, 'Title');
         break;
-      
+
       case 'description':
         this.validator.required(value, 'Description');
         this.validator.minLength(value, CONFIG.VALIDATION.DESCRIPTION_MIN_LENGTH, 'Description');
         this.validator.maxLength(value, CONFIG.VALIDATION.DESCRIPTION_MAX_LENGTH, 'Description');
         break;
-      
+
       case 'category':
         this.validator.required(value, 'Category');
         break;
-      
+
       case 'lossLocation':
         this.validator.required(value, 'Lost Location');
         break;
-      
+
       case 'contactEmail':
         if (value) {
           this.validator.email(value, 'Contact Email');
@@ -239,11 +251,11 @@ export class LostItemForm {
       // Validate entire form
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
-      
+
       // Validate all fields
       let isValid = true;
       const fields = form.querySelectorAll('input, select, textarea');
-      fields.forEach(field => {
+      fields.forEach((field) => {
         if (!this.validateField(field)) {
           isValid = false;
         }
@@ -263,14 +275,14 @@ export class LostItemForm {
         approximateLossTime: data.lostDate || null,
         contactInfo: {
           email: data.contactEmail || null,
-          phone: data.contactPhone || null
-        }
+          phone: data.contactPhone || null,
+        },
       });
 
       // Success handling
       toastManager.success('Lost item reported successfully!');
       form.reset();
-      
+
       // Clear character counters
       const description = document.getElementById('description');
       const title = document.getElementById('title');
@@ -281,10 +293,9 @@ export class LostItemForm {
       if (this.onSubmitSuccess) {
         this.onSubmitSuccess(response.data);
       }
-
     } catch (error) {
       console.error('Form submission error:', error);
-      
+
       if (error instanceof ApiError) {
         if (error.isNetworkError) {
           toastManager.error('Network error. Please check your connection.');
@@ -348,9 +359,11 @@ export class SearchComponent {
             <label for="categoryFilter" class="form-label">Filter by Category</label>
             <select id="categoryFilter" class="form-control form-select">
               <option value="">All categories</option>
-              ${CATEGORIES.map(cat => `
+              ${CATEGORIES.map(
+                (cat) => `
                 <option value="${cat.id}">${cat.icon} ${cat.label}</option>
-              `).join('')}
+              `,
+              ).join('')}
             </select>
           </div>
 
@@ -372,9 +385,12 @@ export class SearchComponent {
     const loadMoreBtn = document.getElementById('loadMoreBtn');
 
     // Search input with debouncing
-    searchInput.addEventListener('input', debounce(() => {
-      this.performSearch();
-    }, CONFIG.UI.DEBOUNCE_DELAY));
+    searchInput.addEventListener(
+      'input',
+      debounce(() => {
+        this.performSearch();
+      }, CONFIG.UI.DEBOUNCE_DELAY),
+    );
 
     // Category filter
     categoryFilter.addEventListener('change', () => {
@@ -396,7 +412,7 @@ export class SearchComponent {
 
     this.isLoading = true;
     const resultsContainer = document.getElementById('searchResults');
-    
+
     if (isInitial) {
       resultsContainer.innerHTML = '<div class="text-center"><div class="spinner"></div></div>';
     }
@@ -404,10 +420,10 @@ export class SearchComponent {
     try {
       const searchInput = document.getElementById('searchInput');
       const categoryFilter = document.getElementById('categoryFilter');
-      
+
       const params = {
         offset: isInitial ? 0 : this.currentPage * CONFIG.DEMO.ITEMS_PER_PAGE,
-        limit: CONFIG.DEMO.ITEMS_PER_PAGE
+        limit: CONFIG.DEMO.ITEMS_PER_PAGE,
       };
 
       if (searchInput.value.trim()) {
@@ -419,7 +435,7 @@ export class SearchComponent {
       }
 
       const response = await apiService.searchLostItems(params);
-      
+
       if (isInitial) {
         this.results = response.data || [];
         this.currentPage = 0;
@@ -429,7 +445,6 @@ export class SearchComponent {
 
       this.renderResults();
       this.updateLoadMoreButton(response.pagination);
-
     } catch (error) {
       console.error('Search error:', error);
       resultsContainer.innerHTML = `
@@ -453,7 +468,7 @@ export class SearchComponent {
 
   renderResults() {
     const resultsContainer = document.getElementById('searchResults');
-    
+
     if (this.results.length === 0) {
       resultsContainer.innerHTML = `
         <div class="empty-state">
@@ -467,7 +482,7 @@ export class SearchComponent {
       return;
     }
 
-    const resultsHtml = this.results.map(item => this.renderResultItem(item)).join('');
+    const resultsHtml = this.results.map((item) => this.renderResultItem(item)).join('');
     resultsContainer.innerHTML = resultsHtml;
 
     // Attach click handlers
@@ -475,16 +490,16 @@ export class SearchComponent {
       const resultItem = e.target.closest('.result-item');
       if (resultItem && this.onResultClick) {
         const itemId = resultItem.dataset.itemId;
-        const item = this.results.find(r => r.id === itemId);
+        const item = this.results.find((r) => r.id === itemId);
         this.onResultClick(item);
       }
     });
   }
 
   renderResultItem(item) {
-    const category = CATEGORIES.find(cat => cat.id === item.category);
+    const category = CATEGORIES.find((cat) => cat.id === item.category);
     const categoryDisplay = category ? `${category.icon} ${category.label}` : item.category;
-    
+
     return `
       <div class="result-item" data-item-id="${item.id}">
         <div class="result-header">
@@ -503,7 +518,7 @@ export class SearchComponent {
   updateLoadMoreButton(pagination) {
     const loadMoreContainer = document.getElementById('loadMore');
     const loadMoreBtn = document.getElementById('loadMoreBtn');
-    
+
     if (pagination && pagination.total > this.results.length) {
       loadMoreContainer.style.display = 'block';
       loadMoreBtn.textContent = `Load More (${this.results.length} of ${pagination.total})`;
@@ -565,18 +580,16 @@ export class StatsDashboard {
       // Load recent items to calculate stats
       const response = await apiService.searchLostItems({ limit: 100 });
       const items = response.data || [];
-      
+
       const today = new Date().toDateString();
-      const todayItems = items.filter(item => 
-        new Date(item.createdAt).toDateString() === today
-      );
+      const todayItems = items.filter((item) => new Date(item.createdAt).toDateString() === today);
 
       // Update UI
-      document.getElementById('totalItems').textContent = response.pagination?.total || items.length;
+      document.getElementById('totalItems').textContent =
+        response.pagination?.total || items.length;
       document.getElementById('todayItems').textContent = todayItems.length;
       document.getElementById('resolvedItems').textContent = Math.floor(items.length * 0.75); // Mock resolved percentage
       document.getElementById('activeItems').textContent = Math.floor(items.length * 0.25); // Mock active percentage
-
     } catch (error) {
       console.error('Failed to load stats:', error);
       // Show error state or fallback values
@@ -620,10 +633,10 @@ export class HealthCheck {
 
   updateStatus(status, message) {
     this.status = status;
-    
+
     // Update any health indicators in the UI
     const indicators = document.querySelectorAll('[data-health-indicator]');
-    indicators.forEach(indicator => {
+    indicators.forEach((indicator) => {
       indicator.className = `health-indicator health-${status}`;
       indicator.title = message;
     });

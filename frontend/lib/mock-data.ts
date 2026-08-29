@@ -4,7 +4,15 @@
  */
 
 import { tenant } from '@/lib/tenant';
-import type { Trip, LostItem, User, Vehicle, Station, StaffMember, StaffNotification } from './types';
+import type {
+  Trip,
+  LostItem,
+  User,
+  Vehicle,
+  Station,
+  StaffMember,
+  StaffNotification,
+} from './types';
 
 // ============================================================================
 // Mock User
@@ -45,8 +53,20 @@ export const stations: Record<string, Station> = {
 // ============================================================================
 
 export const vehicles: Record<string, Vehicle> = {
-  ic1: { id: 'v-001', type: 'train', line: 'IC 1', number: 'IC 723', operator: tenant.operatorCode },
-  ic8: { id: 'v-002', type: 'train', line: 'IC 8', number: 'IC 812', operator: tenant.operatorCode },
+  ic1: {
+    id: 'v-001',
+    type: 'train',
+    line: 'IC 1',
+    number: 'IC 723',
+    operator: tenant.operatorCode,
+  },
+  ic8: {
+    id: 'v-002',
+    type: 'train',
+    line: 'IC 8',
+    number: 'IC 812',
+    operator: tenant.operatorCode,
+  },
   s3: { id: 'v-003', type: 'train', line: 'S3', number: 'S3 18234', operator: tenant.operatorCode },
   s8: { id: 'v-004', type: 'train', line: 'S8', number: 'S8 18456', operator: tenant.operatorCode },
   tram4: { id: 'v-005', type: 'tram', line: 'Tram 4', number: '2047', operator: 'VBZ' },
@@ -214,7 +234,7 @@ export const mockLostItems: LostItem[] = [
 export function simulateDriverResponse(
   onSearching: () => void,
   onFound: () => void,
-  delayMs = 5000
+  delayMs = 5000,
 ): () => void {
   const searchingTimeout = setTimeout(onSearching, 1500);
   const foundTimeout = setTimeout(onFound, delayMs);

@@ -33,9 +33,7 @@ const WS_URL = config.api.wsUrl;
 // ============================================================================
 
 export type WebSocketEventType =
-  | 'lost_item_created'
-  | 'lost_item_status_updated'
-  | 'driver_notification';
+  'lost_item_created' | 'lost_item_status_updated' | 'driver_notification';
 
 export interface WebSocketEvent {
   type: WebSocketEventType;
@@ -62,10 +60,7 @@ class ApiClient {
     this.timeout = config.api.timeout;
   }
 
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<ApiResponse<T>> {
+  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     // Demo mode means no backend is reachable from this build, so there is
     // nothing to try. Firing the request anyway is not a harmless fallback: the
     // URL is inlined at build time, so in a deployed bundle it points at the
@@ -133,7 +128,7 @@ class ApiClient {
   async updateLostItemStatus(
     id: string,
     status: string,
-    message?: string
+    message?: string,
   ): Promise<ApiResponse<LostItem>> {
     return this.request<LostItem>(`/api/lost-items/${id}/status`, {
       method: 'PATCH',
@@ -173,29 +168,24 @@ class ApiClient {
 
   async getDriverNotifications(
     vehicleId: string,
-    filter?: 'all' | 'pending' | 'resolved'
+    filter?: 'all' | 'pending' | 'resolved',
   ): Promise<ApiResponse<DriverNotification[]>> {
     const params = new URLSearchParams({ vehicleId });
     if (filter && filter !== 'all') {
       params.set('filter', filter);
     }
-    return this.request<DriverNotification[]>(
-      `/api/driver-notifications?${params.toString()}`
-    );
+    return this.request<DriverNotification[]>(`/api/driver-notifications?${params.toString()}`);
   }
 
   async respondToNotification(
     notificationId: string,
     status: 'found' | 'not_found',
-    notes?: string
+    notes?: string,
   ): Promise<ApiResponse<DriverNotification>> {
-    return this.request<DriverNotification>(
-      `/api/driver-notifications/${notificationId}/respond`,
-      {
-        method: 'POST',
-        body: JSON.stringify({ status, notes }),
-      }
-    );
+    return this.request<DriverNotification>(`/api/driver-notifications/${notificationId}/respond`, {
+      method: 'POST',
+      body: JSON.stringify({ status, notes }),
+    });
   }
 
   // ============================================================================
@@ -206,7 +196,7 @@ class ApiClient {
     onMessage: (event: WebSocketEvent) => void,
     onError?: (error: Event) => void,
     onConnect?: () => void,
-    onDisconnect?: () => void
+    onDisconnect?: () => void,
   ): WebSocketConnection {
     if (typeof window === 'undefined') return null;
     // Same reason as request(): with no backend configured there is no socket
@@ -278,7 +268,7 @@ class ApiClient {
             Object.entries(data.services).map(([name, status]) => [
               name,
               (status as { ok: boolean }).ok,
-            ])
+            ]),
           ),
         };
       }

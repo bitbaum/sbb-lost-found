@@ -15,7 +15,10 @@ function base64UrlEncode(input) {
 }
 
 function signHS256(data, secret) {
-  return crypto.createHmac('sha256', secret).update(data).digest('base64')
+  return crypto
+    .createHmac('sha256', secret)
+    .update(data)
+    .digest('base64')
     .replace(/=/g, '')
     .replace(/\+/g, '-')
     .replace(/\//g, '_');
@@ -34,7 +37,11 @@ const expSecondsArg = process.argv[3];
 
 let payload = defaultPayload;
 if (payloadArg) {
-  try { payload = JSON.parse(payloadArg); } catch (e) { /* ignore, keep default */ }
+  try {
+    payload = JSON.parse(payloadArg);
+  } catch (e) {
+    /* ignore, keep default */
+  }
 }
 
 const expSeconds = expSecondsArg ? parseInt(expSecondsArg, 10) : 24 * 60 * 60; // 24h
@@ -49,4 +56,3 @@ const signature = signHS256(toSign, secret);
 
 process.stdout.write(`${toSign}.${signature}`);
 process.stdout.write('\n');
-

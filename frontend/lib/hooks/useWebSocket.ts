@@ -24,13 +24,7 @@ interface UseWebSocketReturn {
  * Provides real-time updates for lost item status changes and driver notifications.
  */
 export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketReturn {
-  const {
-    onMessage,
-    onConnect,
-    onDisconnect,
-    onError,
-    autoConnect = true,
-  } = options;
+  const { onMessage, onConnect, onDisconnect, onError, autoConnect = true } = options;
 
   const [isConnected, setIsConnected] = useState(false);
   const [lastEvent, setLastEvent] = useState<WebSocketEvent | null>(null);
@@ -52,10 +46,13 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
   // the current one and no dependency has to be hidden from the linter.
   const connectRef = useRef<() => void>(() => {});
 
-  const handleMessage = useCallback((event: WebSocketEvent) => {
-    setLastEvent(event);
-    onMessage?.(event);
-  }, [onMessage]);
+  const handleMessage = useCallback(
+    (event: WebSocketEvent) => {
+      setLastEvent(event);
+      onMessage?.(event);
+    },
+    [onMessage],
+  );
 
   const handleConnect = useCallback(() => {
     setIsConnected(true);
@@ -77,10 +74,13 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     }
   }, [autoConnect, onDisconnect]);
 
-  const handleError = useCallback((error: Event) => {
-    console.error('WebSocket error:', error);
-    onError?.(error);
-  }, [onError]);
+  const handleError = useCallback(
+    (error: Event) => {
+      console.error('WebSocket error:', error);
+      onError?.(error);
+    },
+    [onError],
+  );
 
   const connect = useCallback(() => {
     if (connectionRef.current) {
@@ -91,7 +91,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
       handleMessage,
       handleError,
       handleConnect,
-      handleDisconnect
+      handleDisconnect,
     );
   }, [handleMessage, handleError, handleConnect, handleDisconnect]);
 
@@ -145,14 +145,15 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
  * Hook specifically for driver notifications.
  * Filters WebSocket events to only handle driver-relevant notifications.
  */
-export function useDriverNotifications(
-  onNewNotification?: (notification: unknown) => void
-) {
-  const handleMessage = useCallback((event: WebSocketEvent) => {
-    if (event.type === 'driver_notification' || event.type === 'lost_item_created') {
-      onNewNotification?.(event.data);
-    }
-  }, [onNewNotification]);
+export function useDriverNotifications(onNewNotification?: (notification: unknown) => void) {
+  const handleMessage = useCallback(
+    (event: WebSocketEvent) => {
+      if (event.type === 'driver_notification' || event.type === 'lost_item_created') {
+        onNewNotification?.(event.data);
+      }
+    },
+    [onNewNotification],
+  );
 
   return useWebSocket({
     onMessage: handleMessage,
@@ -165,17 +166,20 @@ export function useDriverNotifications(
  */
 export function useItemStatusUpdates(
   itemIds: string[],
-  onStatusChange?: (itemId: string, status: string) => void
+  onStatusChange?: (itemId: string, status: string) => void,
 ) {
-  const handleMessage = useCallback((event: WebSocketEvent) => {
-    if (event.type === 'lost_item_status_updated') {
-      const data = event.data as { itemId?: string; lostItemId?: string; status?: string };
-      const itemId = data.itemId || data.lostItemId;
-      if (itemId && itemIds.includes(itemId) && data.status) {
-        onStatusChange?.(itemId, data.status);
+  const handleMessage = useCallback(
+    (event: WebSocketEvent) => {
+      if (event.type === 'lost_item_status_updated') {
+        const data = event.data as { itemId?: string; lostItemId?: string; status?: string };
+        const itemId = data.itemId || data.lostItemId;
+        if (itemId && itemIds.includes(itemId) && data.status) {
+          onStatusChange?.(itemId, data.status);
+        }
       }
-    }
-  }, [itemIds, onStatusChange]);
+    },
+    [itemIds, onStatusChange],
+  );
 
   return useWebSocket({
     onMessage: handleMessage,

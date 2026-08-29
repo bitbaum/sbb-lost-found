@@ -23,58 +23,58 @@
   --safe-area-bottom: env(safe-area-inset-bottom);
 
   /* Brand — neutral house palette (Nordbahn). Operators override below. */
-  --brand:        #0B4F8F;
-  --brand-hover:    #083C6E;
-  --brand-active:    #062B4F;
-  --brand-contrast: #FFFFFF;
+  --brand: #0b4f8f;
+  --brand-hover: #083c6e;
+  --brand-active: #062b4f;
+  --brand-contrast: #ffffff;
   --font-brand: 'Inter';
 
   /* Neutrals */
-  --app-white:      #FFFFFF;
-  --app-milk:       #F6F6F6;
-  --app-cloud:      #E5E5E5;
-  --app-silver:     #DCDCDC;
-  --app-aluminum:   #D2D2D2;
-  --app-platinum:   #CDCDCD;
-  --app-cement:     #BDBDBD;
-  --app-graphite:   #B7B7B7;
-  --app-storm:      #A8A8A8;
+  --app-white: #ffffff;
+  --app-milk: #f6f6f6;
+  --app-cloud: #e5e5e5;
+  --app-silver: #dcdcdc;
+  --app-aluminum: #d2d2d2;
+  --app-platinum: #cdcdcd;
+  --app-cement: #bdbdbd;
+  --app-graphite: #b7b7b7;
+  --app-storm: #a8a8a8;
   /* #8D8D8D is 3.32:1 on white — fine as a FILL (the 3:1 non-text floor),
      never as text. Every text use moved to --app-granite (5.72:1); the one
      survivor is the offline status dot, which is a fill. */
-  --app-smoke:      #8D8D8D;
-  --app-metal:      #767676;
-  --app-granite:    #686868;
-  --app-anthracite: #5A5A5A;
-  --app-iron:       #444444;
-  --app-charcoal:   #212121;
-  --app-midnight:   #151515;
-  --app-black:      #000000;
+  --app-smoke: #8d8d8d;
+  --app-metal: #767676;
+  --app-granite: #686868;
+  --app-anthracite: #5a5a5a;
+  --app-iron: #444444;
+  --app-charcoal: #212121;
+  --app-midnight: #151515;
+  --app-black: #000000;
 
   /* Functional */
-  --app-blue:       #2D327D;
-  --app-success:    #00973B;
-  --app-warning:    #FFAB00;
-  --app-error:      #EB0000;
-  --app-info:       #2D327D;
+  --app-blue: #2d327d;
+  --app-success: #00973b;
+  --app-warning: #ffab00;
+  --app-error: #eb0000;
+  --app-info: #2d327d;
 
   /* Spacing (4px grid) */
-  --app-space-xs:   4px;
-  --app-space-sm:   8px;
-  --app-space-md:   16px;
-  --app-space-lg:   24px;
-  --app-space-xl:   32px;
-  --app-space-2xl:  48px;
+  --app-space-xs: 4px;
+  --app-space-sm: 8px;
+  --app-space-md: 16px;
+  --app-space-lg: 24px;
+  --app-space-xl: 32px;
+  --app-space-2xl: 48px;
 
   /* Border Radius */
-  --app-radius-sm:  4px;
-  --app-radius-md:  8px;
-  --app-radius-lg:  16px;
-  --app-radius-xl:  24px;
+  --app-radius-sm: 4px;
+  --app-radius-md: 8px;
+  --app-radius-lg: 16px;
+  --app-radius-xl: 24px;
 
   /* Shadows. The button glow is brand-tinted, so it is a tenant token. */
-  --app-shadow-card:   0 2px 8px rgba(0, 0, 0, 0.08);
-  --app-shadow-modal:  0 4px 24px rgba(0, 0, 0, 0.16);
+  --app-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --app-shadow-modal: 0 4px 24px rgba(0, 0, 0, 0.16);
   --app-shadow-button: 0 2px 4px rgba(11, 79, 143, 0.24);
 }
 
@@ -86,10 +86,10 @@
 
 /* SBB — Schweizerische Bundesbahnen. Official palette: digital.sbb.ch */
 :root[data-tenant='sbb'] {
-  --brand:          #EB0000;
-  --brand-hover:    #C60018;
-  --brand-active:   #A20013;
-  --brand-contrast: #FFFFFF;
+  --brand: #eb0000;
+  --brand-hover: #c60018;
+  --brand-active: #a20013;
+  --brand-contrast: #ffffff;
   --font-brand: 'SBB Web';
   --app-shadow-button: 0 2px 4px rgba(235, 0, 0, 0.24);
 }
@@ -107,7 +107,15 @@ html {
 }
 
 body {
-  font-family: var(--font-brand), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    var(--font-brand),
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
   background-color: var(--app-milk);
   color: var(--app-charcoal);
   line-height: 1.5;
@@ -237,7 +245,8 @@ body {
 }
 
 @keyframes pulse-subtle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

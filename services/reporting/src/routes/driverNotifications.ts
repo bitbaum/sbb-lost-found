@@ -33,36 +33,33 @@ const notificationRepo = new DriverNotificationRepository();
  *       200:
  *         description: List of driver notifications
  */
-router.get('/',
-  rateLimit(60, 60),
-  async (req: Request, res: Response) => {
-    try {
-      const vehicleId = req.query.vehicleId as string;
-      const filter = req.query.filter as 'all' | 'pending' | 'resolved' | undefined;
-      const limit = parseInt(req.query.limit as string) || 50;
+router.get('/', rateLimit(60, 60), async (req: Request, res: Response) => {
+  try {
+    const vehicleId = req.query.vehicleId as string;
+    const filter = req.query.filter as 'all' | 'pending' | 'resolved' | undefined;
+    const limit = parseInt(req.query.limit as string) || 50;
 
-      if (!vehicleId) {
-        return res.status(400).json({
-          success: false,
-          error: { code: 'MISSING_VEHICLE_ID', message: 'vehicleId is required' }
-        });
-      }
-
-      const notifications = await notificationRepo.findByVehicle(vehicleId, filter, limit);
-
-      res.json({
-        success: true,
-        data: notifications,
-      });
-    } catch (error) {
-      logger.error('Failed to get driver notifications', { error, query: req.query });
-      res.status(500).json({
+    if (!vehicleId) {
+      return res.status(400).json({
         success: false,
-        error: { code: 'INTERNAL_ERROR', message: 'Failed to retrieve notifications' }
+        error: { code: 'MISSING_VEHICLE_ID', message: 'vehicleId is required' },
       });
     }
+
+    const notifications = await notificationRepo.findByVehicle(vehicleId, filter, limit);
+
+    res.json({
+      success: true,
+      data: notifications,
+    });
+  } catch (error) {
+    logger.error('Failed to get driver notifications', { error, query: req.query });
+    res.status(500).json({
+      success: false,
+      error: { code: 'INTERNAL_ERROR', message: 'Failed to retrieve notifications' },
+    });
   }
-);
+});
 
 /**
  * @swagger
@@ -83,33 +80,30 @@ router.get('/',
  *       404:
  *         description: Notification not found
  */
-router.get('/:id',
-  rateLimit(120, 60),
-  async (req: Request, res: Response) => {
-    try {
-      const { id } = req.params;
-      const notification = await notificationRepo.findById(id);
+router.get('/:id', rateLimit(120, 60), async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const notification = await notificationRepo.findById(id);
 
-      if (!notification) {
-        return res.status(404).json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Notification not found' }
-        });
-      }
-
-      res.json({
-        success: true,
-        data: notification,
-      });
-    } catch (error) {
-      logger.error('Failed to get driver notification', { error, id: req.params.id });
-      res.status(500).json({
+    if (!notification) {
+      return res.status(404).json({
         success: false,
-        error: { code: 'INTERNAL_ERROR', message: 'Failed to retrieve notification' }
+        error: { code: 'NOT_FOUND', message: 'Notification not found' },
       });
     }
+
+    res.json({
+      success: true,
+      data: notification,
+    });
+  } catch (error) {
+    logger.error('Failed to get driver notification', { error, id: req.params.id });
+    res.status(500).json({
+      success: false,
+      error: { code: 'INTERNAL_ERROR', message: 'Failed to retrieve notification' },
+    });
   }
-);
+});
 
 /**
  * @swagger
@@ -144,31 +138,31 @@ router.get('/:id',
  *       404:
  *         description: Notification not found
  */
-router.post('/:id/respond',
-  rateLimit(30, 60),
-  async (req: Request, res: Response) => {
-    try {
-      const { id } = req.params;
-      const { status, notes } = req.body;
+router.post('/:id/respond', rateLimit(30, 60), async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status, notes } = req.body;
 
-      if (!status || !['found', 'not_found'].includes(status)) {
-        return res.status(400).json({
-          success: false,
-          error: { code: 'INVALID_STATUS', message: 'status must be "found" or "not_found"' }
-        });
-      }
+    if (!status || !['found', 'not_found'].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_STATUS', message: 'status must be "found" or "not_found"' },
+      });
+    }
 
-      const notification = await notificationRepo.respond(id, status, notes);
+    const notification = await notificationRepo.respond(id, status, notes);
 
-      if (!notification) {
-        return res.status(404).json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Notification not found' }
-        });
-      }
+    if (!notification) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Notification not found' },
+      });
+    }
 
-      // Publish event for real-time updates
-      await redisPublisher.publish('lost_item_status_updated', JSON.stringify({
+    // Publish event for real-time updates
+    await redisPublisher.publish(
+      'lost_item_status_updated',
+      JSON.stringify({
         type: 'lost_item_status_updated',
         data: {
           notificationId: id,
@@ -177,23 +171,23 @@ router.post('/:id/respond',
           notes,
         },
         timestamp: new Date().toISOString(),
-      }));
+      }),
+    );
 
-      res.json({
-        success: true,
-        data: notification,
-      });
+    res.json({
+      success: true,
+      data: notification,
+    });
 
-      logger.info('Driver responded to notification', { notificationId: id, status });
-    } catch (error) {
-      logger.error('Failed to respond to notification', { error, id: req.params.id });
-      res.status(500).json({
-        success: false,
-        error: { code: 'INTERNAL_ERROR', message: 'Failed to record response' }
-      });
-    }
+    logger.info('Driver responded to notification', { notificationId: id, status });
+  } catch (error) {
+    logger.error('Failed to respond to notification', { error, id: req.params.id });
+    res.status(500).json({
+      success: false,
+      error: { code: 'INTERNAL_ERROR', message: 'Failed to record response' },
+    });
   }
-);
+});
 
 /**
  * @swagger
@@ -226,50 +220,54 @@ router.post('/:id/respond',
  *       201:
  *         description: Notification created successfully
  */
-router.post('/',
-  rateLimit(30, 60),
-  async (req: Request, res: Response) => {
-    try {
-      const { lostItemId, vehicleId, message, priority, location, category, passengerInfo } = req.body;
+router.post('/', rateLimit(30, 60), async (req: Request, res: Response) => {
+  try {
+    const { lostItemId, vehicleId, message, priority, location, category, passengerInfo } =
+      req.body;
 
-      if (!lostItemId || !vehicleId || !message) {
-        return res.status(400).json({
-          success: false,
-          error: { code: 'MISSING_FIELDS', message: 'lostItemId, vehicleId, and message are required' }
-        });
-      }
-
-      const notification = await notificationRepo.create({
-        lostItemId,
-        vehicleId,
-        message,
-        priority,
-        location,
-        category,
-        passengerInfo,
+    if (!lostItemId || !vehicleId || !message) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'MISSING_FIELDS',
+          message: 'lostItemId, vehicleId, and message are required',
+        },
       });
+    }
 
-      // Publish event for real-time notification to driver
-      await redisPublisher.publish('driver_notification', JSON.stringify({
+    const notification = await notificationRepo.create({
+      lostItemId,
+      vehicleId,
+      message,
+      priority,
+      location,
+      category,
+      passengerInfo,
+    });
+
+    // Publish event for real-time notification to driver
+    await redisPublisher.publish(
+      'driver_notification',
+      JSON.stringify({
         type: 'driver_notification',
         data: notification,
         timestamp: new Date().toISOString(),
-      }));
+      }),
+    );
 
-      res.status(201).json({
-        success: true,
-        data: notification,
-      });
+    res.status(201).json({
+      success: true,
+      data: notification,
+    });
 
-      logger.info('Driver notification created', { notificationId: notification.id, vehicleId });
-    } catch (error) {
-      logger.error('Failed to create driver notification', { error, body: req.body });
-      res.status(500).json({
-        success: false,
-        error: { code: 'INTERNAL_ERROR', message: 'Failed to create notification' }
-      });
-    }
+    logger.info('Driver notification created', { notificationId: notification.id, vehicleId });
+  } catch (error) {
+    logger.error('Failed to create driver notification', { error, body: req.body });
+    res.status(500).json({
+      success: false,
+      error: { code: 'INTERNAL_ERROR', message: 'Failed to create notification' },
+    });
   }
-);
+});
 
 export default router;
