@@ -29,7 +29,7 @@
     "@types/node": "^26.3.0",
     "concurrently": "^8.0.0",
     "prettier": "3.9.6",
-    "typescript": "^5.0.0"
+    "typescript": "^7.0.2"
   },
   "engines": {
     "node": ">=20",
