@@ -48,23 +48,19 @@ app.post('/api/notifications', async (req, res) => {
   try {
     const { channel = 'driver_notification', payload } = req.body || {};
     if (!payload || typeof payload !== 'object') {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: { code: 'INVALID_PAYLOAD', message: 'payload object is required' },
-        });
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_PAYLOAD', message: 'payload object is required' },
+      });
     }
     await redisPub.publish(channel, JSON.stringify(payload));
     res.status(202).json({ success: true });
   } catch (error) {
     logger.error('Failed to publish notification', { error });
-    res
-      .status(500)
-      .json({
-        success: false,
-        error: { code: 'PUBLISH_FAILED', message: 'Failed to publish notification' },
-      });
+    res.status(500).json({
+      success: false,
+      error: { code: 'PUBLISH_FAILED', message: 'Failed to publish notification' },
+    });
   }
 });
 
