@@ -10,6 +10,7 @@ import {
 } from '@/lib/types';
 import { formatTime, getTimeSinceTrip } from '@/lib/mock-data';
 import { config } from '@/lib/config';
+import { useReportLostItem } from '@/lib/hooks';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 
 interface LostItemModalProps {
@@ -25,19 +26,23 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
   const [category, setCategory] = useState<ItemCategory | null>(null);
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState<ItemLocation | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { reportItem, isSubmitting } = useReportLostItem();
 
   const { minutes, isUrgent } = getTimeSinceTrip(trip.arrivalTime);
 
   const handleSubmit = useCallback(async () => {
     if (!category || !description.trim()) return;
 
-    setIsSubmitting(true);
+    const result = await reportItem({
+      tripId: trip.id,
+      category,
+      description,
+      location: location || 'unknown',
+    });
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, config.demo.mockDelay));
-
-    const newItem: LostItem = {
+    // No backend configured (or it errored): fall back to a locally built
+    // item so the demo flow still completes.
+    const newItem: LostItem = result.item ?? {
       id: `lost-${Date.now()}`,
       userId: 'user-001',
       tripId: trip.id,
@@ -49,14 +54,13 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
       updatedAt: new Date().toISOString(),
     };
 
-    setIsSubmitting(false);
     setStep('success');
 
     // Notify parent after showing success
     setTimeout(() => {
       onSubmit(newItem);
     }, config.timing.successMessageDelay);
-  }, [category, description, location, trip.id, onSubmit]);
+  }, [category, description, location, trip.id, onSubmit, reportItem]);
 
   const handleSelectCategory = (cat: ItemCategory) => {
     setCategory(cat);

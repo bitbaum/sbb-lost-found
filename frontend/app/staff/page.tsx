@@ -5,25 +5,24 @@ import { StaffHeader } from '@/components/staff/StaffHeader';
 import { NotificationCard } from '@/components/staff/NotificationCard';
 import { StaffStatusBar } from '@/components/staff/StaffStatusBar';
 import type { StaffNotification, NotificationStatus } from '@/lib/types';
-import { mockStaffNotifications, mockStaff, mockVehicle } from '@/lib/mock-data';
+import { mockStaff, mockVehicle } from '@/lib/mock-data';
 import { config } from '@/lib/config';
+import { useDriverNotificationsApi } from '@/lib/hooks';
 import { UI_LABELS } from '@/lib/labels';
 
 export default function StaffPage() {
-  const [notifications, setNotifications] = useState<StaffNotification[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // Injected demo notification, prepended ahead of the fetched/mock list below.
+  const [demoNotifications, setDemoNotifications] = useState<StaffNotification[]>([]);
   const [activeFilter, setActiveFilter] = useState<'all' | 'pending' | 'resolved'>('all');
   const [showNewNotification, setShowNewNotification] = useState(false);
 
-  useEffect(() => {
-    // Simulate loading notifications
-    const timer = setTimeout(() => {
-      setNotifications(mockStaffNotifications);
-      setIsLoading(false);
-    }, config.demo.mockDelay);
+  const {
+    data: fetchedNotifications,
+    isLoading,
+    updateNotification,
+  } = useDriverNotificationsApi(mockVehicle.id);
 
-    return () => clearTimeout(timer);
-  }, []);
+  const notifications = [...demoNotifications, ...(fetchedNotifications ?? [])];
 
   // Simulate incoming notification for demo
   useEffect(() => {
@@ -50,7 +49,7 @@ export default function StaffPage() {
         },
       };
 
-      setNotifications((prev) => [newNotification, ...prev]);
+      setDemoNotifications((prev) => [newNotification, ...prev]);
 
       // Play notification sound (if available)
       if (typeof window !== 'undefined' && 'vibrate' in navigator) {
@@ -63,23 +62,26 @@ export default function StaffPage() {
 
   const handleUpdateStatus = useCallback(
     async (notificationId: string, status: NotificationStatus, notes?: string) => {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, config.demo.mockDelay));
+      if (demoNotifications.some((n) => n.id === notificationId)) {
+        setDemoNotifications((prev) =>
+          prev.map((n) =>
+            n.id === notificationId
+              ? {
+                  ...n,
+                  status,
+                  respondedAt: new Date().toISOString(),
+                  response: notes ? { notes, foundItem: status === 'found' } : undefined,
+                }
+              : n,
+          ),
+        );
+        return;
+      }
 
-      setNotifications((prev) =>
-        prev.map((n) =>
-          n.id === notificationId
-            ? {
-                ...n,
-                status,
-                respondedAt: new Date().toISOString(),
-                response: notes ? { notes, foundItem: status === 'found' } : undefined,
-              }
-            : n,
-        ),
-      );
+      if (status !== 'found' && status !== 'not_found') return;
+      await updateNotification(notificationId, status, notes);
     },
-    [],
+    [demoNotifications, updateNotification],
   );
 
   const filteredNotifications = notifications.filter((n) => {

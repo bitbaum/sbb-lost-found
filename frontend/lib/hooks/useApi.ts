@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '../api';
 import { config } from '../config';
 import type { Trip, DriverNotification, LostItem } from '../types';
-import { mockTrips, mockDriverNotifications, mockActiveTrip } from '../mock-data';
+import { mockTrips, mockStaffNotifications, mockActiveTrip } from '../mock-data';
 
 interface UseApiState<T> {
   data: T | null;
@@ -107,7 +107,7 @@ export function useDriverNotificationsApi(
       const response = await api.getDriverNotifications(vehicleId, filter);
       return response;
     },
-    mockDriverNotifications,
+    mockStaffNotifications,
     [vehicleId, filter],
   );
 
@@ -116,10 +116,13 @@ export function useDriverNotificationsApi(
 
   const updateNotification = useCallback(
     async (id: string, status: 'found' | 'not_found', notes?: string) => {
-      // Optimistic update
+      // Optimistic update. `prev` is localData, which starts out null until this
+      // runs once — fall back to the fetched/mock list so the first response
+      // actually applies instead of updating nothing.
       setLocalData((prev) => {
-        if (!prev) return prev;
-        return prev.map((n) =>
+        const base = prev ?? baseState.data;
+        if (!base) return prev;
+        return base.map((n) =>
           n.id === id
             ? {
                 ...n,
@@ -138,7 +141,7 @@ export function useDriverNotificationsApi(
         console.log('API update failed, keeping local state');
       }
     },
-    [],
+    [baseState.data],
   );
 
   return {

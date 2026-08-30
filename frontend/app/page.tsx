@@ -1,14 +1,15 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { StatusBar } from '@/components/ui/StatusBar';
 import { Header } from '@/components/passenger/Header';
 import { TripCard } from '@/components/passenger/TripCard';
 import { LostItemModal } from '@/components/passenger/LostItemModal';
 import { BottomNav, type NavTab } from '@/components/ui/BottomNav';
 import { Toast } from '@/components/ui/Toast';
-import { mockUser, mockTrips, mockActiveTrip, formatRelativeTime } from '@/lib/mock-data';
+import { mockUser, formatRelativeTime } from '@/lib/mock-data';
 import { config } from '@/lib/config';
+import { useCurrentTrip, useTrips } from '@/lib/hooks';
 import { UI_LABELS } from '@/lib/labels';
 import type { Trip, LostItem } from '@/lib/types';
 
@@ -177,20 +178,10 @@ export default function PassengerApp() {
     type: 'success' | 'error' | 'info';
   } | null>(null);
   const [activeTab, setActiveTab] = useState<NavTab>('reisen');
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentTrip, setCurrentTrip] = useState<Trip | null>(null);
-  const [recentTrips, setRecentTrips] = useState<Trip[]>([]);
-
-  // Load trips data (simulates API call)
-  useEffect(() => {
-    const loadData = async () => {
-      await new Promise((resolve) => setTimeout(resolve, config.demo.mockDelay));
-      setCurrentTrip(mockActiveTrip);
-      setRecentTrips(mockTrips);
-      setIsLoading(false);
-    };
-    loadData();
-  }, []);
+  const { data: currentTrip, isLoading: isLoadingCurrentTrip } = useCurrentTrip();
+  const { data: recentTripsData, isLoading: isLoadingTrips } = useTrips();
+  const recentTrips = recentTripsData ?? [];
+  const isLoading = isLoadingCurrentTrip || isLoadingTrips;
 
   const handleReportLost = useCallback((trip: Trip) => {
     setSelectedTrip(trip);

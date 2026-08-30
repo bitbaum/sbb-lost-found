@@ -384,6 +384,3 @@ export const mockStaffNotifications: StaffNotification[] = [
     },
   },
 ];
-
-/** @deprecated Use mockStaffNotifications instead */
-export const mockDriverNotifications = mockStaffNotifications;
