@@ -12,6 +12,11 @@ module.exports = {
   transform: {
     // The app's tsconfig targets the bundler (module: esnext), which Node
     // cannot execute directly — override to commonjs for the test run only.
-    '^.+\\.ts$': ['ts-jest', { tsconfig: { module: 'commonjs', esModuleInterop: true } }],
+    // rootDir: TS 6 (TS5011) requires it explicit when the inferred common
+    // source directory (only the test files here) would mislay output paths.
+    '^.+\\.ts$': [
+      'ts-jest',
+      { tsconfig: { module: 'commonjs', esModuleInterop: true, rootDir: '.' } },
+    ],
   },
 };
