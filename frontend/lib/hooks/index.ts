@@ -12,3 +12,5 @@ export {
   useReportLostItem,
   useApiHealth,
 } from './useApi';
+
+export { useDemoReports } from './useDemoReports';
