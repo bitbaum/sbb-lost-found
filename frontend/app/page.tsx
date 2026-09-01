@@ -5,6 +5,7 @@ import { StatusBar } from '@/components/ui/StatusBar';
 import { Header } from '@/components/passenger/Header';
 import { TripCard } from '@/components/passenger/TripCard';
 import { LostItemModal } from '@/components/passenger/LostItemModal';
+import { MyReports } from '@/components/passenger/MyReports';
 import { BottomNav, type NavTab } from '@/components/ui/BottomNav';
 import { Toast } from '@/components/ui/Toast';
 import { mockUser, formatRelativeTime } from '@/lib/mock-data';
@@ -298,6 +299,9 @@ export default function PassengerApp() {
             ))}
           </div>
         </section>
+
+        {/* What this passenger reported, and how each one ended */}
+        <MyReports />
       </div>
     );
   };

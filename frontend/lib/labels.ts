@@ -159,6 +159,13 @@ export const UI_LABELS = {
     step3: 'Abholung koordinieren',
   },
 
+  // The passenger's own reports and how each one ended
+  myReports: {
+    title: 'Meine Verlustmeldungen',
+    staffNote: 'Rückmeldung des Personals',
+    reportedAt: 'Gemeldet',
+  },
+
   // Time
   time: {
     justNow: 'gerade eben',
