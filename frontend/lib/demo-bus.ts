@@ -13,11 +13,21 @@
  * carries the report, and the `storage` event delivers it to the other tab,
  * which is how the demo is shown (passenger on one screen, crew on another).
  * Everything here is inert when a backend is configured — see `publishReport`.
+ *
+ * It carries the crew's answer back the same way. One key, one shape: the
+ * answer is written onto the notification it answers, so there is no second
+ * type and no second copy of the same fact to drift.
  */
 
 import { config } from './config';
 import { ITEM_LOCATION_CONFIG } from './types';
-import type { LostItem, StaffNotification, NotificationPriority, Trip } from './types';
+import type {
+  LostItem,
+  StaffNotification,
+  NotificationPriority,
+  NotificationStatus,
+  Trip,
+} from './types';
 import { UI_LABELS } from './labels';
 import { mockStaff } from './mock-data';
 
@@ -137,6 +147,57 @@ export function publishReport(item: LostItem, trip: Trip): void {
     s.setItem(config.demo.handoffKey, JSON.stringify(next));
   } catch {
     // Quota or a locked-down browser: the demo degrades to the mock list.
+    return;
+  }
+  window.dispatchEvent(new CustomEvent(SAME_TAB_EVENT));
+}
+
+/**
+ * The crew's answer, written onto the notification it answers. Pure, so the
+ * part that can silently drop an answer is testable without a browser.
+ */
+export function answerReport(
+  reports: StaffNotification[],
+  notificationId: string,
+  status: Extract<NotificationStatus, 'found' | 'not_found'>,
+  notes?: string,
+  respondedAt: string = new Date().toISOString(),
+): StaffNotification[] {
+  return reports.map((n) =>
+    n.id === notificationId
+      ? {
+          ...n,
+          status,
+          respondedAt,
+          response: notes ? { notes, foundItem: status === 'found' } : undefined,
+        }
+      : n,
+  );
+}
+
+/**
+ * Sends the crew's answer back to the passenger view. Same rule as
+ * `publishReport`: only for a notification this browser handed over, never for
+ * one the backend owns — there the answer travels back the way it came.
+ */
+export function publishResponse(
+  notificationId: string,
+  status: Extract<NotificationStatus, 'found' | 'not_found'>,
+  notes?: string,
+): void {
+  const s = store();
+  if (!s) return;
+
+  const reports = readReports();
+  if (!reports.some((n) => n.id === notificationId)) return;
+
+  try {
+    s.setItem(
+      config.demo.handoffKey,
+      JSON.stringify(answerReport(reports, notificationId, status, notes)),
+    );
+  } catch {
+    // Quota or a locked-down browser: the crew view keeps its local answer.
     return;
   }
   window.dispatchEvent(new CustomEvent(SAME_TAB_EVENT));

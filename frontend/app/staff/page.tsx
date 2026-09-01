@@ -8,7 +8,7 @@ import type { StaffNotification, NotificationStatus } from '@/lib/types';
 import { createDemoIncomingNotification, mockStaff, mockVehicle } from '@/lib/mock-data';
 import { config } from '@/lib/config';
 import { useDriverNotificationsApi } from '@/lib/hooks';
-import { readReports, subscribeReports } from '@/lib/demo-bus';
+import { publishResponse, readReports, subscribeReports } from '@/lib/demo-bus';
 import { UI_LABELS } from '@/lib/labels';
 
 /** How an arriving report announces itself on a phone in a noisy train. */
@@ -91,6 +91,12 @@ export default function StaffPage() {
               : n,
           ),
         );
+
+        // Tell the passenger. Ignored for the staged notification, which nobody
+        // reported and which is therefore not in the handover — see demo-bus.
+        if (status === 'found' || status === 'not_found') {
+          publishResponse(notificationId, status, notes);
+        }
         return;
       }
 
