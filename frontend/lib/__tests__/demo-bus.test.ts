@@ -5,10 +5,13 @@
  * parser (storage is shared, long-lived, and therefore untrusted input).
  */
 
-import { notificationFromReport, parseReports } from '../demo-bus';
+import { answerReport, notificationFromReport, parseReports } from '../demo-bus';
 import { config } from '../config';
 import { mockActiveTrip, mockTrips } from '../mock-data';
 import type { LostItem, StaffNotification, Trip } from '../types';
+
+/** Fixed so an answer's timestamp is asserted, not merely present. */
+const STAMP = '2026-09-01T09:00:00.000Z';
 
 function report(overrides: Partial<LostItem> = {}): LostItem {
   return {
@@ -100,5 +103,41 @@ describe('parseReports', () => {
 
     const parsed: StaffNotification[] = parseReports(raw);
     expect(parsed).toEqual([good]);
+  });
+});
+
+describe('answerReport', () => {
+  const reports = [
+    notificationFromReport(report({ id: 'lost-a' }), mockActiveTrip),
+    notificationFromReport(report({ id: 'lost-b' }), mockActiveTrip),
+  ];
+
+  it('writes the crew’s answer onto the notification it answers', () => {
+    const answered = answerReport(reports, 'notif-lost-a', 'found', 'lag in der Ablage', STAMP);
+
+    expect(answered[0]).toMatchObject({
+      id: 'notif-lost-a',
+      status: 'found',
+      respondedAt: STAMP,
+      response: { notes: 'lag in der Ablage', foundItem: true },
+    });
+  });
+
+  it('leaves every other report untouched', () => {
+    const answered = answerReport(reports, 'notif-lost-a', 'not_found', undefined, STAMP);
+
+    expect(answered[1]).toEqual(reports[1]);
+    expect(answered[1].respondedAt).toBeUndefined();
+  });
+
+  it('records a not-found answer as such, without inventing a note', () => {
+    const [first] = answerReport(reports, 'notif-lost-a', 'not_found', undefined, STAMP);
+
+    expect(first.status).toBe('not_found');
+    expect(first.response).toBeUndefined();
+  });
+
+  it('changes nothing when the id is not one of ours', () => {
+    expect(answerReport(reports, 'notif-someone-else', 'found', undefined, STAMP)).toEqual(reports);
   });
 });

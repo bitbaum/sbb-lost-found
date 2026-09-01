@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { StatusBar } from '@/components/ui/StatusBar';
 import { Header } from '@/components/passenger/Header';
 import { TripCard } from '@/components/passenger/TripCard';
@@ -10,8 +10,9 @@ import { Toast } from '@/components/ui/Toast';
 import { mockUser, formatRelativeTime } from '@/lib/mock-data';
 import { config } from '@/lib/config';
 import { useCurrentTrip, useTrips } from '@/lib/hooks';
+import { readReports, subscribeReports } from '@/lib/demo-bus';
 import { UI_LABELS } from '@/lib/labels';
-import type { Trip, LostItem } from '@/lib/types';
+import type { Trip, LostItem, StaffNotification } from '@/lib/types';
 
 // Tab content components
 function PlanenTab() {
@@ -178,6 +179,8 @@ export default function PassengerApp() {
     type: 'success' | 'error' | 'info';
   } | null>(null);
   const [activeTab, setActiveTab] = useState<NavTab>('reisen');
+  // Answers already announced, so a re-read never repeats a toast.
+  const announcedIds = useRef<Set<string>>(new Set());
   const { data: currentTrip, isLoading: isLoadingCurrentTrip } = useCurrentTrip();
   const { data: recentTripsData, isLoading: isLoadingTrips } = useTrips();
   const recentTrips = recentTripsData ?? [];
@@ -195,13 +198,38 @@ export default function PassengerApp() {
       type: 'success',
     });
 
-    // Demo: Simulate staff searching
+    // The crew is looking — the plausible next beat while nobody has answered
+    // yet. It must never talk over a real answer, so it stands down once one
+    // is in: with two devices on the demo, the crew can answer inside these
+    // few seconds.
     setTimeout(() => {
+      const answered = readReports().find((n) => n.lostItemId === item.id)?.respondedAt;
+      if (answered) return;
       setToast({
-        message: 'Personal sucht aktiv nach Ihrem Gegenstand',
+        message: UI_LABELS.lostItem.staffSearching,
         type: 'info',
       });
     }, config.timing.demoNotificationDelay);
+  }, []);
+
+  // What the crew answered, told to the passenger — the last hop of the flow
+  // this demo exists to show. Answers already sitting in storage are history,
+  // not news: they seed the seen set on mount so a reload stays quiet.
+  useEffect(() => {
+    const announce = (reports: StaffNotification[], onMount: boolean) => {
+      const answered = reports.filter((n) => n.respondedAt && !announcedIds.current.has(n.id));
+      answered.forEach((n) => announcedIds.current.add(n.id));
+      if (onMount || answered.length === 0) return;
+
+      const found = answered[0].status === 'found';
+      setToast({
+        message: found ? UI_LABELS.lostItem.itemFound : UI_LABELS.lostItem.itemNotFound,
+        type: found ? 'success' : 'info',
+      });
+    };
+
+    announce(readReports(), true);
+    return subscribeReports((reports) => announce(reports, false));
   }, []);
 
   const handleCloseModal = useCallback(() => {
