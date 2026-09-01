@@ -1,20 +1,34 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { StaffHeader } from '@/components/staff/StaffHeader';
 import { NotificationCard } from '@/components/staff/NotificationCard';
 import { StaffStatusBar } from '@/components/staff/StaffStatusBar';
 import type { StaffNotification, NotificationStatus } from '@/lib/types';
-import { mockStaff, mockVehicle } from '@/lib/mock-data';
+import { createDemoIncomingNotification, mockStaff, mockVehicle } from '@/lib/mock-data';
 import { config } from '@/lib/config';
 import { useDriverNotificationsApi } from '@/lib/hooks';
+import { readReports, subscribeReports } from '@/lib/demo-bus';
 import { UI_LABELS } from '@/lib/labels';
 
+/** How an arriving report announces itself on a phone in a noisy train. */
+function buzz() {
+  if (typeof window !== 'undefined' && 'vibrate' in navigator) {
+    navigator.vibrate([200, 100, 200]);
+  }
+}
+
 export default function StaffPage() {
-  // Injected demo notification, prepended ahead of the fetched/mock list below.
+  // Notifications this view received locally — handed over from the passenger
+  // view (lib/demo-bus) or, failing that, the staged demo one. Prepended ahead
+  // of the fetched/mock list below.
   const [demoNotifications, setDemoNotifications] = useState<StaffNotification[]>([]);
   const [activeFilter, setActiveFilter] = useState<'all' | 'pending' | 'resolved'>('all');
-  const [showNewNotification, setShowNewNotification] = useState(false);
+  // The report to shout about, and the one to keep highlighted after the
+  // visitor dismisses the alert.
+  const [arrival, setArrival] = useState<StaffNotification | null>(null);
+  const [arrivedId, setArrivedId] = useState<string | null>(null);
+  const seenIds = useRef<Set<string>>(new Set());
 
   const {
     data: fetchedNotifications,
@@ -24,41 +38,43 @@ export default function StaffPage() {
 
   const notifications = [...demoNotifications, ...(fetchedNotifications ?? [])];
 
-  // Simulate incoming notification for demo
+  const receive = useCallback((incoming: StaffNotification[], announce: boolean) => {
+    const fresh = incoming.filter((n) => !seenIds.current.has(n.id));
+    if (fresh.length === 0) return;
+
+    fresh.forEach((n) => seenIds.current.add(n.id));
+    // Prepend rather than replace: a notification already answered here keeps
+    // the answer, and re-reading storage never resets it.
+    setDemoNotifications((prev) => [...fresh, ...prev]);
+
+    if (announce) {
+      setArrival(fresh[0]);
+      setArrivedId(fresh[0].id);
+      buzz();
+    }
+  }, []);
+
+  // Reports the passenger view handed over. Read after mount, not during
+  // render: localStorage does not exist on the server, and a report already
+  // sitting there is history, not an arrival — only what lands while the crew
+  // is watching gets the alert.
+  useEffect(() => {
+    receive(readReports(), false);
+    return subscribeReports((reports) => receive(reports, true));
+  }, [receive]);
+
+  // Nobody on a second device: stage one report so a visitor opening /staff
+  // alone still sees an arrival. A real one always wins.
   useEffect(() => {
     if (!config.demo.autoNotify) return;
 
     const demoTimer = setTimeout(() => {
-      setShowNewNotification(true);
-
-      const newNotification: StaffNotification = {
-        id: `notif-${Date.now()}`,
-        lostItemId: 'lost-demo',
-        staffId: mockStaff.id,
-        vehicleId: mockVehicle.id,
-        status: 'pending',
-        message: 'Schwarze Laptop-Tasche',
-        priority: 'urgent',
-        location: 'Wagen 7, Platz 45',
-        createdAt: new Date().toISOString(),
-        category: 'bags',
-        passengerInfo: {
-          tripRoute: 'Zürich HB → Bern',
-          tripTime: '14:32',
-          seatInfo: 'Wagen 7, Platz 45',
-        },
-      };
-
-      setDemoNotifications((prev) => [newNotification, ...prev]);
-
-      // Play notification sound (if available)
-      if (typeof window !== 'undefined' && 'vibrate' in navigator) {
-        navigator.vibrate([200, 100, 200]);
-      }
+      if (seenIds.current.size > 0) return;
+      receive([createDemoIncomingNotification()], true);
     }, config.timing.demoNotificationDelay);
 
     return () => clearTimeout(demoTimer);
-  }, []);
+  }, [receive]);
 
   const handleUpdateStatus = useCallback(
     async (notificationId: string, status: NotificationStatus, notes?: string) => {
@@ -188,14 +204,14 @@ export default function StaffPage() {
               key={notification.id}
               notification={notification}
               onUpdateStatus={handleUpdateStatus}
-              isNew={index === 0 && showNewNotification && notification.status === 'pending'}
+              isNew={notification.id === arrivedId && notification.status === 'pending'}
             />
           ))
         )}
       </main>
 
-      {/* Incoming Notification Alert */}
-      {showNewNotification && (
+      {/* Incoming Notification Alert — the report that just arrived, not a script */}
+      {arrival && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20 animate-fade-in">
           <div className="bg-white rounded-app-lg shadow-xl mx-4 max-w-sm w-full animate-slide-down overflow-hidden">
             <div className="bg-gradient-to-r from-brand to-brand-hover text-white p-4 text-center">
@@ -203,16 +219,11 @@ export default function StaffPage() {
               <h3 className="text-lg font-semibold">{UI_LABELS.staff.newLostReport}</h3>
             </div>
             <div className="p-4">
-              <p className="text-app-base text-app-charcoal font-medium mb-1">
-                Schwarze Laptop-Tasche
-              </p>
+              <p className="text-app-base text-app-charcoal font-medium mb-1">{arrival.message}</p>
               <p className="text-app-sm text-app-granite mb-4">
-                Wagen 7, Platz 45 • Zürich HB → Bern
+                {[arrival.location, arrival.passengerInfo?.tripRoute].filter(Boolean).join(' • ')}
               </p>
-              <button
-                onClick={() => setShowNewNotification(false)}
-                className="btn-app-primary w-full"
-              >
+              <button onClick={() => setArrival(null)} className="btn-app-primary w-full">
                 {UI_LABELS.staff.viewReport}
               </button>
             </div>

@@ -11,6 +11,7 @@ import {
 import { formatTime, getTimeSinceTrip } from '@/lib/mock-data';
 import { config } from '@/lib/config';
 import { useReportLostItem } from '@/lib/hooks';
+import { publishReport } from '@/lib/demo-bus';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 
 interface LostItemModalProps {
@@ -54,13 +55,18 @@ export function LostItemModal({ trip, onClose, onSubmit }: LostItemModalProps) {
       updatedAt: new Date().toISOString(),
     };
 
+    // Nothing took the report, so nothing will push it to the crew either.
+    // Carry it to /staff ourselves — that hop is the whole claim of the demo.
+    // With a backend, `result.item` exists and the notification service owns it.
+    if (!result.item) publishReport(newItem, trip);
+
     setStep('success');
 
     // Notify parent after showing success
     setTimeout(() => {
       onSubmit(newItem);
     }, config.timing.successMessageDelay);
-  }, [category, description, location, trip.id, onSubmit, reportItem]);
+  }, [category, description, location, trip, onSubmit, reportItem]);
 
   const handleSelectCategory = (cat: ItemCategory) => {
     setCategory(cat);

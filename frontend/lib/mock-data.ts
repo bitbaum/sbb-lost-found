@@ -4,6 +4,7 @@
  */
 
 import { tenant } from '@/lib/tenant';
+import { UI_LABELS } from './labels';
 import type {
   Trip,
   LostItem,
@@ -318,6 +319,37 @@ export const mockVehicle: Vehicle = {
 // ============================================================================
 // Staff Notifications Mock Data
 // ============================================================================
+
+/**
+ * The report the crew view stages for a visitor who opens /staff on its own,
+ * so the arrival moment — the thing this product is about — is visible without
+ * a second device. A real report handed over from the passenger view takes
+ * precedence over it (see lib/demo-bus.ts and app/staff/page.tsx).
+ *
+ * Built fresh per call so its timestamp reads as "gerade eben", and derived
+ * from mockActiveTrip so the seat and route cannot drift from the trip the
+ * passenger view actually shows.
+ */
+export function createDemoIncomingNotification(): StaffNotification {
+  const seat = `${UI_LABELS.trip.car} ${mockActiveTrip.car}, ${UI_LABELS.trip.seat} ${mockActiveTrip.seat}`;
+  return {
+    id: `notif-demo-${Date.now()}`,
+    lostItemId: 'lost-demo',
+    staffId: mockStaff.id,
+    vehicleId: mockActiveTrip.vehicle.id,
+    status: 'pending',
+    message: 'Schwarze Laptop-Tasche',
+    priority: 'urgent',
+    location: seat,
+    category: 'bags',
+    createdAt: new Date().toISOString(),
+    passengerInfo: {
+      tripRoute: `${mockActiveTrip.origin.name} → ${mockActiveTrip.destination.name}`,
+      tripTime: formatTime(mockActiveTrip.departureTime),
+      seatInfo: seat,
+    },
+  };
+}
 
 export const mockStaffNotifications: StaffNotification[] = [
   {

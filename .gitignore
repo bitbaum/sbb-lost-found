@@ -44,3 +44,6 @@ temp/
 
 # Per-session agent worktrees — scratch, never part of the repo.
 .claude/worktrees/
+
+# Scratch written by browser-driving agents (Playwright MCP).
+.playwright-mcp/
