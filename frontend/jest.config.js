@@ -9,6 +9,9 @@
 module.exports = {
   testEnvironment: 'node',
   testMatch: ['<rootDir>/lib/**/__tests__/**/*.test.ts'],
+  // The app resolves `@/...` through tsconfig paths; jest needs the same map or
+  // any module that reaches one (lib/mock-data -> @/lib/tenant) fails to load.
+  moduleNameMapper: { '^@/(.*)$': '<rootDir>/$1' },
   transform: {
     // The app's tsconfig targets the bundler (module: esnext), which Node
     // cannot execute directly — override to commonjs for the test run only.
