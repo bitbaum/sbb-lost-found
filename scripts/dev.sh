@@ -54,7 +54,7 @@ case $COMMAND in
         echo "  - Redis:           localhost:6380"
         echo ""
         echo -e "${YELLOW}To start the frontend, run:${NC}"
-        echo "  cd frontend && npm run dev"
+        echo "  cd frontend && pnpm run dev"
         echo ""
         echo "Or start everything including frontend:"
         echo "  ./scripts/dev.sh frontend"

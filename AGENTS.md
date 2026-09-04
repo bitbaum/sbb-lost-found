@@ -33,7 +33,7 @@ This project leverages multiple AI coding models through Cursor IDE for differen
 - Test handoffs work smoothly between agents
 
 ## Overview
-- Microservices monorepo (Node.js/TypeScript) with npm workspaces.
+- Microservices monorepo (Node.js/TypeScript) with a pnpm workspace.
 - Event‑driven via Redis pub/sub; PostgreSQL as primary DB.
 - Real‑time updates with Socket.IO; OpenAPI docs via Swagger UI.
 
@@ -50,26 +50,26 @@ Structure
 - `k8s/` manifests
 
 ## Prerequisites
-- Node >= 18, npm >= 9
+- Node >= 20, pnpm 11
 - Docker + Docker Compose (for full stack)
 - Local Postgres and Redis OR use Compose services
 
 ## Core Commands (run in repo root)
-- `npm install`: Install all workspace deps
-- `npm run build`: Build all workspaces
-- `npm run dev`: `docker-compose up -d` then start all workspaces in dev
-- `npm test`: Run tests across workspaces (where present)
-- `npm run lint`: Lint across workspaces (where configured)
-- `npm run typecheck`: TypeScript `--noEmit` across workspaces
-- `npm run clean`: Remove build artifacts per workspace
+- `pnpm install`: Install all workspace deps
+- `pnpm run build`: Build all workspaces
+- `pnpm run dev`: `docker-compose up -d` then start all workspaces in dev
+- `pnpm test`: Run tests (reporting service + frontend)
+- `pnpm run lint`: Lint across workspaces (where configured)
+- `pnpm run typecheck`: TypeScript `--noEmit` across workspaces
+- `pnpm run clean`: Remove build artifacts per workspace
 
 Workspace‑scoped (examples)
-- `npm run build --workspace=@sbb-lost-found/types`
-- `npm run build --workspace=@sbb-lost-found/reporting-service`
+- `pnpm --filter @sbb-lost-found/types run build`
+- `pnpm --filter @sbb-lost-found/reporting-service run build`
 
 Docker/K8s
-- `npm run docker:build` | `npm run docker:up` | `npm run docker:down`
-- `npm run k8s:deploy` (expects kubectl context configured)
+- `pnpm run docker:build` | `pnpm run docker:up` | `pnpm run docker:down`
+- `pnpm run k8s:deploy` (expects kubectl context configured)
 
 Agent Tools
 - `make agent-log SUMMARY="..." CHANGES="..." COMMANDS="..." NOTES="..." AGENT=<model-name>`
@@ -107,15 +107,15 @@ Notes
 
 ## Local Development Flows
 Option A: Full stack via Compose
-- `npm run docker:up`
+- `pnpm run docker:up`
 - Access: API Gateway `http://localhost:3000`, Reporting `http://localhost:3001` (docs at `/docs`)
 
 Option B: Run reporting service only
 - Start Postgres + Redis locally (or via Compose) 
 - Export env: `DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, REDIS_URL, PORT`
-- Build deps: `npm run build --workspace=@sbb-lost-found/types`
-- Build service: `npm run build --workspace=@sbb-lost-found/reporting-service`
-- Dev: `npm run dev --workspace=@sbb-lost-found/reporting-service`
+- Build deps: `pnpm --filter @sbb-lost-found/types run build`
+- Build service: `pnpm --filter @sbb-lost-found/reporting-service run build`
+- Dev: `pnpm --filter @sbb-lost-found/reporting-service run dev`
 - Health: `GET /health`, Docs: `GET /docs`
 
 ## Design System
@@ -178,14 +178,14 @@ All design tokens live in `app/globals.css` only. Tailwind config MUST reference
   - Unit tests near source or in `__tests__` (service preference)
   - Name: `*.test.ts` or `*.spec.ts`
 - Commands
-  - `npm test --workspace=@sbb-lost-found/reporting-service`
+  - `pnpm --filter @sbb-lost-found/reporting-service run test`
 - Add regression tests for fixed bugs; keep tests fast and isolated
 
 ## Database
 - Local dev DB initialized by Compose via `database/init`
 - Reporting service scripts
-  - `npm run db:migrate --workspace=services/reporting`
-  - `npm run db:seed --workspace=services/reporting`
+  - `pnpm --filter @sbb-lost-found/reporting-service run db:migrate`
+  - `pnpm --filter @sbb-lost-found/reporting-service run db:seed`
 - Use proper indexing for new queries (follow existing schema patterns)
 
 ## Common Tasks

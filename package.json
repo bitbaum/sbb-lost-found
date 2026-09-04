@@ -3,36 +3,35 @@
   "version": "1.0.0",
   "description": "Enterprise-grade lost and found system for SBB Swiss public transport",
   "private": true,
-  "workspaces": [
-    "services/*",
-    "shared/*"
-  ],
+  "packageManager": "pnpm@11.25.0",
   "scripts": {
-    "build": "npm run build --workspaces",
-    "dev": "docker-compose up -d && npm run dev --workspaces",
-    "test": "npm run test --workspace=services/reporting && npm --prefix frontend run test",
-    "lint": "npm run lint --workspaces && npm --prefix frontend run lint",
-    "typecheck": "npm run typecheck --workspaces && npm --prefix frontend run typecheck",
-    "verify": "npm run format:check && npm run build --workspace=@sbb-lost-found/types && npm run lint && npm run typecheck && npm run test && npm run check:tenant",
+    "build": "pnpm -r run build",
+    "dev": "docker-compose up -d && pnpm -r run dev",
+    "test": "pnpm --filter @sbb-lost-found/reporting-service run test && pnpm --dir frontend run test",
+    "lint": "pnpm -r run lint && pnpm --dir frontend run lint",
+    "typecheck": "pnpm -r run typecheck && pnpm --dir frontend run typecheck",
+    "verify": "pnpm run format:check && pnpm --filter @sbb-lost-found/types run build && pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run check:tenant",
     "check:tenant": "bash scripts/check-tenant-ssot.sh",
-    "clean": "npm run clean --workspaces --if-present",
+    "clean": "pnpm -r run clean",
     "docker:build": "docker-compose build",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "k8s:deploy": "kubectl apply -f k8s/",
-    "db:migrate": "npm run db:migrate --workspace=services/reporting",
-    "db:seed": "npm run db:seed --workspace=services/reporting",
+    "db:migrate": "pnpm --filter @sbb-lost-found/reporting-service run db:migrate",
+    "db:seed": "pnpm --filter @sbb-lost-found/reporting-service run db:seed",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "devDependencies": {
     "@types/node": "^26.3.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "concurrently": "^8.0.0",
+    "eslint": "^8.57.1",
     "prettier": "3.9.6",
     "typescript": "^6.0.3"
   },
   "engines": {
-    "node": ">=20",
-    "npm": ">=9.0.0"
+    "node": ">=20"
   }
 }
