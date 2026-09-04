@@ -58,16 +58,16 @@ services/
 ./scripts/dev.sh start
 
 # In another terminal, start frontend
-cd frontend && npm run dev
+cd frontend && pnpm run dev
 ```
 
 ### Frontend Only (Demo Mode)
 ```bash
 cd frontend
-npm install          # Install dependencies
-npm run dev          # Start dev server (localhost:3000)
-npm run build        # Production build
-npm run lint         # Lint code
+pnpm install          # Install dependencies
+pnpm run dev          # Start dev server (localhost:3000)
+pnpm run build        # Production build
+pnpm run lint         # Lint code
 ```
 
 ### Full Stack with Docker
@@ -242,7 +242,7 @@ Before committing:
 - [ ] Touch targets minimum 44x44px (w-11 h-11)
 - [ ] Input fields have maxLength from config.validation
 - [ ] ARIA roles on interactive elements (tabs, dialogs)
-- [ ] Build passes: `npm run build`
+- [ ] Build passes: `pnpm run build`
 
 ---
 

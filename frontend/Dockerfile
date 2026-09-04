@@ -1,11 +1,15 @@
 # Frontend Dockerfile for Development
-FROM node:20-alpine
+# node:24 — pnpm 11 needs Node >= 22.13, and 24 is the fleet default.
+FROM node:24-alpine
 
 WORKDIR /app
 
+# corepack reads the packageManager pin from package.json
+RUN corepack enable pnpm
+
 # Install dependencies
-COPY package*.json ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
@@ -14,4 +18,4 @@ COPY . .
 EXPOSE 3000
 
 # Start development server
-CMD ["npm", "run", "dev"]
+CMD ["pnpm", "run", "dev"]

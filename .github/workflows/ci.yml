@@ -11,7 +11,7 @@ name: CI
 #     for this additive floor.
 #   * Running the services / full E2E — needs docker-compose + Postgres + Redis infra.
 #
-# `npm run verify` (root package.json) is the single source of truth for these checks;
+# `pnpm run verify` (root package.json) is the single source of truth for these checks;
 # CI runs it verbatim so local green == CI green.
 
 on:
@@ -27,20 +27,29 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # pnpm before setup-node so `cache: pnpm` can find the store.
+      - uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: 24
+          cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            frontend/pnpm-lock.yaml
 
       - name: Install workspace dependencies (services + shared)
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
+      # The frontend is deliberately not a workspace member — it keeps its own
+      # lockfile and installs, exactly as it did under npm.
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       # SSOT: the gate bundle is defined once, in package.json `verify`, and CI
       # calls it verbatim. Do not inline checks here — a check that exists only
       # in CI cannot be run before pushing, which is the whole point of verify.
       - name: Verify (build shared types, lint + typecheck + test, tenant SSOT)
-        run: npm run verify
+        run: pnpm run verify

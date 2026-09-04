@@ -1,0 +1,13 @@
+# Workspace layout (moved here from package.json "workspaces" — pnpm's SSOT).
+# The frontend is intentionally NOT a workspace member: it keeps its own
+# lockfile and installs, exactly as it did under npm (`npm --prefix frontend`).
+packages:
+  - 'services/*'
+  - 'shared/*'
+# pnpm 11 blocks dependency build scripts by default; allow only what we trust.
+# @scarf/scarf's "build" is analytics telemetry — deliberately denied.
+allowBuilds:
+  '@scarf/scarf': false
+  bcrypt: true
+  esbuild: true
+  unrs-resolver: true
