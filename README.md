@@ -3,7 +3,7 @@
 Real-time lost item recovery for Swiss public transport. Connects passengers with train staff while the item is still on board.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-14-000.svg)](https://nextjs.org/)
 
 ## The Problem
@@ -30,7 +30,7 @@ Two interfaces: passenger app (`/`) and staff app (`/staff`). Open both side by 
 ### Microservice Design
 
 ```
-Frontend (Next.js 14, port 3000)
+Frontend (Next.js 14, port 3005)
     │
     ├── Reporting Service (Express, port 3001) ── PostgreSQL
     │        │
@@ -49,9 +49,9 @@ Every category of data lives in exactly one file:
 
 | File | What It Owns |
 |------|-------------|
-| `lib/types.ts` | All TypeScript types and enums (266 lines) |
+| `lib/types.ts` | All TypeScript types and enums |
 | `lib/config.ts` | Timing windows, validation limits, API URLs |
-| `lib/labels.ts` | All German UI text (211 lines, i18n-ready) |
+| `lib/labels.ts` | All German UI text (i18n-ready) |
 | `lib/schemas.ts` | Zod validation schemas (derived from types) |
 | `lib/design-system.ts` | Colors, spacing, typography for non-CSS contexts |
 | `lib/tenant.ts` | **Operator identity — wordmark, product name, locale, code** |
@@ -64,8 +64,8 @@ The app carries no operator's identity in its code. Branding is expressed in
 exactly two places, and switching operator is one environment variable:
 
 ```bash
-npm run build                          # Nordbahn — the neutral house brand
-NEXT_PUBLIC_TENANT=sbb npm run build   # SBB livery, same binary
+pnpm run build                          # Nordbahn — the neutral house brand
+NEXT_PUBLIC_TENANT=sbb pnpm run build   # SBB livery, same binary
 ```
 
 | Where | What it owns |
@@ -78,7 +78,7 @@ keys off it — so the palette flips at runtime from a single attribute. Adding
 an operator is two edits: a `TENANTS` entry and one CSS override block
 restating only the tokens that actually differ.
 
-**`npm run check:tenant` enforces this** (and runs inside `npm run verify`):
+**`pnpm run check:tenant` enforces this** (and runs inside `pnpm run verify`):
 it fails the build if an operator name appears anywhere outside those two
 files. The codebase previously spread one operator's name across 600+
 references, and nothing would have failed if that crept back — the app would
@@ -114,7 +114,7 @@ WebSocket connection has auto-reconnect with exponential backoff (1s, 2s, 4s, 8s
 
 ### Graceful Degradation
 
-`useApiWithFallback()` hook -- tries the real backend, silently serves mock data from `lib/mock-data.ts` (368 lines) if unavailable. The shop directory keeps working. No error pages for infrastructure failures.
+`useApiWithFallback()` hook -- tries the real backend, silently serves mock data from `lib/mock-data.ts` if unavailable. The shop directory keeps working. No error pages for infrastructure failures.
 
 ### Lost Item State Machine
 
@@ -130,7 +130,7 @@ Three time windows drive priority:
 
 ### SBB Design System
 
-Official SBB corporate identity -- not approximated, implemented from their design specs. SBB Red (#EB0000) reserved for primary actions only. 4px spacing grid. Typography scale from 12-30px. All tokenized in `design-system.ts` and `tailwind.config.js` as `sbb-*` classes.
+Official SBB corporate identity -- not approximated, implemented from their design specs (applied as the `sbb` tenant). SBB Red (#EB0000) reserved for primary actions only. 4px spacing grid. Typography scale from 12-32px. All tokenized as CSS custom properties in `app/globals.css`, exposed as `brand` / `app-*` Tailwind classes (mirrored in `design-system.ts` for non-CSS contexts).
 
 ---
 
@@ -138,10 +138,10 @@ Official SBB corporate identity -- not approximated, implemented from their desi
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | Next.js 14 (App Router), TypeScript 5, Tailwind CSS 3 |
-| Backend | Express.js 4, Node.js 18+ |
+| Frontend | Next.js 14 (App Router), TypeScript 6, Tailwind CSS 3 |
+| Backend | Express.js 4, Node.js 20+ |
 | Database | PostgreSQL 15, Redis 7 (pub/sub) |
-| Real-time | Socket.io 4.7 |
+| Real-time | Socket.io 4.8 |
 | Auth | JWT, bcrypt |
 | Validation | Zod (runtime), TypeScript (compile-time) |
 | API Docs | OpenAPI 3.0 (auto-generated at `/docs`) |
@@ -154,21 +154,21 @@ Official SBB corporate identity -- not approximated, implemented from their desi
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20+, pnpm 11
 - PostgreSQL 15 + Redis 7 (or use Docker)
 
 ### Setup
 
 ```bash
-git clone https://github.com/catomean/sbb-lost-found.git
+git clone https://github.com/bitbaum/sbb-lost-found.git
 cd sbb-lost-found
 
 # Option A: Docker (recommended)
 docker compose up -d              # PostgreSQL + Redis + services
-cd frontend && npm install && npm run dev
+cd frontend && pnpm install && pnpm run dev
 
 # Option B: Frontend only (mock data)
-cd frontend && npm install && npm run dev
+cd frontend && pnpm install && pnpm run dev
 ```
 
 ### Pages
@@ -202,7 +202,7 @@ frontend/
     schemas.ts              # Zod validation (derived from types)
     design-system.ts        # SBB design tokens
     api.ts                  # API client with fallback
-    mock-data.ts            # Demo data (368 lines)
+    mock-data.ts            # Demo data
     hooks/
       useApi.ts             # API hooks with graceful degradation
       useWebSocket.ts       # Real-time hooks with auto-reconnect

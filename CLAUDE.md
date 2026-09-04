@@ -65,7 +65,7 @@ cd frontend && pnpm run dev
 ```bash
 cd frontend
 pnpm install          # Install dependencies
-pnpm run dev          # Start dev server (localhost:3000)
+pnpm run dev          # Start dev server (localhost:3005)
 pnpm run build        # Production build
 pnpm run lint         # Lint code
 ```
@@ -82,7 +82,7 @@ pnpm run lint         # Lint code
 ### Service URLs
 | Service | URL | Description |
 |---------|-----|-------------|
-| Frontend | http://localhost:3000 | Next.js app (dev) |
+| Frontend | http://localhost:3005 | Next.js app (dev) |
 | API Gateway | http://localhost:3000 | Proxy to all services |
 | Reporting API | http://localhost:3001 | Lost items CRUD |
 | Matching API | http://localhost:3002 | Item matching |
@@ -99,59 +99,61 @@ pnpm run lint         # Lint code
 
 All tokens are CSS custom properties. `tailwind.config.js` maps Tailwind utilities → CSS vars (no literal values).
 
-**Colors (official SBB palette from digital.sbb.ch):**
+**WHITE-LABEL**: `:root` carries the neutral house brand (Nordbahn); each operator gets one `:root[data-tenant="…"]` override block. The active tenant is set on `<html data-tenant>` from `lib/tenant.ts` (env var `NEXT_PUBLIC_TENANT`).
+
+**Brand tokens (tenant-driven) + neutral `app` palette:**
 ```css
---sbb-red: #EB0000        /* primary, brand, focus ring */
---sbb-red-125: #C60018    /* hover */
---sbb-red-150: #A20013    /* active */
---sbb-white: #FFFFFF
---sbb-milk: #F6F6F6       /* page background */
---sbb-cloud: #E5E5E5      /* borders */
---sbb-silver: #DCDCDC
---sbb-aluminum: #D2D2D2
---sbb-platinum: #CDCDCD
---sbb-cement: #BDBDBD     /* active secondary bg */
---sbb-graphite: #B7B7B7
---sbb-storm: #A8A8A8
---sbb-smoke: #8D8D8D      /* placeholder text */
---sbb-metal: #767676
---sbb-granite: #686868    /* secondary text */
---sbb-anthracite: #5A5A5A
---sbb-iron: #444444
---sbb-charcoal: #212121   /* primary text */
---sbb-midnight: #151515
---sbb-black: #000000
---sbb-blue: #2D327D       /* info state */
---sbb-success: #00973B
---sbb-warning: #FFAB00
---sbb-error: #EB0000      /* = red */
---sbb-info: #2D327D       /* = blue */
+--brand: #0b4f8f          /* neutral default; sbb tenant → #EB0000 */
+--brand-hover / --brand-active / --brand-contrast
+--font-brand: 'Inter'     /* sbb tenant → 'SBB Web' */
+--app-white: #FFFFFF
+--app-milk: #F6F6F6       /* page background */
+--app-cloud: #E5E5E5      /* borders */
+--app-silver: #DCDCDC
+--app-aluminum: #D2D2D2
+--app-platinum: #CDCDCD
+--app-cement: #BDBDBD     /* active secondary bg */
+--app-graphite: #B7B7B7
+--app-storm: #A8A8A8
+--app-smoke: #8D8D8D      /* fill-only (3.32:1) — never text */
+--app-metal: #767676
+--app-granite: #686868    /* secondary text */
+--app-anthracite: #5A5A5A
+--app-iron: #444444
+--app-charcoal: #212121   /* primary text */
+--app-midnight: #151515
+--app-black: #000000
+--app-blue: #2D327D       /* info state */
+--app-success: #00973B
+--app-warning: #FFAB00
+--app-error: #EB0000
+--app-info: #2D327D       /* = blue */
 ```
 
 **Spacing, radius, shadows:**
 ```css
---sbb-space-xs/sm/md/lg/xl/2xl:  4/8/16/24/32/48px
---sbb-radius-sm/md/lg/xl:        4/8/16/24px
---sbb-shadow-card:   0 2px 8px rgba(0,0,0,0.08)
---sbb-shadow-modal:  0 4px 24px rgba(0,0,0,0.16)
---sbb-shadow-button: 0 2px 4px rgba(235,0,0,0.24)   /* red-tinted */
+--app-space-xs/sm/md/lg/xl/2xl:  4/8/16/24/32/48px
+--app-radius-sm/md/lg/xl:        4/8/16/24px
+--app-shadow-card:   0 2px 8px rgba(0,0,0,0.08)
+--app-shadow-modal:  0 4px 24px rgba(0,0,0,0.16)
+--app-shadow-button: 0 2px 4px — brand-tinted, so a tenant token
 ```
 
 **Typography** (literal values in tailwind.config.js — no CSS var approach for font-size arrays):
 ```
-sbb-xs→12/16  sbb-sm→14/20  sbb-base→16/24  sbb-lg→18/28
-sbb-xl→20/28  sbb-2xl→24/32  sbb-3xl→32/40
+app-xs→12/16  app-sm→14/20  app-base→16/24  app-lg→18/28
+app-xl→20/28  app-2xl→24/32  app-3xl→32/40
 ```
 
-**Font:** `SBB Web, -apple-system, BlinkMacSystemFont, ...` (system font stack)
+**Font:** `var(--font-brand), -apple-system, BlinkMacSystemFont, ...` (brand face from the tenant, then the system stack)
 
 ### TypeScript Mirror — `frontend/lib/design-system.ts`
 
-Use ONLY in non-CSS runtime contexts (canvas drawing, Satori OG images, Recharts SVG attributes) where CSS vars are inaccessible. Do NOT use in React components — use Tailwind `sbb-*` classes instead. Must stay in sync with `globals.css` manually.
+Use ONLY in non-CSS runtime contexts (canvas drawing, Satori OG images, Recharts SVG attributes) where CSS vars are inaccessible. Do NOT use in React components — use Tailwind `brand` / `app-*` classes instead. Must stay in sync with `globals.css` manually.
 
 ### SSOT Rule
 
-All design tokens live in `frontend/app/globals.css` only. `tailwind.config.js` references CSS vars. Components use `sbb-*` Tailwind classes, never `bg-[#hex]` or inline styles.
+All design tokens live in `frontend/app/globals.css` only. `tailwind.config.js` references CSS vars. Components use `brand` / `app-*` Tailwind classes, never `bg-[#hex]` or inline styles.
 
 **Audit:** `grep -r '\[#' frontend/` — every result is a violation.
 
@@ -163,7 +165,7 @@ All design tokens live in `frontend/app/globals.css` only. `tailwind.config.js` 
 |------|---------------|
 | TypeScript Types | `lib/types.ts` |
 | Zod Schemas | `lib/schemas.ts` |
-| Design Tokens | `tailwind.config.js` |
+| Design Tokens | `app/globals.css` |
 | UI Labels | `lib/labels.ts` |
 | Config & Timing | `lib/config.ts` |
 | API Client | `lib/api.ts` |
@@ -234,7 +236,7 @@ When backend is unavailable, frontend automatically uses mock data from `lib/moc
 ## Quality Checklist
 
 Before committing:
-- [ ] No hardcoded colors (use Tailwind sbb-* classes)
+- [ ] No hardcoded colors (use Tailwind brand / app-* classes)
 - [ ] No duplicate components (check ui/ first)
 - [ ] Labels in lib/labels.ts (not in components)
 - [ ] Types in lib/types.ts
@@ -300,4 +302,4 @@ Demo landing page at `/demo` explains the concept.
 
 ---
 
-**Last Updated**: 2026-01-23
+**Last Updated**: 2026-09-04
