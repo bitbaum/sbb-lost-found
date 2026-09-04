@@ -9,7 +9,7 @@
     "start": "node dist/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
-    "lint": "eslint src --ext .ts",
+    "lint": "eslint src",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
     "db:migrate": "tsx src/scripts/migrate.ts",
@@ -52,7 +52,6 @@
     "nodemon": "^3.1.14",
     "jest": "^30.4.2",
     "ts-jest": "^29.4.12",
-    "eslint": "^8.42.0",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0"
   }
