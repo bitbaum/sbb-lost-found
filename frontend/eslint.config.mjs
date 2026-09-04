@@ -18,9 +18,27 @@ import coreWebVitals from 'eslint-config-next/core-web-vitals';
 const config = [
   ...coreWebVitals,
   {
+    // eslint-plugin-react's version:'detect' calls context.getFilename, which
+    // ESLint 10 removed — pin the React major so detection never runs. Must
+    // come after coreWebVitals, which sets version:'detect'.
+    settings: { react: { version: '18' } },
+  },
+  {
     // Build output and dependencies are not ours to lint. Without this, a
     // `.next/` left over from a local build makes lint fail on generated code.
-    ignores: ['.next/**', 'out/**', 'node_modules/**', 'next-env.d.ts'],
+    // Toolchain config files (*.config.js/mjs) are ignored too: eslint-config-next
+    // parses plain JS with @babel/eslint-parser, whose eslint-scope-5 scope
+    // manager lacks the `addGlobals` API ESLint 10 requires — linting any .js
+    // file crashes ESLint outright. Same exclusion the fleet's other
+    // eslint-10 + next repos (botsmann) ship.
+    ignores: [
+      '.next/**',
+      'out/**',
+      'node_modules/**',
+      'next-env.d.ts',
+      '*.config.js',
+      '*.config.mjs',
+    ],
   },
 ];
 

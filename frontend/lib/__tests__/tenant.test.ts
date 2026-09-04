@@ -50,7 +50,6 @@ function loadWithTenant(value: string | undefined) {
   } else {
     process.env.NEXT_PUBLIC_TENANT = value;
   }
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   return require('../tenant') as typeof import('../tenant');
 }
 
