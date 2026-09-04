@@ -120,35 +120,35 @@ Option B: Run reporting service only
 
 ## Design System
 
-**SSOT situation**: Token values live in `frontend/tailwind.config.js` as literal hex. A TypeScript mirror exists at `frontend/lib/design-system.ts` — these two files must stay in sync (a known drift already exists: `SBB_SHADOWS.modal` differs between them).
+**SSOT situation**: Token values live in `frontend/app/globals.css` as CSS custom properties (white-label: `:root` is the neutral house brand, each operator gets a `:root[data-tenant="…"]` override block). `frontend/tailwind.config.js` references those vars — no literal hex. A TypeScript mirror exists at `frontend/lib/design-system.ts` (`APP_*` constants) for non-CSS contexts only; it must stay in sync with `globals.css` manually.
 
-### Color Tokens (use `sbb-*` Tailwind classes in components)
+### Color Tokens (use `brand` / `app-*` Tailwind classes in components)
 
 ```
-sbb-red / sbb-red-125 / sbb-red-150   — primary brand, hover, active
-sbb-charcoal                           — primary text (#212121)
-sbb-granite                            — secondary text (#686868)
-sbb-smoke                              — placeholder (#8D8D8D)
-sbb-cloud                              — borders (#E5E5E5)
-sbb-milk                               — page background (#F6F6F6)
-sbb-white                              — card/surface background (#FFFFFF)
-sbb-success / sbb-warning / sbb-error  — functional states
-sbb-blue / sbb-info                    — info state (#2D327D)
+brand / brand-hover / brand-active     — tenant brand colour (sbb tenant → SBB red)
+app-charcoal                           — primary text (#212121)
+app-granite                            — secondary text (#686868)
+app-smoke                              — fill-only (#8D8D8D — never text)
+app-cloud                              — borders (#E5E5E5)
+app-milk                               — page background (#F6F6F6)
+app-white                              — card/surface background (#FFFFFF)
+app-success / app-warning / app-error  — functional states
+app-blue / app-info                    — info state (#2D327D)
 ```
 
 ### Spacing / Radius / Shadow classes
 
 ```
-Spacing:       p-sbb-xs (4px) / p-sbb-sm (8px) / p-sbb-md (16px) / p-sbb-lg (24px) / p-sbb-xl (32px) / p-sbb-2xl (48px)
-Border radius: rounded-sbb-sm (4px) / rounded-sbb-md (8px) / rounded-sbb-lg (16px) / rounded-sbb-xl (24px)
-Shadows:       shadow-sbb-card / shadow-sbb-modal / shadow-sbb-button
+Spacing:       p-app-xs (4px) / p-app-sm (8px) / p-app-md (16px) / p-app-lg (24px) / p-app-xl (32px) / p-app-2xl (48px)
+Border radius: rounded-app-sm (4px) / rounded-app-md (8px) / rounded-app-lg (16px) / rounded-app-xl (24px)
+Shadows:       shadow-app-card / shadow-app-modal / shadow-app-button
 ```
 
 ### Utility classes defined in `frontend/app/globals.css`
 
-Pre-built SBB component classes (use these, do not rebuild inline):
-- `.btn-sbb-primary` / `.btn-sbb-secondary` / `.btn-sbb-ghost`
-- `.card-sbb` / `.input-sbb` / `.header-sbb`
+Pre-built component classes (use these, do not rebuild inline):
+- `.btn-app-primary` / `.btn-app-secondary` / `.btn-app-ghost`
+- `.card-app` / `.input-app` / `.header-app`
 - `.mobile-container` / `.safe-top` / `.safe-bottom` / `.bottom-nav`
 - `.modal-overlay` / `.modal-content` / `.toast`
 - `.touch-feedback` / `.hide-scrollbar`
