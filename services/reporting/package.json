@@ -52,7 +52,7 @@
     "nodemon": "^3.1.14",
     "jest": "^30.4.2",
     "ts-jest": "^29.4.12",
-    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/eslint-plugin": "^8.69.0",
     "@typescript-eslint/parser": "^8.69.0"
   }
 }
