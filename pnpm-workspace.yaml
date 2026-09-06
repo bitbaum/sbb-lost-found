@@ -8,6 +8,7 @@ packages:
 # @scarf/scarf's "build" is analytics telemetry — deliberately denied.
 allowBuilds:
   '@scarf/scarf': false
+  '@parcel/watcher': true
   bcrypt: true
   esbuild: true
   unrs-resolver: true
